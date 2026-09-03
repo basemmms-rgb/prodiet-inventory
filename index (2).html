@@ -1,0 +1,2859 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام المخزون ERP</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Tahoma,Arial,sans-serif;
+background:#f3f4f6;
+color:#111827;
+}
+
+header{
+background:#111827;
+color:#fff;
+padding:15px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+header h1{margin:0;font-size:21px}
+
+.container{
+max-width:1450px;
+margin:auto;
+padding:15px;
+}
+
+nav{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:15px;
+}
+
+nav button{
+background:#fff;
+color:#111827;
+border:1px solid #d1d5db;
+}
+
+nav button.active{
+background:#2563eb;
+color:#fff;
+}
+
+button{
+border:0;
+border-radius:8px;
+padding:10px 14px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{background:#2563eb;color:white}
+.success{background:#059669;color:white}
+.danger{background:#dc2626;color:white}
+.gray{background:#6b7280;color:white}
+
+.page{display:none}
+.page.active{display:block}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.card-title{
+color:#6b7280;
+font-size:14px;
+}
+
+.card-value{
+font-size:25px;
+font-weight:bold;
+margin-top:8px;
+}
+
+.panel{
+background:white;
+padding:18px;
+border-radius:12px;
+margin-top:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+}
+
+.grid2{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.grid4{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+
+label{
+display:block;
+font-weight:bold;
+font-size:14px;
+margin-bottom:5px;
+}
+
+input,select,textarea{
+width:100%;
+padding:11px;
+border:1px solid #d1d5db;
+border-radius:8px;
+font-family:inherit;
+font-size:14px;
+}
+
+textarea{min-height:80px}
+
+.table-wrap{
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:750px;
+}
+
+th,td{
+border-bottom:1px solid #e5e7eb;
+padding:10px;
+text-align:right;
+white-space:nowrap;
+}
+
+th{
+background:#f9fafb;
+}
+
+.badge{
+padding:5px 8px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+
+.in{
+background:#dcfce7;
+color:#166534;
+}
+
+.out{
+background:#fee2e2;
+color:#991b1b;
+}
+
+.transfer{
+background:#dbeafe;
+color:#1e40af;
+}
+
+.search{
+margin-bottom:12px;
+}
+
+.total-box{
+background:#f9fafb;
+padding:15px;
+border-radius:8px;
+margin-top:15px;
+font-size:18px;
+font-weight:bold;
+}
+
+.small{
+color:#6b7280;
+font-size:13px;
+}
+
+.filter-box{
+background:#eef2ff;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+}
+
+.branch-summary{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-top:15px;
+}
+
+.branch-card{
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:10px;
+padding:15px;
+}
+
+.branch-card h3{
+margin:0 0 10px;
+font-size:16px;
+}
+
+.branch-number{
+font-size:23px;
+font-weight:bold;
+}
+
+.branch-label{
+font-size:12px;
+color:#6b7280;
+margin-top:5px;
+}
+
+@media(max-width:1000px){
+.cards{
+grid-template-columns:repeat(2,1fr);
+}
+
+.branch-summary{
+grid-template-columns:repeat(2,1fr);
+}
+
+.grid,.grid2,.grid4{
+grid-template-columns:1fr;
+}
+}
+
+@media(max-width:500px){
+header h1{font-size:17px}
+
+.cards{
+grid-template-columns:1fr 1fr;
+}
+
+.branch-summary{
+grid-template-columns:1fr 1fr;
+}
+
+.card{
+padding:12px;
+}
+
+.card-value{
+font-size:19px;
+}
+
+nav button{
+flex:1;
+min-width:120px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>📦 نظام المخزون ERP</h1>
+<div id="currentDate"></div>
+</header>
+
+<div class="container">
+
+<nav id="menu">
+
+<button onclick="showPage('dashboard')" class="active">
+لوحة التحكم
+</button>
+
+<button onclick="showPage('items')">
+الأصناف
+</button>
+
+<button onclick="showPage('opening')">
+رصيد أول المدة
+</button>
+
+<button onclick="showPage('receipt')">
+إذن استلام
+</button>
+
+<button onclick="showPage('issue')">
+إذن صرف
+</button>
+
+<button onclick="showPage('transfer')">
+تحويل مخزني
+</button>
+
+<button onclick="showPage('movements')">
+الحركات
+</button>
+
+<button onclick="showPage('card')">
+كارت الصنف
+</button>
+
+<button onclick="showPage('backup')">
+نسخ احتياطي
+</button>
+
+</nav>
+
+
+<!-- =====================================================
+لوحة التحكم
+===================================================== -->
+
+<section id="dashboard" class="page active">
+
+<div class="panel">
+
+<h2>📊 لوحة التحكم</h2>
+
+<div class="filter-box">
+
+<h3>🔎 فلترة تقرير صرف الفروع</h3>
+
+<div class="grid4">
+
+<div>
+<label>من تاريخ</label>
+<input type="date" id="reportFrom">
+</div>
+
+<div>
+<label>إلى تاريخ</label>
+<input type="date" id="reportTo">
+</div>
+
+<div>
+<label>الفرع</label>
+
+<select id="reportBranch">
+<option value="ALL">كل الفروع</option>
+<option value="فرع جدة">فرع جدة</option>
+<option value="فرع ينبع">فرع ينبع</option>
+<option value="فرع المدينة">فرع المدينة</option>
+</select>
+
+</div>
+
+<div style="display:flex;align-items:end">
+
+<button class="primary"
+onclick="applyReportFilter()"
+style="width:100%">
+🔎 عرض التقرير
+</button>
+
+</div>
+
+</div>
+
+<br>
+
+<button class="gray" onclick="clearReportFilter()">
+إلغاء الفلتر
+</button>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card">
+<div class="card-title">عدد الأصناف</div>
+<div class="card-value" id="dashItems">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">إجمالي كمية المخزون</div>
+<div class="card-value" id="dashQty">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">قيمة المخزون</div>
+<div class="card-value" id="dashValue">0.00</div>
+</div>
+
+<div class="card">
+<div class="card-title">عدد الحركات</div>
+<div class="card-value" id="dashMoves">0</div>
+</div>
+
+</div>
+
+
+<!-- تقرير صرف الفروع -->
+
+<div class="panel">
+
+<h2>🏢 تقرير صرف الفروع</h2>
+
+<p class="small">
+التحويل من المخزن الرئيسي إلى الفرع يظهر هنا كـ "صرف للفرع".
+أما إذن الصرف الذي يتم من داخل الفرع فيظهر كـ "استهلاك الفرع".
+</p>
+
+<div class="branch-summary">
+
+<div class="branch-card">
+<h3>فرع جدة</h3>
+
+<div class="branch-number"
+id="jeddahQty">
+0
+</div>
+
+<div class="branch-label">
+كمية ما تم صرفه للفرع
+</div>
+
+<div class="branch-number"
+id="jeddahValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+قيمة الصرف
+</div>
+</div>
+
+
+<div class="branch-card">
+<h3>فرع ينبع</h3>
+
+<div class="branch-number"
+id="yanbuQty">
+0
+</div>
+
+<div class="branch-label">
+كمية ما تم صرفه للفرع
+</div>
+
+<div class="branch-number"
+id="yanbuValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+قيمة الصرف
+</div>
+</div>
+
+
+<div class="branch-card">
+<h3>فرع المدينة</h3>
+
+<div class="branch-number"
+id="madinahQty">
+0
+</div>
+
+<div class="branch-label">
+كمية ما تم صرفه للفرع
+</div>
+
+<div class="branch-number"
+id="madinahValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+قيمة الصرف
+</div>
+</div>
+
+
+<div class="branch-card">
+<h3>الإجمالي</h3>
+
+<div class="branch-number"
+id="allBranchQty">
+0
+</div>
+
+<div class="branch-label">
+إجمالي الكمية
+</div>
+
+<div class="branch-number"
+id="allBranchValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+إجمالي القيمة
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- تفاصيل الصرف -->
+
+<div class="panel">
+
+<h2>📋 تفاصيل صرف الفروع</h2>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>التاريخ</th>
+<th>الرقم</th>
+<th>الفرع</th>
+<th>الصنف</th>
+<th>نوع الحركة</th>
+<th>من</th>
+<th>الكمية</th>
+<th>التكلفة</th>
+<th>القيمة</th>
+</tr>
+
+</thead>
+
+<tbody id="branchReportTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- رصيد المخزون -->
+
+<div class="panel">
+
+<h2>📦 رصيد المخزون</h2>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>الصنف</th>
+<th>الوحدة</th>
+<th>المخزن الرئيسي</th>
+<th>فرع جدة</th>
+<th>فرع ينبع</th>
+<th>فرع المدينة</th>
+<th>الإجمالي</th>
+<th>القيمة</th>
+</tr>
+
+</thead>
+
+<tbody id="dashboardStock"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="panel">
+
+<h2>آخر الحركات</h2>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>التاريخ</th>
+<th>الرقم</th>
+<th>النوع</th>
+<th>الصنف</th>
+<th>من</th>
+<th>إلى</th>
+<th>الكمية</th>
+<th>القيمة</th>
+</tr>
+
+</thead>
+
+<tbody id="recentMoves"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+الأصناف
+===================================================== -->
+
+<section id="items" class="page">
+
+<div class="panel">
+
+<h2>📦 إضافة صنف</h2>
+
+<div class="grid">
+
+<div>
+<label>اسم الصنف</label>
+<input id="itemName">
+</div>
+
+<div>
+<label>الوحدة</label>
+
+<select id="itemUnit">
+<option>كجم</option>
+<option>جرام</option>
+<option>لتر</option>
+<option>حبة</option>
+<option>علبة</option>
+<option>كرتون</option>
+</select>
+
+</div>
+
+<div>
+<label>التكلفة الحالية</label>
+<input id="itemCost" type="number" step="0.01">
+</div>
+
+</div>
+
+<br>
+
+<button class="primary" onclick="addItem()">
+➕ إضافة الصنف
+</button>
+
+</div>
+
+
+<div class="panel">
+
+<h2>الأصناف</h2>
+
+<input
+class="search"
+id="itemSearch"
+placeholder="🔎 ابحث عن صنف..."
+oninput="renderItems()"
+>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>الصنف</th>
+<th>الوحدة</th>
+<th>التكلفة</th>
+<th>الرئيسي</th>
+<th>جدة</th>
+<th>ينبع</th>
+<th>المدينة</th>
+<th>الإجمالي</th>
+<th>القيمة</th>
+<th>إجراء</th>
+</tr>
+
+</thead>
+
+<tbody id="itemsTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+رصيد أول المدة
+===================================================== -->
+
+<section id="opening" class="page">
+
+<div class="panel">
+
+<h2>📋 رصيد أول المدة</h2>
+
+<div class="grid">
+
+<div>
+<label>المخزن</label>
+<select id="openingWarehouse"></select>
+</div>
+
+<div>
+<label>الصنف</label>
+<select id="openingItem"></select>
+</div>
+
+<div>
+<label>الكمية</label>
+<input id="openingQty" type="number" step="0.001">
+</div>
+
+<div>
+<label>تكلفة الوحدة</label>
+<input id="openingCost" type="number" step="0.01">
+</div>
+
+</div>
+
+<br>
+
+<button class="success" onclick="saveOpening()">
+حفظ رصيد أول المدة
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+إذن الاستلام
+===================================================== -->
+
+<section id="receipt" class="page">
+
+<div class="panel">
+
+<h2>📥 إذن استلام</h2>
+
+<div class="grid">
+
+<div>
+<label>رقم الإذن</label>
+<input id="receiptNo">
+</div>
+
+<div>
+<label>التاريخ</label>
+<input id="receiptDate" type="date">
+</div>
+
+<div>
+<label>المخزن</label>
+<select id="receiptWarehouse"></select>
+</div>
+
+<div>
+<label>الصنف</label>
+<select id="receiptItem"></select>
+</div>
+
+<div>
+<label>الكمية</label>
+<input id="receiptQty" type="number" step="0.001">
+</div>
+
+<div>
+<label>تكلفة الوحدة</label>
+<input id="receiptCost" type="number" step="0.01">
+</div>
+
+</div>
+
+<br>
+
+<label>ملاحظات</label>
+<textarea id="receiptNote"></textarea>
+
+<br><br>
+
+<button class="success" onclick="saveReceipt()">
+💾 حفظ إذن الاستلام
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+إذن الصرف
+===================================================== -->
+
+<section id="issue" class="page">
+
+<div class="panel">
+
+<h2>🧾 إذن صرف</h2>
+
+<div class="grid">
+
+<div>
+<label>رقم إذن الصرف</label>
+<input id="issueNo">
+</div>
+
+<div>
+<label>التاريخ</label>
+<input id="issueDate" type="date">
+</div>
+
+<div>
+<label>المخزن المصدر</label>
+<select id="issueWarehouse"></select>
+</div>
+
+<div>
+<label>الصنف</label>
+<select id="issueItem" onchange="updateIssueCost()"></select>
+</div>
+
+<div>
+<label>الكمية</label>
+<input
+id="issueQty"
+type="number"
+step="0.001"
+oninput="calculateIssue()"
+>
+</div>
+
+<div>
+<label>متوسط التكلفة</label>
+<input id="issueCost" readonly>
+</div>
+
+</div>
+
+<br>
+
+<div class="total-box">
+
+إجمالي قيمة الصرف:
+<span id="issueTotal">0.00</span>
+ر.س
+
+</div>
+
+<br>
+
+<label>الجهة المستلمة / سبب الصرف</label>
+<input id="issueReceiver">
+
+<br><br>
+
+<label>ملاحظات</label>
+<textarea id="issueNote"></textarea>
+
+<br><br>
+
+<button class="danger" onclick="saveIssue()">
+🧾 حفظ إذن الصرف
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+التحويل
+===================================================== -->
+
+<section id="transfer" class="page">
+
+<div class="panel">
+
+<h2>🔄 تحويل مخزني</h2>
+
+<p class="small">
+مثال: صرف 20 كجم دجاج من المخزن الرئيسي إلى فرع جدة.
+سيتم خصم 20 كجم من الرئيسي وإضافة 20 كجم إلى جدة.
+وسيظهر ذلك في تقرير صرف الفروع.
+</p>
+
+<div class="grid">
+
+<div>
+<label>رقم التحويل</label>
+<input id="transferNo">
+</div>
+
+<div>
+<label>التاريخ</label>
+<input id="transferDate" type="date">
+</div>
+
+<div>
+<label>من مخزن</label>
+<select id="transferFrom"></select>
+</div>
+
+<div>
+<label>إلى مخزن</label>
+<select id="transferTo"></select>
+</div>
+
+<div>
+<label>الصنف</label>
+<select id="transferItem" onchange="updateTransferCost()"></select>
+</div>
+
+<div>
+<label>الكمية</label>
+<input id="transferQty" type="number" step="0.001">
+</div>
+
+</div>
+
+<br>
+
+<div class="total-box">
+
+متوسط تكلفة الصنف:
+<span id="transferCost">0.00</span>
+ر.س
+
+</div>
+
+<br>
+
+<button class="primary" onclick="saveTransfer()">
+🔄 تنفيذ التحويل
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+الحركات
+===================================================== -->
+
+<section id="movements" class="page">
+
+<div class="panel">
+
+<h2>📚 حركات المخزون</h2>
+
+<input
+class="search"
+id="movementSearch"
+placeholder="🔎 ابحث في الحركات..."
+oninput="renderMovements()"
+>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>التاريخ</th>
+<th>الرقم</th>
+<th>النوع</th>
+<th>الصنف</th>
+<th>من</th>
+<th>إلى</th>
+<th>الكمية</th>
+<th>التكلفة</th>
+<th>القيمة</th>
+<th>ملاحظات</th>
+</tr>
+
+</thead>
+
+<tbody id="movementTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+كارت الصنف
+===================================================== -->
+
+<section id="card" class="page">
+
+<div class="panel">
+
+<h2>📊 كارت الصنف</h2>
+
+<select id="cardItem" onchange="renderCard()"></select>
+
+<div id="cardSummary"></div>
+
+<br>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>التاريخ</th>
+<th>الرقم</th>
+<th>النوع</th>
+<th>من</th>
+<th>إلى</th>
+<th>الكمية</th>
+<th>التكلفة</th>
+<th>القيمة</th>
+</tr>
+
+</thead>
+
+<tbody id="cardTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+النسخ الاحتياطي
+===================================================== -->
+
+<section id="backup" class="page">
+
+<div class="panel">
+
+<h2>💾 النسخ الاحتياطي</h2>
+
+<p>
+البيانات محفوظة تلقائيًا داخل المتصفح.
+يفضل تنزيل نسخة احتياطية بشكل دوري.
+</p>
+
+<button class="primary" onclick="backupData()">
+⬇️ تنزيل نسخة احتياطية
+</button>
+
+<br><br>
+
+<label>استعادة نسخة احتياطية</label>
+
+<input
+type="file"
+accept=".json"
+onchange="restoreData(event)"
+>
+
+<br><br>
+
+<button class="danger" onclick="deleteAllData()">
+🗑️ حذف جميع البيانات
+</button>
+
+</div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+DATABASE
+===================================================== */
+
+const warehouses = [
+"المخزن الرئيسي",
+"فرع جدة",
+"فرع ينبع",
+"فرع المدينة"
+];
+
+const branches = [
+"فرع جدة",
+"فرع ينبع",
+"فرع المدينة"
+];
+
+let database =
+JSON.parse(
+localStorage.getItem("inventoryERP")
+) || {
+items:[],
+movements:[]
+};
+
+
+/* =====================================================
+HELPERS
+===================================================== */
+
+function saveDatabase(){
+
+localStorage.setItem(
+"inventoryERP",
+JSON.stringify(database)
+);
+
+}
+
+
+function money(value){
+
+return Number(value || 0)
+.toLocaleString("ar-SA",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
+
+}
+
+
+function today(){
+
+return new Date()
+.toISOString()
+.substring(0,10);
+
+}
+
+
+function generateID(){
+
+return Date.now().toString()+
+Math.random().toString(36).substring(2);
+
+}
+
+
+function getItem(id){
+
+return database.items.find(
+item=>item.id===id
+);
+
+}
+
+
+function totalQuantity(item){
+
+return warehouses.reduce(
+(sum,warehouse)=>
+sum+Number(item.stock[warehouse]||0),
+0
+);
+
+}
+
+
+function totalValue(item){
+
+return totalQuantity(item)*
+Number(item.cost||0);
+
+}
+
+
+/* =====================================================
+NAVIGATION
+===================================================== */
+
+function showPage(page){
+
+document
+.querySelectorAll(".page")
+.forEach(x=>x.classList.remove("active"));
+
+document
+.getElementById(page)
+.classList.add("active");
+
+document
+.querySelectorAll("#menu button")
+.forEach(x=>x.classList.remove("active"));
+
+const pages=[
+"dashboard",
+"items",
+"opening",
+"receipt",
+"issue",
+"transfer",
+"movements",
+"card",
+"backup"
+];
+
+const index=pages.indexOf(page);
+
+if(index>=0){
+
+document
+.querySelectorAll("#menu button")
+[index]
+.classList.add("active");
+
+}
+
+renderAll();
+
+}
+
+
+/* =====================================================
+SELECTS
+===================================================== */
+
+function fillWarehouseSelect(id){
+
+const select=
+document.getElementById(id);
+
+select.innerHTML=
+warehouses.map(
+warehouse=>
+`<option value="${warehouse}">
+${warehouse}
+</option>`
+).join("");
+
+}
+
+
+function fillItemSelect(id){
+
+const select=
+document.getElementById(id);
+
+select.innerHTML=
+`<option value="">اختر الصنف</option>`+
+database.items.map(
+item=>
+`<option value="${item.id}">
+${item.name}
+</option>`
+).join("");
+
+}
+
+
+function fillAllSelects(){
+
+[
+"openingWarehouse",
+"receiptWarehouse",
+"issueWarehouse",
+"transferFrom",
+"transferTo"
+].forEach(fillWarehouseSelect);
+
+
+[
+"openingItem",
+"receiptItem",
+"issueItem",
+"transferItem",
+"cardItem"
+].forEach(fillItemSelect);
+
+}
+
+
+/* =====================================================
+ITEMS
+===================================================== */
+
+function addItem(){
+
+const name=
+document.getElementById("itemName")
+.value.trim();
+
+const unit=
+document.getElementById("itemUnit")
+.value;
+
+const cost=
+Number(
+document.getElementById("itemCost")
+.value||0
+);
+
+if(!name){
+
+alert("اكتب اسم الصنف");
+
+return;
+
+}
+
+
+if(
+database.items.some(
+item=>
+item.name.toLowerCase()===
+name.toLowerCase()
+)
+){
+
+alert("هذا الصنف موجود بالفعل");
+
+return;
+
+}
+
+
+let stock={};
+
+warehouses.forEach(
+warehouse=>{
+stock[warehouse]=0;
+}
+);
+
+
+database.items.push({
+
+id:generateID(),
+
+name:name,
+
+unit:unit,
+
+cost:cost,
+
+stock:stock
+
+});
+
+
+saveDatabase();
+
+document.getElementById("itemName").value="";
+document.getElementById("itemCost").value="";
+
+fillAllSelects();
+
+renderAll();
+
+alert("تم إضافة الصنف");
+
+}
+
+
+function deleteItem(id){
+
+if(
+database.movements.some(
+movement=>
+movement.itemId===id
+)
+){
+
+alert(
+"لا يمكن حذف صنف لديه حركات مخزون."
+);
+
+return;
+
+}
+
+
+if(
+!confirm("هل تريد حذف الصنف؟")
+){
+
+return;
+
+}
+
+
+database.items=
+database.items.filter(
+item=>item.id!==id
+);
+
+saveDatabase();
+
+fillAllSelects();
+
+renderAll();
+
+}
+
+
+/* =====================================================
+RENDER ITEMS
+===================================================== */
+
+function renderItems(){
+
+const search=
+(
+document.getElementById("itemSearch")
+.value||""
+).toLowerCase();
+
+
+const body=
+document.getElementById("itemsTable");
+
+
+const items=
+database.items.filter(
+item=>
+item.name.toLowerCase()
+.includes(search)
+);
+
+
+body.innerHTML=
+items.map(item=>{
+
+const qty=
+totalQuantity(item);
+
+const value=
+totalValue(item);
+
+
+return `
+
+<tr>
+
+<td>${item.name}</td>
+
+<td>${item.unit}</td>
+
+<td>${money(item.cost)}</td>
+
+<td>${item.stock["المخزن الرئيسي"]}</td>
+
+<td>${item.stock["فرع جدة"]}</td>
+
+<td>${item.stock["فرع ينبع"]}</td>
+
+<td>${item.stock["فرع المدينة"]}</td>
+
+<td>${qty}</td>
+
+<td>${money(value)}</td>
+
+<td>
+
+<button
+class="danger"
+onclick="deleteItem('${item.id}')">
+
+حذف
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =====================================================
+OPENING
+===================================================== */
+
+function saveOpening(){
+
+const warehouse=
+document.getElementById("openingWarehouse")
+.value;
+
+const itemId=
+document.getElementById("openingItem")
+.value;
+
+const qty=
+Number(
+document.getElementById("openingQty")
+.value||0
+);
+
+const cost=
+Number(
+document.getElementById("openingCost")
+.value||0
+);
+
+const item=getItem(itemId);
+
+if(!item||qty<=0){
+
+alert("أكمل البيانات");
+
+return;
+
+}
+
+
+item.stock[warehouse]+=qty;
+
+item.cost=cost;
+
+
+database.movements.push({
+
+id:generateID(),
+
+date:today(),
+
+number:"OPEN-"+Date.now(),
+
+type:"رصيد أول المدة",
+
+itemId:item.id,
+
+from:"",
+
+to:warehouse,
+
+qty:qty,
+
+cost:cost,
+
+value:qty*cost,
+
+note:""
+
+});
+
+
+saveDatabase();
+
+fillAllSelects();
+
+renderAll();
+
+document.getElementById("openingQty").value="";
+document.getElementById("openingCost").value="";
+
+alert("تم تسجيل رصيد أول المدة");
+
+}
+
+
+/* =====================================================
+RECEIPT
+===================================================== */
+
+function saveReceipt(){
+
+const number=
+document.getElementById("receiptNo")
+.value.trim()||
+"REC-"+Date.now();
+
+const date=
+document.getElementById("receiptDate")
+.value||
+today();
+
+const warehouse=
+document.getElementById("receiptWarehouse")
+.value;
+
+const itemId=
+document.getElementById("receiptItem")
+.value;
+
+const qty=
+Number(
+document.getElementById("receiptQty")
+.value||0
+);
+
+const cost=
+Number(
+document.getElementById("receiptCost")
+.value||0
+);
+
+const note=
+document.getElementById("receiptNote")
+.value;
+
+const item=getItem(itemId);
+
+if(!item||qty<=0){
+
+alert("أكمل البيانات");
+
+return;
+
+}
+
+
+/*
+حساب متوسط التكلفة
+*/
+
+const oldQty=
+totalQuantity(item);
+
+const oldValue=
+oldQty*Number(item.cost||0);
+
+const newQty=
+oldQty+qty;
+
+const newValue=
+oldValue+(qty*cost);
+
+if(newQty>0){
+
+item.cost=
+newValue/newQty;
+
+}
+
+
+item.stock[warehouse]+=qty;
+
+
+database.movements.push({
+
+id:generateID(),
+
+date:date,
+
+number:number,
+
+type:"إذن استلام",
+
+itemId:item.id,
+
+from:"",
+
+to:warehouse,
+
+qty:qty,
+
+cost:cost,
+
+value:qty*cost,
+
+note:note
+
+});
+
+
+saveDatabase();
+
+fillAllSelects();
+
+renderAll();
+
+document.getElementById("receiptNo").value="";
+document.getElementById("receiptQty").value="";
+document.getElementById("receiptCost").value="";
+document.getElementById("receiptNote").value="";
+
+alert("تم حفظ إذن الاستلام");
+
+}
+
+
+/* =====================================================
+ISSUE
+===================================================== */
+
+function updateIssueCost(){
+
+const item=
+getItem(
+document.getElementById("issueItem")
+.value
+);
+
+document.getElementById("issueCost")
+.value=
+item?
+Number(item.cost||0).toFixed(2):
+"0.00";
+
+calculateIssue();
+
+}
+
+
+function calculateIssue(){
+
+const qty=
+Number(
+document.getElementById("issueQty")
+.value||0
+);
+
+const cost=
+Number(
+document.getElementById("issueCost")
+.value||0
+);
+
+document.getElementById("issueTotal")
+.textContent=
+money(qty*cost);
+
+}
+
+
+function saveIssue(){
+
+const number=
+document.getElementById("issueNo")
+.value.trim()||
+"ISS-"+Date.now();
+
+const date=
+document.getElementById("issueDate")
+.value||
+today();
+
+const warehouse=
+document.getElementById("issueWarehouse")
+.value;
+
+const itemId=
+document.getElementById("issueItem")
+.value;
+
+const qty=
+Number(
+document.getElementById("issueQty")
+.value||0
+);
+
+const receiver=
+document.getElementById("issueReceiver")
+.value;
+
+const note=
+document.getElementById("issueNote")
+.value;
+
+const item=getItem(itemId);
+
+if(!item||qty<=0){
+
+alert("أكمل البيانات");
+
+return;
+
+}
+
+
+const available=
+Number(
+item.stock[warehouse]||0
+);
+
+
+if(qty>available){
+
+alert(
+"الرصيد غير كافٍ.\n"+
+"الرصيد المتاح: "+
+available+
+" "+
+item.unit
+);
+
+return;
+
+}
+
+
+const cost=
+Number(item.cost||0);
+
+
+/*
+خصم فعلي من المخزون
+*/
+
+item.stock[warehouse]-=qty;
+
+
+database.movements.push({
+
+id:generateID(),
+
+date:date,
+
+number:number,
+
+type:"إذن صرف",
+
+itemId:item.id,
+
+from:warehouse,
+
+to:receiver||"استهلاك",
+
+qty:qty,
+
+cost:cost,
+
+value:qty*cost,
+
+note:note
+
+});
+
+
+saveDatabase();
+
+renderAll();
+
+document.getElementById("issueNo").value="";
+document.getElementById("issueQty").value="";
+document.getElementById("issueReceiver").value="";
+document.getElementById("issueNote").value="";
+
+alert(
+"تم حفظ إذن الصرف وتم خصم الكمية من المخزون."
+);
+
+}
+
+
+/* =====================================================
+TRANSFER
+===================================================== */
+
+function updateTransferCost(){
+
+const item=
+getItem(
+document.getElementById("transferItem")
+.value
+);
+
+document.getElementById("transferCost")
+.textContent=
+item?
+money(item.cost):
+"0.00";
+
+}
+
+
+function saveTransfer(){
+
+const number=
+document.getElementById("transferNo")
+.value.trim()||
+"TR-"+Date.now();
+
+const date=
+document.getElementById("transferDate")
+.value||
+today();
+
+const from=
+document.getElementById("transferFrom")
+.value;
+
+const to=
+document.getElementById("transferTo")
+.value;
+
+const itemId=
+document.getElementById("transferItem")
+.value;
+
+const qty=
+Number(
+document.getElementById("transferQty")
+.value||0
+);
+
+const item=getItem(itemId);
+
+if(from===to){
+
+alert(
+"لا يمكن التحويل لنفس المخزن."
+);
+
+return;
+
+}
+
+
+if(!item||qty<=0){
+
+alert("أكمل البيانات");
+
+return;
+
+}
+
+
+const available=
+Number(item.stock[from]||0);
+
+if(qty>available){
+
+alert(
+"الرصيد غير كافٍ.\n"+
+"المتاح: "+
+available+
+" "+
+item.unit
+);
+
+return;
+
+}
+
+
+const cost=
+Number(item.cost||0);
+
+
+/*
+خصم من المصدر
+*/
+
+item.stock[from]-=qty;
+
+
+/*
+إضافة للمستلم
+*/
+
+item.stock[to]+=qty;
+
+
+database.movements.push({
+
+id:generateID(),
+
+date:date,
+
+number:number,
+
+type:"تحويل مخزني",
+
+itemId:item.id,
+
+from:from,
+
+to:to,
+
+qty:qty,
+
+cost:cost,
+
+value:qty*cost,
+
+note:"تحويل بين المخازن"
+
+});
+
+
+saveDatabase();
+
+renderAll();
+
+document.getElementById("transferNo").value="";
+document.getElementById("transferQty").value="";
+
+alert(
+"تم تنفيذ التحويل بنجاح."
+);
+
+}
+
+
+/* =====================================================
+تقرير صرف الفروع
+===================================================== */
+
+/*
+مهم:
+
+1- تحويل من الرئيسي إلى الفرع
+   يعتبر صرف للفرع.
+
+2- إذن صرف من داخل الفرع
+   يعتبر استهلاك للفرع.
+
+3- لا يتم احتساب التحويل مرة ثانية
+   كاستهلاك للفرع.
+*/
+
+function getReportMovements(){
+
+const from=
+document.getElementById("reportFrom").value;
+
+const to=
+document.getElementById("reportTo").value;
+
+const branch=
+document.getElementById("reportBranch").value;
+
+
+return database.movements.filter(m=>{
+
+if(from && m.date<from)
+return false;
+
+if(to && m.date>to)
+return false;
+
+
+/*
+الحركات التي تخص صرف الفروع:
+
+أولاً:
+تحويل من الرئيسي إلى فرع.
+
+ثانيًا:
+إذن صرف من داخل الفرع للاستهلاك.
+*/
+
+let selectedBranch="";
+
+
+if(
+m.type==="تحويل مخزني" &&
+m.from==="المخزن الرئيسي" &&
+branches.includes(m.to)
+){
+
+selectedBranch=m.to;
+
+}
+
+
+else if(
+m.type==="إذن صرف" &&
+branches.includes(m.from)
+){
+
+selectedBranch=m.from;
+
+}
+
+
+else{
+
+return false;
+
+}
+
+
+if(
+branch!=="ALL" &&
+selectedBranch!==branch
+){
+
+return false;
+
+}
+
+
+return true;
+
+});
+
+}
+
+
+function renderBranchReport(){
+
+const movements=
+getReportMovements();
+
+
+let data={};
+
+branches.forEach(branch=>{
+
+data[branch]={
+qty:0,
+value:0
+};
+
+});
+
+
+movements.forEach(m=>{
+
+let branch="";
+
+
+if(
+m.type==="تحويل مخزني" &&
+m.from==="المخزن الرئيسي"
+){
+
+branch=m.to;
+
+}
+
+
+if(
+m.type==="إذن صرف"
+){
+
+branch=m.from;
+
+}
+
+
+if(
+!data[branch]
+)return;
+
+
+data[branch].qty+=
+Number(m.qty||0);
+
+data[branch].value+=
+Number(m.value||0);
+
+});
+
+
+/*
+عرض الكروت
+*/
+
+document.getElementById("jeddahQty")
+.textContent=
+data["فرع جدة"].qty.toFixed(3);
+
+document.getElementById("jeddahValue")
+.textContent=
+money(data["فرع جدة"].value)+" ر.س";
+
+
+document.getElementById("yanbuQty")
+.textContent=
+data["فرع ينبع"].qty.toFixed(3);
+
+document.getElementById("yanbuValue")
+.textContent=
+money(data["فرع ينبع"].value)+" ر.س";
+
+
+document.getElementById("madinahQty")
+.textContent=
+data["فرع المدينة"].qty.toFixed(3);
+
+document.getElementById("madinahValue")
+.textContent=
+money(data["فرع المدينة"].value)+" ر.س";
+
+
+let totalQty=0;
+let totalValueAmount=0;
+
+branches.forEach(branch=>{
+
+totalQty+=data[branch].qty;
+
+totalValueAmount+=data[branch].value;
+
+});
+
+
+document.getElementById("allBranchQty")
+.textContent=
+totalQty.toFixed(3);
+
+document.getElementById("allBranchValue")
+.textContent=
+money(totalValueAmount)+" ر.س";
+
+
+/*
+جدول التفاصيل
+*/
+
+const body=
+document.getElementById("branchReportTable");
+
+
+body.innerHTML=
+movements
+.sort(
+(a,b)=>
+b.date.localeCompare(a.date)
+)
+.map(m=>{
+
+const item=
+getItem(m.itemId);
+
+const branch=
+m.type==="تحويل مخزني"
+?m.to
+:m.from;
+
+
+return `
+
+<tr>
+
+<td>${m.date}</td>
+
+<td>${m.number}</td>
+
+<td>${branch}</td>
+
+<td>${item?item.name:""}</td>
+
+<td>
+
+<span class="badge ${
+m.type==="تحويل مخزني"
+?"transfer"
+:"out"
+}">
+
+${
+m.type==="تحويل مخزني"
+?"صرف للفرع"
+:"استهلاك الفرع"
+}
+
+</span>
+
+</td>
+
+<td>${m.from||"-"}</td>
+
+<td>${m.qty}</td>
+
+<td>${money(m.cost)}</td>
+
+<td>${money(m.value)}</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+
+if(!body.innerHTML){
+
+body.innerHTML=
+`
+<tr>
+<td colspan="9">
+لا توجد حركات صرف خلال الفترة المحددة.
+</td>
+</tr>
+`;
+
+}
+
+}
+
+
+/* =====================================================
+تطبيق الفلتر
+===================================================== */
+
+function applyReportFilter(){
+
+const from=
+document.getElementById("reportFrom").value;
+
+const to=
+document.getElementById("reportTo").value;
+
+
+if(from && to && from>to){
+
+alert(
+"تاريخ البداية لا يمكن أن يكون بعد تاريخ النهاية."
+);
+
+return;
+
+}
+
+
+renderBranchReport();
+
+}
+
+
+function clearReportFilter(){
+
+document.getElementById("reportFrom")
+.value="";
+
+document.getElementById("reportTo")
+.value="";
+
+document.getElementById("reportBranch")
+.value="ALL";
+
+renderBranchReport();
+
+}
+
+
+/* =====================================================
+الحركات
+===================================================== */
+
+function renderMovements(){
+
+const search=
+(
+document.getElementById("movementSearch")
+.value||""
+).toLowerCase();
+
+
+const body=
+document.getElementById("movementTable");
+
+
+const movements=
+[...database.movements]
+.reverse()
+.filter(m=>{
+
+const item=getItem(m.itemId);
+
+const text=
+JSON.stringify(m)+
+(item?item.name:"");
+
+return text
+.toLowerCase()
+.includes(search);
+
+});
+
+
+body.innerHTML=
+movements.map(m=>{
+
+const item=
+getItem(m.itemId);
+
+let badge="in";
+
+if(m.type==="إذن صرف")
+badge="out";
+
+if(m.type==="تحويل مخزني")
+badge="transfer";
+
+
+return `
+
+<tr>
+
+<td>${m.date}</td>
+
+<td>${m.number}</td>
+
+<td>
+<span class="badge ${badge}">
+${m.type}
+</span>
+</td>
+
+<td>${item?item.name:""}</td>
+
+<td>${m.from||"-"}</td>
+
+<td>${m.to||"-"}</td>
+
+<td>${m.qty}</td>
+
+<td>${money(m.cost)}</td>
+
+<td>${money(m.value)}</td>
+
+<td>${m.note||""}</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =====================================================
+كارت الصنف
+===================================================== */
+
+function renderCard(){
+
+const item=
+getItem(
+document.getElementById("cardItem").value
+);
+
+const summary=
+document.getElementById("cardSummary");
+
+const body=
+document.getElementById("cardTable");
+
+
+if(!item){
+
+summary.innerHTML="";
+
+body.innerHTML="";
+
+return;
+
+}
+
+
+summary.innerHTML=`
+
+<div class="total-box">
+
+الصنف:
+${item.name}
+
+&nbsp; | &nbsp;
+
+متوسط التكلفة:
+${money(item.cost)}
+ر.س
+
+&nbsp; | &nbsp;
+
+إجمالي الرصيد:
+${totalQuantity(item)}
+${item.unit}
+
+&nbsp; | &nbsp;
+
+قيمة المخزون:
+${money(totalValue(item))}
+ر.س
+
+</div>
+
+`;
+
+
+const movements=
+database.movements
+.filter(
+m=>m.itemId===item.id
+)
+.sort(
+(a,b)=>
+a.date.localeCompare(b.date)
+);
+
+
+body.innerHTML=
+movements.map(m=>{
+
+return `
+
+<tr>
+
+<td>${m.date}</td>
+
+<td>${m.number}</td>
+
+<td>${m.type}</td>
+
+<td>${m.from||"-"}</td>
+
+<td>${m.to||"-"}</td>
+
+<td>${m.qty}</td>
+
+<td>${money(m.cost)}</td>
+
+<td>${money(m.value)}</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =====================================================
+DASHBOARD
+===================================================== */
+
+function renderDashboard(){
+
+document.getElementById("dashItems")
+.textContent=
+database.items.length;
+
+
+let totalQty=0;
+let totalValueAmount=0;
+
+
+database.items.forEach(item=>{
+
+totalQty+=
+totalQuantity(item);
+
+totalValueAmount+=
+totalValue(item);
+
+});
+
+
+document.getElementById("dashQty")
+.textContent=
+totalQty.toFixed(3);
+
+
+document.getElementById("dashValue")
+.textContent=
+money(totalValueAmount);
+
+
+document.getElementById("dashMoves")
+.textContent=
+database.movements.length;
+
+
+/*
+رصيد المخزون
+*/
+
+const body=
+document.getElementById("dashboardStock");
+
+
+body.innerHTML=
+database.items.map(item=>{
+
+return `
+
+<tr>
+
+<td>${item.name}</td>
+
+<td>${item.unit}</td>
+
+<td>${item.stock["المخزن الرئيسي"]}</td>
+
+<td>${item.stock["فرع جدة"]}</td>
+
+<td>${item.stock["فرع ينبع"]}</td>
+
+<td>${item.stock["فرع المدينة"]}</td>
+
+<td>${totalQuantity(item)}</td>
+
+<td>${money(totalValue(item))}</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+
+/*
+آخر الحركات
+*/
+
+const recent=
+document.getElementById("recentMoves");
+
+
+recent.innerHTML=
+[...database.movements]
+.reverse()
+.slice(0,10)
+.map(m=>{
+
+const item=
+getItem(m.itemId);
+
+return `
+
+<tr>
+
+<td>${m.date}</td>
+
+<td>${m.number}</td>
+
+<td>${m.type}</td>
+
+<td>${item?item.name:""}</td>
+
+<td>${m.from||"-"}</td>
+
+<td>${m.to||"-"}</td>
+
+<td>${m.qty}</td>
+
+<td>${money(m.value)}</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+
+/*
+تقرير الفروع
+*/
+
+renderBranchReport();
+
+}
+
+
+/* =====================================================
+BACKUP
+===================================================== */
+
+function backupData(){
+
+const data=
+JSON.stringify(
+database,
+null,
+2
+);
+
+
+const blob=
+new Blob(
+[data],
+{
+type:"application/json"
+}
+);
+
+
+const url=
+URL.createObjectURL(blob);
+
+
+const a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+"inventory-backup-"+
+today()+
+".json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+
+function restoreData(event){
+
+const file=
+event.target.files[0];
+
+if(!file)
+return;
+
+
+const reader=
+new FileReader();
+
+
+reader.onload=function(){
+
+try{
+
+database=
+JSON.parse(
+reader.result
+);
+
+saveDatabase();
+
+fillAllSelects();
+
+renderAll();
+
+alert(
+"تم استعادة النسخة الاحتياطية بنجاح."
+);
+
+}
+
+catch(error){
+
+alert(
+"الملف غير صالح."
+);
+
+}
+
+};
+
+
+reader.readAsText(file);
+
+}
+
+
+/* =====================================================
+DELETE ALL
+===================================================== */
+
+function deleteAllData(){
+
+if(
+!confirm(
+"تحذير!\n\n"+
+"سيتم حذف جميع الأصناف والحركات.\n"+
+"هل أنت متأكد؟"
+)
+){
+
+return;
+
+}
+
+
+database={
+items:[],
+movements:[]
+};
+
+
+saveDatabase();
+
+fillAllSelects();
+
+renderAll();
+
+alert(
+"تم حذف جميع البيانات."
+);
+
+}
+
+
+/* =====================================================
+RENDER ALL
+===================================================== */
+
+function renderAll(){
+
+renderDashboard();
+
+renderItems();
+
+renderMovements();
+
+renderCard();
+
+updateIssueCost();
+
+updateTransferCost();
+
+}
+
+
+/* =====================================================
+INITIALIZATION
+===================================================== */
+
+document.getElementById("currentDate")
+.textContent=today();
+
+document.getElementById("receiptDate")
+.value=today();
+
+document.getElementById("issueDate")
+.value=today();
+
+document.getElementById("transferDate")
+.value=today();
+
+fillAllSelects();
+
+renderAll();
+
+</script>
+
+</body>
+</html>
