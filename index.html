@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -7,275 +8,60 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-margin:0;
-font-family:Tahoma,Arial,sans-serif;
-background:#f3f4f6;
-color:#111827;
-}
-
-header{
-background:#111827;
-color:#fff;
-padding:15px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f3f4f6;color:#111827}
+header{background:#111827;color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
 header h1{margin:0;font-size:21px}
-
-.container{
-max-width:1450px;
-margin:auto;
-padding:15px;
-}
-
-nav{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin-bottom:15px;
-}
-
-nav button{
-background:#fff;
-color:#111827;
-border:1px solid #d1d5db;
-}
-
-nav button.active{
-background:#2563eb;
-color:#fff;
-}
-
-button{
-border:0;
-border-radius:8px;
-padding:10px 14px;
-cursor:pointer;
-font-weight:bold;
-}
-
+.container{max-width:1450px;margin:auto;padding:15px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+nav button{background:#fff;color:#111827;border:1px solid #d1d5db}
+nav button.active{background:#2563eb;color:#fff}
+button{border:0;border-radius:8px;padding:10px 14px;cursor:pointer;font-weight:bold}
 .primary{background:#2563eb;color:white}
 .success{background:#059669;color:white}
 .danger{background:#dc2626;color:white}
 .gray{background:#6b7280;color:white}
-
-.page{display:none}
-.page.active{display:block}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-}
-
-.card{
-background:white;
-padding:18px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-.card-title{
-color:#6b7280;
-font-size:14px;
-}
-
-.card-value{
-font-size:25px;
-font-weight:bold;
-margin-top:8px;
-}
-
-.panel{
-background:white;
-padding:18px;
-border-radius:12px;
-margin-top:15px;
-box-shadow:0 2px 8px rgba(0,0,0,.07);
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-}
-
-.grid2{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-}
-
-.grid4{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-}
-
-label{
-display:block;
-font-weight:bold;
-font-size:14px;
-margin-bottom:5px;
-}
-
-input,select,textarea{
-width:100%;
-padding:11px;
-border:1px solid #d1d5db;
-border-radius:8px;
-font-family:inherit;
-font-size:14px;
-}
-
+.page{display:none}.page.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:white;padding:18px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card-title{color:#6b7280;font-size:14px}
+.card-value{font-size:25px;font-weight:bold;margin-top:8px}
+.panel{background:white;padding:18px;border-radius:12px;margin-top:15px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+label{display:block;font-weight:bold;font-size:14px;margin-bottom:5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:8px;font-family:inherit;font-size:14px}
 textarea{min-height:80px}
-
-.table-wrap{
-overflow:auto;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-min-width:750px;
-}
-
-th,td{
-border-bottom:1px solid #e5e7eb;
-padding:10px;
-text-align:right;
-white-space:nowrap;
-}
-
-th{
-background:#f9fafb;
-}
-
-.badge{
-padding:5px 8px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-}
-
-.in{
-background:#dcfce7;
-color:#166534;
-}
-
-.out{
-background:#fee2e2;
-color:#991b1b;
-}
-
-.transfer{
-background:#dbeafe;
-color:#1e40af;
-}
-
-.search{
-margin-bottom:12px;
-}
-
-.total-box{
-background:#f9fafb;
-padding:15px;
-border-radius:8px;
-margin-top:15px;
-font-size:18px;
-font-weight:bold;
-}
-
-.small{
-color:#6b7280;
-font-size:13px;
-}
-
-.filter-box{
-background:#eef2ff;
-padding:15px;
-border-radius:10px;
-margin-bottom:15px;
-}
-
-.branch-summary{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-margin-top:15px;
-}
-
-.branch-card{
-background:#fff;
-border:1px solid #e5e7eb;
-border-radius:10px;
-padding:15px;
-}
-
-.branch-card h3{
-margin:0 0 10px;
-font-size:16px;
-}
-
-.branch-number{
-font-size:23px;
-font-weight:bold;
-}
-
-.branch-label{
-font-size:12px;
-color:#6b7280;
-margin-top:5px;
-}
-
-.date-info{
-background:#f9fafb;
-padding:10px;
-border-radius:8px;
-margin-top:12px;
-}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:750px}
+th,td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:right;white-space:nowrap}
+th{background:#f9fafb}
+.badge{padding:5px 8px;border-radius:20px;font-size:12px;font-weight:bold}
+.in{background:#dcfce7;color:#166534}
+.out{background:#fee2e2;color:#991b1b}
+.transfer{background:#dbeafe;color:#1e40af}
+.search{margin-bottom:12px}
+.total-box{background:#f9fafb;padding:15px;border-radius:8px;margin-top:15px;font-size:18px;font-weight:bold}
+.small{color:#6b7280;font-size:13px}
+.filter-box{background:#eef2ff;padding:15px;border-radius:10px;margin-bottom:15px}
+.branch-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:15px}
+.branch-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:15px}
+.branch-card h3{margin:0 0 10px;font-size:16px}
+.branch-number{font-size:23px;font-weight:bold}
+.branch-label{font-size:12px;color:#6b7280;margin-top:5px}
 
 @media(max-width:1000px){
-.cards{
-grid-template-columns:repeat(2,1fr);
+.cards{grid-template-columns:repeat(2,1fr)}
+.branch-summary{grid-template-columns:repeat(2,1fr)}
+.grid,.grid2,.grid4{grid-template-columns:1fr}
 }
-
-.branch-summary{
-grid-template-columns:repeat(2,1fr);
-}
-
-.grid,.grid2,.grid4{
-grid-template-columns:1fr;
-}
-}
-
 @media(max-width:500px){
 header h1{font-size:17px}
-
-.cards{
-grid-template-columns:1fr 1fr;
-}
-
-.branch-summary{
-grid-template-columns:1fr 1fr;
-}
-
-.card{
-padding:12px;
-}
-
-.card-value{
-font-size:19px;
-}
-
-nav button{
-flex:1;
-min-width:120px;
-}
+.cards{grid-template-columns:1fr 1fr}
+.branch-summary{grid-template-columns:1fr 1fr}
+.card{padding:12px}
+.card-value{font-size:19px}
+nav button{flex:1;min-width:120px}
 }
 </style>
 </head>
@@ -290,53 +76,23 @@ min-width:120px;
 <div class="container">
 
 <nav id="menu">
-
-<button onclick="showPage('dashboard')" class="active">
-لوحة التحكم
-</button>
-
-<button onclick="showPage('items')">
-الأصناف
-</button>
-
-<button onclick="showPage('opening')">
-رصيد أول المدة
-</button>
-
-<button onclick="showPage('receipt')">
-إذن استلام
-</button>
-
-<button onclick="showPage('issue')">
-إذن صرف
-</button>
-
-<button onclick="showPage('transfer')">
-تحويل مخزني
-</button>
-
-<button onclick="showPage('movements')">
-الحركات
-</button>
-
-<button onclick="showPage('card')">
-كارت الصنف
-</button>
-
-<button onclick="showPage('backup')">
-نسخ احتياطي
-</button>
-
+<button onclick="showPage('dashboard')" class="active">لوحة التحكم</button>
+<button onclick="showPage('items')">الأصناف</button>
+<button onclick="showPage('opening')">رصيد أول المدة</button>
+<button onclick="showPage('receipt')">إذن استلام</button>
+<button onclick="showPage('issue')">إذن صرف</button>
+<button onclick="showPage('transfer')">تحويل مخزني</button>
+<button onclick="showPage('movements')">الحركات</button>
+<button onclick="showPage('card')">كارت الصنف</button>
+<button onclick="showPage('backup')">نسخ احتياطي</button>
 </nav>
 
 <section id="dashboard" class="page active">
 
 <div class="panel">
-
 <h2>📊 لوحة التحكم</h2>
 
 <div class="filter-box">
-
 <h3>🔎 فلترة تقرير صرف الفروع</h3>
 
 <div class="grid4">
@@ -353,34 +109,25 @@ min-width:120px;
 
 <div>
 <label>الفرع</label>
-
 <select id="reportBranch">
 <option value="ALL">كل الفروع</option>
 <option value="فرع جدة">فرع جدة</option>
 <option value="فرع ينبع">فرع ينبع</option>
 <option value="فرع المدينة">فرع المدينة</option>
 </select>
-
 </div>
 
 <div style="display:flex;align-items:end">
-
-<button class="primary"
-onclick="applyReportFilter()"
-style="width:100%">
+<button class="primary" onclick="applyReportFilter()" style="width:100%">
 🔎 عرض التقرير
 </button>
-
 </div>
 
 </div>
 
 <br>
 
-<button class="gray" onclick="clearReportFilter()">
-إلغاء الفلتر
-</button>
-
+<button class="gray" onclick="clearReportFilter()">إلغاء الفلتر</button>
 </div>
 
 <div class="cards">
@@ -407,10 +154,7 @@ style="width:100%">
 
 </div>
 
-</div>
-
 <div class="panel">
-
 <h2>🏢 تقرير صرف الفروع</h2>
 
 <p class="small">
@@ -422,95 +166,44 @@ style="width:100%">
 
 <div class="branch-card">
 <h3>فرع جدة</h3>
-
-<div class="branch-number" id="jeddahQty">
-0
-</div>
-
-<div class="branch-label">
-كمية ما تم صرفه للفرع
-</div>
-
-<div class="branch-number" id="jeddahValue">
-0.00 ر.س
-</div>
-
-<div class="branch-label">
-قيمة الصرف
-</div>
+<div class="branch-number" id="jeddahQty">0</div>
+<div class="branch-label">كمية ما تم صرفه للفرع</div>
+<div class="branch-number" id="jeddahValue">0.00 ر.س</div>
+<div class="branch-label">قيمة الصرف</div>
 </div>
 
 <div class="branch-card">
 <h3>فرع ينبع</h3>
-
-<div class="branch-number" id="yanbuQty">
-0
-</div>
-
-<div class="branch-label">
-كمية ما تم صرفه للفرع
-</div>
-
-<div class="branch-number" id="yanbuValue">
-0.00 ر.س
-</div>
-
-<div class="branch-label">
-قيمة الصرف
-</div>
+<div class="branch-number" id="yanbuQty">0</div>
+<div class="branch-label">كمية ما تم صرفه للفرع</div>
+<div class="branch-number" id="yanbuValue">0.00 ر.س</div>
+<div class="branch-label">قيمة الصرف</div>
 </div>
 
 <div class="branch-card">
 <h3>فرع المدينة</h3>
-
-<div class="branch-number" id="madinahQty">
-0
-</div>
-
-<div class="branch-label">
-كمية ما تم صرفه للفرع
-</div>
-
-<div class="branch-number" id="madinahValue">
-0.00 ر.س
-</div>
-
-<div class="branch-label">
-قيمة الصرف
-</div>
+<div class="branch-number" id="madinahQty">0</div>
+<div class="branch-label">كمية ما تم صرفه للفرع</div>
+<div class="branch-number" id="madinahValue">0.00 ر.س</div>
+<div class="branch-label">قيمة الصرف</div>
 </div>
 
 <div class="branch-card">
 <h3>الإجمالي</h3>
-
-<div class="branch-number" id="allBranchQty">
-0
-</div>
-
-<div class="branch-label">
-إجمالي الكمية
-</div>
-
-<div class="branch-number" id="allBranchValue">
-0.00 ر.س
-</div>
-
-<div class="branch-label">
-إجمالي القيمة
-</div>
+<div class="branch-number" id="allBranchQty">0</div>
+<div class="branch-label">إجمالي الكمية</div>
+<div class="branch-number" id="allBranchValue">0.00 ر.س</div>
+<div class="branch-label">إجمالي القيمة</div>
 </div>
 
 </div>
 </div>
 
 <div class="panel">
-
 <h2>📋 تفاصيل صرف الفروع</h2>
 
 <div class="table-wrap">
-
 <table>
-
 <thead>
 <tr>
 <th>التاريخ</th>
@@ -524,23 +217,16 @@ style="width:100%">
 <th>القيمة</th>
 </tr>
 </thead>
-
 <tbody id="branchReportTable"></tbody>
-
 </table>
-
 </div>
-
 </div>
 
 <div class="panel">
-
 <h2>📦 رصيد المخزون</h2>
 
 <div class="table-wrap">
-
 <table>
-
 <thead>
 <tr>
 <th>الصنف</th>
@@ -553,23 +239,16 @@ style="width:100%">
 <th>القيمة</th>
 </tr>
 </thead>
-
 <tbody id="dashboardStock"></tbody>
-
 </table>
-
 </div>
-
 </div>
 
 <div class="panel">
-
 <h2>آخر الحركات</h2>
 
 <div class="table-wrap">
-
 <table>
-
 <thead>
 <tr>
 <th>التاريخ</th>
@@ -582,13 +261,9 @@ style="width:100%">
 <th>القيمة</th>
 </tr>
 </thead>
-
 <tbody id="recentMoves"></tbody>
-
 </table>
-
 </div>
-
 </div>
 
 </section>
@@ -596,7 +271,6 @@ style="width:100%">
 <section id="items" class="page">
 
 <div class="panel">
-
 <h2>📦 إضافة صنف</h2>
 
 <div class="grid">
@@ -608,7 +282,6 @@ style="width:100%">
 
 <div>
 <label>الوحدة</label>
-
 <select id="itemUnit">
 <option>كجم</option>
 <option>جرام</option>
@@ -617,7 +290,6 @@ style="width:100%">
 <option>علبة</option>
 <option>كرتون</option>
 </select>
-
 </div>
 
 <div>
@@ -629,29 +301,17 @@ style="width:100%">
 
 <br>
 
-<button class="primary" onclick="addItem()">
-➕ إضافة الصنف
-</button>
-
+<button class="primary" onclick="addItem()">➕ إضافة الصنف</button>
 </div>
 
 <div class="panel">
-
 <h2>الأصناف</h2>
 
-<input
-class="search"
-id="itemSearch"
-placeholder="🔎 ابحث عن صنف..."
-oninput="renderItems"
->
+<input class="search" id="itemSearch" placeholder="🔎 ابحث عن صنف..." oninput="renderItems()">
 
 <div class="table-wrap">
-
 <table>
-
 <thead>
-
 <tr>
 <th>الصنف</th>
 <th>الوحدة</th>
@@ -664,15 +324,10 @@ oninput="renderItems"
 <th>القيمة</th>
 <th>إجراء</th>
 </tr>
-
 </thead>
-
 <tbody id="itemsTable"></tbody>
-
 </table>
-
 </div>
-
 </div>
 
 </section>
@@ -701,18 +356,20 @@ oninput="renderItems"
 </div>
 
 <div>
-<label>تكلفة الوحدة</label>
-<input id="openingCost" type="number" step="0.01">
-</div>
-
-<div>
 <label>تاريخ رصيد أول المدة</label>
 <input id="openingDate" type="date">
 </div>
 
+<div>
+<label>تكلفة الوحدة</label>
+<input id="openingCost" type="number" step="0.01">
 </div>
 
-<div class="date-info">
+</div>
+
+<br>
+
+<div style="margin-top:12px;padding:10px;background:#f9fafb;border-radius:8px">
 📅 سيتم تسجيل رصيد أول المدة بتاريخ:
 <strong id="openingDatePreview">-</strong>
 </div>
@@ -731,23 +388,23 @@ oninput="renderItems"
 
 <div class="panel">
 
-<h2>📥 إذن استلام</h2>
+<h2>🧾 إذن استلام</h2>
 
 <div class="grid">
 
 <div>
-<label>رقم الإذن</label>
-<input id="receiptNo">
+<label>المورد</label>
+<select id="receiptSupplier"></select>
+</div>
+
+<div>
+<label>رقم الفاتورة</label>
+<input id="receiptInvoice">
 </div>
 
 <div>
 <label>التاريخ</label>
 <input id="receiptDate" type="date">
-</div>
-
-<div>
-<label>المخزن</label>
-<select id="receiptWarehouse"></select>
 </div>
 
 <div>
@@ -775,7 +432,7 @@ oninput="renderItems"
 <br><br>
 
 <button class="success" onclick="saveReceipt()">
-💾 حفظ إذن الاستلام
+🧾 حفظ إذن الاستلام
 </button>
 
 </div>
@@ -806,18 +463,23 @@ oninput="renderItems"
 </div>
 
 <div>
+<label>الفرع المصروف له</label>
+<select id="issueBranch">
+<option value="">اختر الفرع</option>
+<option value="فرع جدة">فرع جدة</option>
+<option value="فرع ينبع">فرع ينبع</option>
+<option value="فرع المدينة">فرع المدينة</option>
+</select>
+</div>
+
+<div>
 <label>الصنف</label>
 <select id="issueItem" onchange="updateIssueCost()"></select>
 </div>
 
 <div>
 <label>الكمية</label>
-<input
-id="issueQty"
-type="number"
-step="0.001"
-oninput="calculateIssue()"
->
+<input id="issueQty" type="number" step="0.001" oninput="calculateIssue()">
 </div>
 
 <div>
@@ -861,12 +523,6 @@ oninput="calculateIssue()"
 
 <h2>🔄 تحويل مخزني</h2>
 
-<p class="small">
-مثال: صرف 20 كجم دجاج من المخزن الرئيسي إلى فرع جدة.
-سيتم خصم 20 كجم من الرئيسي وإضافة 20 كجم إلى جدة.
-وسيظهر ذلك في تقرير صرف الفروع.
-</p>
-
 <div class="grid">
 
 <div>
@@ -880,12 +536,12 @@ oninput="calculateIssue()"
 </div>
 
 <div>
-<label>من مخزن</label>
+<label>من</label>
 <select id="transferFrom"></select>
 </div>
 
 <div>
-<label>إلى مخزن</label>
+<label>إلى</label>
 <select id="transferTo"></select>
 </div>
 
@@ -899,14 +555,11 @@ oninput="calculateIssue()"
 <input id="transferQty" type="number" step="0.001">
 </div>
 
+<div>
+<label>متوسط التكلفة</label>
+<div id="transferCost" class="total-box">0.00</div>
 </div>
 
-<br>
-
-<div class="total-box">
-متوسط تكلفة الصنف:
-<span id="transferCost">0.00</span>
-ر.س
 </div>
 
 <br>
@@ -923,21 +576,14 @@ oninput="calculateIssue()"
 
 <div class="panel">
 
-<h2>📚 حركات المخزون</h2>
+<h2>📋 الحركات</h2>
 
-<input
-class="search"
-id="movementSearch"
-placeholder="🔎 ابحث في الحركات..."
-oninput="renderMovements()"
->
+<input class="search" id="movementSearch" placeholder="🔎 ابحث..." oninput="renderMovements()">
 
 <div class="table-wrap">
 
 <table>
-
 <thead>
-
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
@@ -950,7 +596,6 @@ oninput="renderMovements()"
 <th>القيمة</th>
 <th>ملاحظات</th>
 </tr>
-
 </thead>
 
 <tbody id="movementTable"></tbody>
@@ -967,31 +612,28 @@ oninput="renderMovements()"
 
 <div class="panel">
 
-<h2>📊 كارت الصنف</h2>
+<h2>📑 كارت الصنف</h2>
 
+<label>الصنف</label>
 <select id="cardItem" onchange="renderCard()"></select>
 
 <div id="cardSummary"></div>
-
-<br>
 
 <div class="table-wrap">
 
 <table>
 
 <thead>
-
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
-<th>النوع</th>
+<th>الحركة</th>
 <th>من</th>
 <th>إلى</th>
 <th>الكمية</th>
 <th>التكلفة</th>
 <th>القيمة</th>
 </tr>
-
 </thead>
 
 <tbody id="cardTable"></tbody>
@@ -1008,32 +650,19 @@ oninput="renderMovements()"
 
 <div class="panel">
 
-<h2>💾 النسخ الاحتياطي</h2>
+<h2>💾 نسخ احتياطي</h2>
 
 <p>
-البيانات الأساسية محفوظة أونلاين في Supabase.
-يمكنك تنزيل نسخة احتياطية من البيانات المعروضة حاليًا بشكل دوري.
+يمكنك تحميل نسخة احتياطية من البيانات المحملة في المتصفح.
 </p>
 
 <button class="primary" onclick="backupData()">
-⬇️ تنزيل نسخة احتياطية
+💾 تحميل نسخة احتياطية
 </button>
 
 <br><br>
 
-<label>استعادة نسخة احتياطية</label>
-
-<input
-type="file"
-accept=".json"
-onchange="restoreData(event)"
->
-
-<br><br>
-
-<button class="danger" onclick="deleteAllData()">
-🗑️ حذف جميع البيانات
-</button>
+<input type="file" id="restoreFile" accept=".json" onchange="restoreData(event)">
 
 </div>
 
@@ -1057,27 +686,6 @@ SUPABASE_URL,
 SUPABASE_PUBLISHABLE_KEY
 );
 
-const warehouseLabels = {
-"المخزن الرئيسي":"المخزن الرئيسي",
-"الزهراء":"فرع جدة",
-"ينبع":"فرع ينبع",
-"المدينة":"فرع المدينة"
-};
-
-const displayToDbWarehouse = {
-"المخزن الرئيسي":"المخزن الرئيسي",
-"فرع جدة":"الزهراء",
-"فرع ينبع":"ينبع",
-"فرع المدينة":"المدينة"
-};
-
-const warehouses=[
-"المخزن الرئيسي",
-"فرع جدة",
-"فرع ينبع",
-"فرع المدينة"
-];
-
 const branches=[
 "فرع جدة",
 "فرع ينبع",
@@ -1086,83 +694,60 @@ const branches=[
 
 let db={
 items:[],
+warehouses:[],
+stocks:[],
 movements:[]
 };
-
-let dbWarehouses=[];
-let dbProducts=[];
-
-function money(v){
-return Number(v||0).toLocaleString(
-"ar-SA",
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-}
 
 function today(){
 return new Date().toISOString().slice(0,10);
 }
 
-function generateID(){
-return crypto.randomUUID();
+function money(n){
+return Number(n||0).toLocaleString("ar-SA",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
 }
 
 function getItem(id){
-return db.items.find(
-x=>String(x.id)===String(id)
-);
+return db.items.find(x=>x.id===id);
 }
 
-function totalQuantity(item){
-return warehouses.reduce(
-(s,w)=>s+Number(item.stock[w]||0),
-0
-);
-}
-
-function totalValue(item){
-return totalQuantity(item)*Number(item.cost||0);
-}
-
-function dbWarehouseId(displayName){
-
-const dbName =
-displayToDbWarehouse[displayName] ||
-displayName;
-
-const w =
-dbWarehouses.find(
-x=>x.name===dbName
-);
-
+function dbWarehouseId(name){
+const w=db.warehouses.find(x=>x.name===name);
 return w?w.id:null;
 }
 
-function displayWarehouseName(dbName){
-return warehouseLabels[dbName]||dbName||"";
+function warehouseName(id){
+const w=db.warehouses.find(x=>x.id===id);
+return w?w.name:"";
 }
 
-function movementTypeLabel(t){
+function movementTypeLabel(type){
 
-return ({
+const map={
 opening:"رصيد أول المدة",
-purchase:"إذن استلام",
-transfer_out:"تحويل مخزني",
-transfer_in:"تحويل مخزني",
-adjustment_in:"تسوية إضافة",
-adjustment_out:"تسوية خصم"
-})[t]||t;
+purchase:"استلام",
+adjustment_out:"صرف",
+transfer_out:"تحويل صادر",
+transfer_in:"تحويل وارد"
+};
+
+return map[type]||type;
+}
+
+function totalQuantity(item){
+
+return Object.values(item.stock||{})
+.reduce((a,b)=>a+Number(b||0),0);
 
 }
 
-function localSave(){
-localStorage.setItem(
-"inventoryERP",
-JSON.stringify(db)
-);
+function totalValue(item){
+
+return totalQuantity(item)*Number(item.cost||0);
+
 }
 
 async function loadDatabase(){
@@ -1198,162 +783,173 @@ supabaseClient
 
 supabaseClient
 .from("transfers")
-.select(
-"id,transfer_date,from_warehouse_id,to_warehouse_id,status"
-)
+.select("id,transfer_date,from_warehouse_id,to_warehouse_id,status")
 .eq("status","posted")
 
 ]);
 
 if(pe||we||se||me||te){
+
 throw new Error(
 (pe||we||se||me||te).message
 );
+
 }
 
-dbProducts=products||[];
-dbWarehouses=whs||[];
+db.warehouses=whs||[];
+db.stocks=stocks||[];
 
-db.items=dbProducts.map(p=>{
+db.items=(products||[]).map(p=>{
 
-const stock={
-"المخزن الرئيسي":0,
-"فرع جدة":0,
-"فرع ينبع":0,
-"فرع المدينة":0
-};
+const stock={};
 
-let cost=0;
+db.warehouses.forEach(w=>{
+stock[w.name]=0;
+});
 
-(stocks||[])
-.filter(
-s=>String(s.product_id)===String(p.id)
-)
+db.stocks
+.filter(s=>s.product_id===p.id)
 .forEach(s=>{
 
-const w=dbWarehouses.find(
-x=>String(x.id)===String(s.warehouse_id)
-);
+const name=warehouseName(s.warehouse_id);
 
-if(w && warehouseLabels[w.name])
-stock[warehouseLabels[w.name]]
-=Number(s.qty||0);
-
-if(w && w.warehouse_type==="main")
-cost=Number(s.avg_cost||0);
-
-});
-
-if(!cost){
-
-const vals=(stocks||[])
-.filter(
-s=>String(s.product_id)===String(p.id)
-);
-
-if(vals.length)
-cost=Number(vals[0].avg_cost||0);
-
+if(name){
+stock[name]=Number(s.qty||0);
 }
 
-return {
-id:p.id,
-name:p.name,
-unit:p.unit,
-cost,
-stock
-};
-
 });
 
-const transferMap={};
-
-(transfers||[]).forEach(t=>{
-
-transferMap[String(t.id)]={
-from:
-displayWarehouseName(
-(dbWarehouses.find(
-w=>String(w.id)===String(t.from_warehouse_id)
-)||{}).name
-),
-
-to:
-displayWarehouseName(
-(dbWarehouses.find(
-w=>String(w.id)===String(t.to_warehouse_id)
-)||{}).name
-),
-
-date:
-String(t.transfer_date||"").slice(0,10)
-
+return{
+...p,
+cost:Number(p.cost||0),
+stock
 };
 
 });
 
 db.movements=(moves||[]).map(m=>{
 
-const tr =
-transferMap[String(m.reference_id)]||{};
+const item=getItem(m.product_id);
 
-const fromBase =
-displayWarehouseName(
-(dbWarehouses.find(
-w=>String(w.id)===String(m.warehouse_id)
-)||{}).name
-);
+let from="";
+let to="";
 
-let from=fromBase,
-to="";
+if(m.movement_type==="opening"){
+from="رصيد أول المدة";
+}
+
+if(m.movement_type==="purchase"){
+to=warehouseName(m.warehouse_id);
+}
+
+if(m.movement_type==="adjustment_out"){
+
+const note=m.notes||"";
+const match=note.match(/الفرع المصروف له:\s*([^|]+)/);
+
+if(match){
+from=match[1].trim();
+}else{
+from=warehouseName(m.warehouse_id);
+}
+
+}
 
 if(m.movement_type==="transfer_out"){
-from=tr.from||fromBase;
-to=tr.to||"";
+from=warehouseName(m.warehouse_id);
 }
 
-if(m.movement_type==="transfer_in"){
-from=tr.from||"";
-to=tr.to||fromBase;
-}
-
-return {
-
+return{
 id:m.id,
-
-date:
-String(
-m.movement_date||
-tr.date||
-""
-).slice(0,10),
-
+date:String(m.movement_date||"").slice(0,10),
 number:m.document_no||"",
-
 type:m.movement_type,
-
 itemId:m.product_id,
-
 from,
-
 to,
-
 qty:Number(m.qty||0),
-
 cost:Number(m.unit_cost||0),
-
 value:Number(m.total_cost||0),
-
 note:m.notes||""
-
 };
 
 });
 
-localSave();
+}
 
-fillAllSelects();
-renderAll();
+function fillWarehouseSelect(id){
+
+const s=document.getElementById(id);
+
+if(!s)return;
+
+s.innerHTML=
+`<option value="">اختر المخزن</option>`+
+db.warehouses
+.map(w=>`<option value="${w.name}">${w.name}</option>`)
+.join("");
+
+}
+
+function fillBranchSelect(id){
+
+const s=document.getElementById(id);
+
+if(!s)return;
+
+s.innerHTML=
+`<option value="">اختر الفرع</option>`+
+branches
+.map(b=>`<option value="${b}">${b}</option>`)
+.join("");
+
+}
+
+function fillItemSelect(id){
+
+const s=document.getElementById(id);
+
+if(!s)return;
+
+s.innerHTML=
+`<option value="">اختر الصنف</option>`+
+db.items
+.map(i=>`<option value="${i.id}">${i.name}</option>`)
+.join("");
+
+}
+
+function fillSupplierSelect(){
+
+const s=document.getElementById("receiptSupplier");
+
+if(!s)return;
+
+s.innerHTML=
+`<option value="">اختر المورد</option>`;
+
+}
+
+function fillAllSelects(){
+
+[
+"openingWarehouse",
+"issueWarehouse",
+"transferFrom",
+"transferTo"
+].forEach(fillWarehouseSelect);
+
+fillBranchSelect("issueBranch");
+
+[
+"openingItem",
+"receiptItem",
+"issueItem",
+"transferItem",
+"cardItem"
+].forEach(fillItemSelect);
+
+fillSupplierSelect();
 
 }
 
@@ -1361,9 +957,7 @@ function showPage(page){
 
 document
 .querySelectorAll(".page")
-.forEach(
-x=>x.classList.remove("active")
-);
+.forEach(x=>x.classList.remove("active"));
 
 document
 .getElementById(page)
@@ -1371,9 +965,7 @@ document
 
 document
 .querySelectorAll("#menu button")
-.forEach(
-x=>x.classList.remove("active")
-);
+.forEach(x=>x.classList.remove("active"));
 
 const pages=[
 "dashboard",
@@ -1398,305 +990,162 @@ renderAll();
 
 }
 
-function fillWarehouseSelect(id){
-
-const s=document.getElementById(id);
-
-if(!s)return;
-
-s.innerHTML=
-warehouses.map(
-w=>`<option value="${w}">${w}</option>`
-).join("");
-
-}
-
-function fillItemSelect(id){
-
-const s=document.getElementById(id);
-
-if(!s)return;
-
-s.innerHTML=
-`<option value="">اختر الصنف</option>`+
-db.items.map(
-i=>`<option value="${i.id}">${i.name}</option>`
-).join("");
-
-}
-
-function fillAllSelects(){
-
-[
-"openingWarehouse",
-"issueWarehouse",
-"transferFrom",
-"transferTo"
-].forEach(fillWarehouseSelect);
-
-fillWarehouseSelect("receiptWarehouse");
-
-const receipt=
-document.getElementById("receiptWarehouse");
-
-if(receipt){
-
-const main=warehouses[0];
-
-receipt.value=main;
-receipt.disabled=true;
-
-}
-
-[
-"openingItem",
-"receiptItem",
-"issueItem",
-"transferItem",
-"cardItem"
-].forEach(fillItemSelect);
-
-}
-
 async function addItem(){
 
-const name=
-document.getElementById("itemName")
-.value.trim();
-
-const unit=
-document.getElementById("itemUnit")
-.value;
-
-const cost=
-Number(
-document.getElementById("itemCost")
-.value||0
-);
+const name=document.getElementById("itemName").value.trim();
+const unit=document.getElementById("itemUnit").value;
+const cost=Number(document.getElementById("itemCost").value||0);
 
 if(!name)
-return alert("اكتب اسم الصنف");
+return alert("اكتب اسم الصنف.");
 
-if(
-db.items.some(
-i=>i.name.toLowerCase()===
-name.toLowerCase()
-)
-)
-return alert("هذا الصنف موجود بالفعل");
-
-const {data,error}=
-await supabaseClient
+const {error}=await supabaseClient
 .from("products")
 .insert({
 name,
-unit
-})
-.select("*")
-.single();
-
-if(error)
-return alert(
-"لم يتم إضافة الصنف:\n"+
-error.message
-);
-
-dbProducts.push(data);
-
-db.items.push({
-
-id:data.id,
-name:data.name,
-unit:data.unit,
+unit,
 cost,
-
-stock:{
-"المخزن الرئيسي":0,
-"فرع جدة":0,
-"فرع ينبع":0,
-"فرع المدينة":0
-}
-
+active:true
 });
 
-localSave();
+if(error)
+return alert("تعذر إضافة الصنف:\n"+error.message);
+
+await loadDatabase();
 
 document.getElementById("itemName").value="";
 document.getElementById("itemCost").value="";
 
-fillAllSelects();
 renderAll();
 
-alert("تم إضافة الصنف أونلاين");
-
-}
-
-async function deleteItem(id){
-
-if(
-db.movements.some(
-m=>m.itemId===id
-)
-)
-return alert(
-"لا يمكن حذف صنف لديه حركات مخزون."
-);
-
-if(!confirm("هل تريد حذف الصنف؟"))
-return;
-
-const {error}=
-await supabaseClient
-.from("products")
-.update({active:false})
-.eq("id",id);
-
-if(error)
-return alert(
-"تعذر حذف الصنف:\n"+
-error.message
-);
-
-db.items=
-db.items.filter(
-i=>i.id!==id
-);
-
-localSave();
-
-fillAllSelects();
-renderAll();
+alert("تمت إضافة الصنف بنجاح.");
 
 }
 
 function renderItems(){
 
 const q=
-(
-document.getElementById("itemSearch")
-.value||""
-).toLowerCase();
+(document.getElementById("itemSearch").value||"")
+.toLowerCase();
 
-const body=
-document.getElementById("itemsTable");
+const body=document.getElementById("itemsTable");
 
 body.innerHTML=
 db.items
-.filter(
-i=>i.name.toLowerCase().includes(q)
+.filter(i=>
+i.name.toLowerCase().includes(q)
 )
-.map(
-i=>`
+.map(i=>{
 
+return `
 <tr>
 
 <td>${i.name}</td>
-
 <td>${i.unit}</td>
-
 <td>${money(i.cost)}</td>
 
-<td>${i.stock["المخزن الرئيسي"]}</td>
+<td>${i.stock["المخزن الرئيسي"]||0}</td>
+<td>${i.stock["فرع جدة"]||0}</td>
+<td>${i.stock["فرع ينبع"]||0}</td>
+<td>${i.stock["فرع المدينة"]||0}</td>
 
-<td>${i.stock["فرع جدة"]}</td>
-
-<td>${i.stock["فرع ينبع"]}</td>
-
-<td>${i.stock["فرع المدينة"]}</td>
-
-<td>${totalQuantity(i)}</td>
-
+<td>${totalQuantity(i).toFixed(3)}</td>
 <td>${money(totalValue(i))}</td>
 
 <td>
-<button
-class="danger"
-onclick="deleteItem('${i.id}')">
+<button class="danger"
+onclick="deactivateItem('${i.id}')">
 حذف
 </button>
 </td>
 
 </tr>
+`;
 
-`
-)
+})
 .join("");
+
+}
+
+async function deactivateItem(id){
+
+if(!confirm("هل تريد إخفاء هذا الصنف؟"))
+return;
+
+const {error}=await supabaseClient
+.from("products")
+.update({active:false})
+.eq("id",id);
+
+if(error)
+return alert(error.message);
+
+await loadDatabase();
+renderAll();
 
 }
 
 function updateOpeningDatePreview(){
 
 const value=
-document.getElementById("openingDate")
-.value;
+document.getElementById("openingDate").value;
 
 document.getElementById(
 "openingDatePreview"
-).textContent=
-value||"-";
+).textContent=value||"-";
 
 }
 
 async function saveOpening(){
 
-const warehouse=
-document.getElementById(
-"openingWarehouse"
-).value;
+const wid=
+dbWarehouseId(
+document.getElementById("openingWarehouse").value
+);
 
 const itemId=
-document.getElementById(
-"openingItem"
-).value;
+document.getElementById("openingItem").value;
 
 const qty=
 Number(
-document.getElementById(
-"openingQty"
-).value||0
+document.getElementById("openingQty").value||0
 );
 
 const cost=
 Number(
-document.getElementById(
-"openingCost"
-).value||0
+document.getElementById("openingCost").value||0
 );
 
 const openingDate=
-document.getElementById(
-"openingDate"
-).value;
+document.getElementById("openingDate").value;
 
-const item=getItem(itemId);
+if(!wid)
+return alert("اختر المخزن.");
 
-const wid=
-dbWarehouseId(warehouse);
+if(!itemId)
+return alert("اختر الصنف.");
+
+if(qty<=0)
+return alert("أدخل كمية صحيحة.");
 
 if(!openingDate)
-return alert(
-"من فضلك اختر تاريخ رصيد أول المدة."
-);
+return alert("من فضلك اختر تاريخ رصيد أول المدة.");
 
-if(!item||qty<=0||!wid)
-return alert("أكمل البيانات");
+const {error}=await supabaseClient
+.rpc("post_opening",{
 
-const {error}=
-await supabaseClient.rpc(
-"post_opening",
-{
 p_warehouse:wid,
 p_date:openingDate,
 p_items:[
 {
-product_id:item.id,
-qty,
+product_id:itemId,
+qty:qty,
 unit_cost:cost
 }
 ],
 p_notes:""
-}
-);
+
+});
 
 if(error)
 return alert(
@@ -1706,112 +1155,10 @@ error.message
 
 await loadDatabase();
 
-document.getElementById(
-"openingQty"
-).value="";
+document.getElementById("openingQty").value="";
+document.getElementById("openingCost").value="";
 
-document.getElementById(
-"openingCost"
-).value="";
-
-alert(
-"تم تسجيل رصيد أول المدة أونلاين بتاريخ "+
-openingDate
-);
-
-}
-
-async function saveReceipt(){
-
-const number=
-document.getElementById(
-"receiptNo"
-).value.trim();
-
-const date=
-document.getElementById(
-"receiptDate"
-).value||today();
-
-const itemId=
-document.getElementById(
-"receiptItem"
-).value;
-
-const qty=
-Number(
-document.getElementById(
-"receiptQty"
-).value||0
-);
-
-const cost=
-Number(
-document.getElementById(
-"receiptCost"
-).value||0
-);
-
-const note=
-document.getElementById(
-"receiptNote"
-).value;
-
-const item=getItem(itemId);
-
-if(!item||qty<=0||cost<0)
-return alert(
-"أكمل البيانات وتأكد أن الكمية والتكلفة صحيحتان"
-);
-
-const {error}=
-await supabaseClient.rpc(
-"post_purchase",
-{
-p_supplier_id:null,
-p_purchase_date:date,
-p_invoice_no:number||null,
-p_notes:
-note||
-"استلام للمخزن الرئيسي",
-
-p_items:[
-{
-product_id:item.id,
-qty,
-unit_cost:cost
-}
-]
-}
-);
-
-if(error)
-return alert(
-"لم يتم حفظ إذن الاستلام:\n"+
-error.message
-);
-
-await loadDatabase();
-
-document.getElementById(
-"receiptNo"
-).value="";
-
-document.getElementById(
-"receiptQty"
-).value="";
-
-document.getElementById(
-"receiptCost"
-).value="";
-
-document.getElementById(
-"receiptNote"
-).value="";
-
-alert(
-"تم حفظ إذن الاستلام أونلاين في المخزن الرئيسي."
-);
+alert("تم حفظ رصيد أول المدة بنجاح.");
 
 }
 
@@ -1819,14 +1166,10 @@ function updateIssueCost(){
 
 const item=
 getItem(
-document.getElementById(
-"issueItem"
-).value
+document.getElementById("issueItem").value
 );
 
-document.getElementById(
-"issueCost"
-).value=
+document.getElementById("issueCost").value=
 item?
 Number(item.cost||0).toFixed(2):
 "0.00";
@@ -1839,21 +1182,16 @@ function calculateIssue(){
 
 const qty=
 Number(
-document.getElementById(
-"issueQty"
-).value||0
+document.getElementById("issueQty").value||0
 );
 
 const cost=
 Number(
-document.getElementById(
-"issueCost"
-).value||0
+document.getElementById("issueCost").value||0
 );
 
-document.getElementById(
-"issueTotal"
-).textContent=
+document.getElementById("issueTotal")
+.textContent=
 money(qty*cost);
 
 }
@@ -1861,56 +1199,55 @@ money(qty*cost);
 async function saveIssue(){
 
 const number=
-document.getElementById(
-"issueNo"
-).value.trim()||
+document.getElementById("issueNo")
+.value.trim()||
 "ISS-"+Date.now();
 
 const date=
-document.getElementById(
-"issueDate"
-).value||today();
+document.getElementById("issueDate")
+.value||today();
 
 const warehouse=
-document.getElementById(
-"issueWarehouse"
-).value;
+document.getElementById("issueWarehouse")
+.value;
+
+const branch=
+document.getElementById("issueBranch")
+.value;
 
 const itemId=
-document.getElementById(
-"issueItem"
-).value;
+document.getElementById("issueItem")
+.value;
 
 const qty=
 Number(
-document.getElementById(
-"issueQty"
-).value||0
+document.getElementById("issueQty").value||0
 );
 
 const receiver=
-document.getElementById(
-"issueReceiver"
-).value;
+document.getElementById("issueReceiver")
+.value;
 
 const note=
-document.getElementById(
-"issueNote"
-).value;
+document.getElementById("issueNote")
+.value;
 
 const item=getItem(itemId);
 
-const wid=
-dbWarehouseId(warehouse);
+const wid=dbWarehouseId(warehouse);
 
-if(!item||qty<=0||!wid)
-return alert("أكمل البيانات");
+if(!item||qty<=0||!wid||!branch){
+
+return alert(
+"أكمل البيانات واختر الفرع المصروف له"
+);
+
+}
 
 const {
 data:sb,
 error:se
-}=
-await supabaseClient
+}=await supabaseClient
 .from("stock_balances")
 .select("qty,avg_cost")
 .eq("warehouse_id",wid)
@@ -1926,13 +1263,17 @@ se.message
 const available=
 Number(sb?.qty||0);
 
-if(qty>available)
+if(qty>available){
+
 return alert(
-"الرصيد غير كافٍ.\nالرصيد المتاح: "+
+"الرصيد غير كافٍ.\n"+
+"الرصيد المتاح: "+
 available+
 " "+
 item.unit
 );
+
+}
 
 const cost=
 Number(
@@ -1941,49 +1282,50 @@ item.cost||
 0
 );
 
-const {error:ue}=
-await supabaseClient
+const {
+error:ue
+}=await supabaseClient
 .from("stock_balances")
 .update({
 qty:available-qty,
-updated_at:
-new Date().toISOString()
+updated_at:new Date().toISOString()
 })
 .eq("warehouse_id",wid)
 .eq("product_id",item.id);
 
-if(ue)
+if(ue){
+
 return alert(
 "تعذر خصم المخزون:\n"+
 ue.message
 );
 
-const {error:me}=
-await supabaseClient
+}
+
+const movementNotes=
+"الفرع المصروف له: "+
+branch+
+(receiver?
+" | الجهة/السبب: "+receiver:"")+
+(note?
+" | "+note:"");
+
+const {
+error:me
+}=await supabaseClient
 .from("stock_movements")
 .insert({
-movement_date:
-date+"T00:00:00",
 
-movement_type:
-"adjustment_out",
-
+movement_date:date+"T00:00:00",
+movement_type:"adjustment_out",
 document_no:number,
-
 warehouse_id:wid,
-
 product_id:item.id,
-
 qty,
-
 unit_cost:cost,
-
 total_cost:qty*cost,
+notes:movementNotes
 
-notes:
-(receiver?
-"الجهة: "+receiver+" | ":"")+
-note
 });
 
 if(me){
@@ -1992,8 +1334,7 @@ await supabaseClient
 .from("stock_balances")
 .update({
 qty:available,
-updated_at:
-new Date().toISOString()
+updated_at:new Date().toISOString()
 })
 .eq("warehouse_id",wid)
 .eq("product_id",item.id);
@@ -2007,25 +1348,83 @@ me.message
 
 await loadDatabase();
 
-document.getElementById(
-"issueNo"
-).value="";
-
-document.getElementById(
-"issueQty"
-).value="";
-
-document.getElementById(
-"issueReceiver"
-).value="";
-
-document.getElementById(
-"issueNote"
-).value="";
+document.getElementById("issueNo").value="";
+document.getElementById("issueQty").value="";
+document.getElementById("issueReceiver").value="";
+document.getElementById("issueNote").value="";
+document.getElementById("issueBranch").value="";
 
 alert(
-"تم حفظ إذن الصرف وتم خصم الكمية أونلاين."
+"تم حفظ إذن الصرف وتم خصم الكمية أونلاين مع تسجيل الفرع المصروف له."
 );
+
+}
+
+async function saveReceipt(){
+
+const supplierId=
+document.getElementById("receiptSupplier").value;
+
+const invoice=
+document.getElementById("receiptInvoice")
+.value.trim();
+
+const date=
+document.getElementById("receiptDate")
+.value||today();
+
+const itemId=
+document.getElementById("receiptItem").value;
+
+const qty=
+Number(
+document.getElementById("receiptQty").value||0
+);
+
+const cost=
+Number(
+document.getElementById("receiptCost").value||0
+);
+
+const note=
+document.getElementById("receiptNote").value;
+
+if(!itemId||qty<=0||cost<0)
+return alert("أكمل البيانات.");
+
+const {
+error
+}=await supabaseClient.rpc(
+"post_purchase",
+{
+p_supplier_id:supplierId||null,
+p_purchase_date:date,
+p_invoice_no:invoice,
+p_notes:note,
+p_items:[
+{
+product_id:itemId,
+qty:qty,
+unit_cost:cost
+}
+]
+}
+);
+
+if(error)
+return alert(
+"لم يتم حفظ إذن الاستلام:\n"+
+error.message
+);
+
+await loadDatabase();
+
+document.getElementById("receiptInvoice").value="";
+document.getElementById("receiptQty").value="";
+document.getElementById("receiptCost").value="";
+document.getElementById("receiptNote").value="";
+
+alert("تم حفظ إذن الاستلام أونلاين في المخزن الرئيسي.");
 
 }
 
@@ -2033,14 +1432,11 @@ function updateTransferCost(){
 
 const item=
 getItem(
-document.getElementById(
-"transferItem"
-).value
+document.getElementById("transferItem").value
 );
 
-document.getElementById(
-"transferCost"
-).textContent=
+document.getElementById("transferCost")
+.textContent=
 item?
 money(item.cost):
 "0.00";
@@ -2050,64 +1446,47 @@ money(item.cost):
 async function saveTransfer(){
 
 const number=
-document.getElementById(
-"transferNo"
-).value.trim();
+document.getElementById("transferNo")
+.value.trim();
 
 const date=
-document.getElementById(
-"transferDate"
-).value||today();
+document.getElementById("transferDate")
+.value||today();
 
 const from=
-document.getElementById(
-"transferFrom"
-).value;
+document.getElementById("transferFrom").value;
 
 const to=
-document.getElementById(
-"transferTo"
-).value;
+document.getElementById("transferTo").value;
 
 const itemId=
-document.getElementById(
-"transferItem"
-).value;
+document.getElementById("transferItem").value;
 
 const qty=
 Number(
-document.getElementById(
-"transferQty"
-).value||0
+document.getElementById("transferQty").value||0
 );
 
 const item=getItem(itemId);
 
-const fromId=
-dbWarehouseId(from);
-
-const toId=
-dbWarehouseId(to);
+const fromId=dbWarehouseId(from);
+const toId=dbWarehouseId(to);
 
 if(from===to)
-return alert(
-"لا يمكن التحويل لنفس المخزن."
-);
+return alert("لا يمكن التحويل لنفس المخزن.");
 
 if(!item||qty<=0||!fromId||!toId)
-return alert("أكمل البيانات");
+return alert("أكمل البيانات.");
 
-const {error}=
-await supabaseClient.rpc(
+const {error}=await supabaseClient
+.rpc(
 "post_transfer",
 {
 p_from:fromId,
 p_to:toId,
 p_transfer_date:date,
-p_notes:
-number?
-"رقم التحويل: "+number:
-"",
+p_notes:number?
+"رقم التحويل: "+number:"",
 p_items:[
 {
 product_id:item.id,
@@ -2125,36 +1504,23 @@ error.message
 
 await loadDatabase();
 
-document.getElementById(
-"transferNo"
-).value="";
+document.getElementById("transferNo").value="";
+document.getElementById("transferQty").value="";
 
-document.getElementById(
-"transferQty"
-).value="";
-
-alert(
-"تم تنفيذ التحويل أونلاين بنجاح."
-);
+alert("تم تنفيذ التحويل أونلاين بنجاح.");
 
 }
 
 function getReportMovements(){
 
 const from=
-document.getElementById(
-"reportFrom"
-).value;
+document.getElementById("reportFrom").value;
 
 const to=
-document.getElementById(
-"reportTo"
-).value;
+document.getElementById("reportTo").value;
 
 const branch=
-document.getElementById(
-"reportBranch"
-).value;
+document.getElementById("reportBranch").value;
 
 return db.movements.filter(m=>{
 
@@ -2172,14 +1538,10 @@ return false;
 
 const b=
 m.type==="transfer_out"
-?
-m.to
-:
-(branches.includes(m.from)?
-m.from:null);
+?m.to
+:(branches.includes(m.from)?m.from:null);
 
-return b &&
-(
+return b&&(
 branch==="ALL"||
 b===branch
 );
@@ -2191,19 +1553,13 @@ b===branch
 function renderBranchReport(){
 
 const from=
-document.getElementById(
-"reportFrom"
-).value;
+document.getElementById("reportFrom").value;
 
 const to=
-document.getElementById(
-"reportTo"
-).value;
+document.getElementById("reportTo").value;
 
 const selected=
-document.getElementById(
-"reportBranch"
-).value;
+document.getElementById("reportBranch").value;
 
 let data={
 "فرع جدة":{qty:0,value:0},
@@ -2232,7 +1588,7 @@ let branch=null;
 let label="";
 
 if(
-m.type==="transfer_out" &&
+m.type==="transfer_out"&&
 branches.includes(m.to)
 ){
 
@@ -2242,7 +1598,7 @@ label="صرف للفرع";
 }
 
 else if(
-m.type==="adjustment_out" &&
+m.type==="adjustment_out"&&
 branches.includes(m.from)
 ){
 
@@ -2252,18 +1608,12 @@ label="استهلاك الفرع";
 }
 
 if(
-branch &&
-(
-selected==="ALL"||
-branch===selected
-)
+branch&&
+(selected==="ALL"||branch===selected)
 ){
 
-data[branch].qty+=
-Number(m.qty||0);
-
-data[branch].value+=
-Number(m.value||0);
+data[branch].qty+=Number(m.qty||0);
+data[branch].value+=Number(m.value||0);
 
 rows.push({
 m,
@@ -2275,11 +1625,8 @@ label
 
 });
 
-[
-"فرع جدة",
-"فرع ينبع",
-"فرع المدينة"
-].forEach((b,i)=>{
+["فرع جدة","فرع ينبع","فرع المدينة"]
+.forEach((b,i)=>{
 
 const key=
 i===0?
@@ -2288,14 +1635,12 @@ i===1?
 "yanbu":
 "madinah";
 
-document.getElementById(
-key+"Qty"
-).textContent=
+document.getElementById(key+"Qty")
+.textContent=
 data[b].qty.toFixed(3);
 
-document.getElementById(
-key+"Value"
-).textContent=
+document.getElementById(key+"Value")
+.textContent=
 money(data[b].value)+" ر.س";
 
 });
@@ -2314,81 +1659,57 @@ Object.values(data)
 0
 );
 
-document.getElementById(
-"allBranchQty"
-).textContent=
+document.getElementById("allBranchQty")
+.textContent=
 tq.toFixed(3);
 
-document.getElementById(
-"allBranchValue"
-).textContent=
+document.getElementById("allBranchValue")
+.textContent=
 money(tv)+" ر.س";
 
-document.getElementById(
-"branchReportTable"
-).innerHTML=
+document.getElementById("branchReportTable")
+.innerHTML=
 rows.map(r=>{
 
-const i=
-getItem(r.m.itemId);
+const i=getItem(r.m.itemId);
 
 return `
-
 <tr>
-
 <td>${r.m.date}</td>
-
 <td>${r.m.number}</td>
-
 <td>${r.branch}</td>
-
 <td>${i?i.name:""}</td>
-
 <td>
 <span class="badge ${
-r.label==="صرف للفرع"
-?
-"transfer":
-"out"
+r.label==="صرف للفرع"?
+"transfer":"out"
 }">
 ${r.label}
 </span>
 </td>
-
 <td>${r.m.from||"-"}</td>
-
 <td>${r.m.qty}</td>
-
 <td>${money(r.m.cost)}</td>
-
 <td>${money(r.m.value)}</td>
-
 </tr>
-
 `;
 
 }).join("")||
-`
-<tr>
+`<tr>
 <td colspan="9">
 لا توجد حركات صرف خلال الفترة المحددة.
 </td>
-</tr>
-`;
+</tr>`;
 
 }
 
 function applyReportFilter(){
 
 const a=
-document.getElementById(
-"reportFrom"
-).value;
+document.getElementById("reportFrom").value;
 
 const b=
-document.getElementById(
-"reportTo"
-).value;
+document.getElementById("reportTo").value;
 
 if(a&&b&&a>b)
 return alert(
@@ -2401,17 +1722,9 @@ renderBranchReport();
 
 function clearReportFilter(){
 
-document.getElementById(
-"reportFrom"
-).value="";
-
-document.getElementById(
-"reportTo"
-).value="";
-
-document.getElementById(
-"reportBranch"
-).value="ALL";
+document.getElementById("reportFrom").value="";
+document.getElementById("reportTo").value="";
+document.getElementById("reportBranch").value="ALL";
 
 renderBranchReport();
 
@@ -2420,25 +1733,19 @@ renderBranchReport();
 function renderMovements(){
 
 const q=
-(
-document.getElementById(
-"movementSearch"
-).value||""
-).toLowerCase();
+(document.getElementById("movementSearch").value||"")
+.toLowerCase();
 
 const body=
-document.getElementById(
-"movementTable"
-);
+document.getElementById("movementTable");
 
 body.innerHTML=
 db.movements
 .filter(m=>{
 
-const i=
-getItem(m.itemId);
+const i=getItem(m.itemId);
 
-return (
+return(
 JSON.stringify(m)+
 (i?i.name:" ")
 )
@@ -2448,49 +1755,34 @@ JSON.stringify(m)+
 })
 .map(m=>{
 
-const i=
-getItem(m.itemId);
+const i=getItem(m.itemId);
 
 let badge=
 m.type==="transfer_out"||
 m.type==="transfer_in"
 ?
 "transfer":
-m.type==="adjustment_out"
-?
+m.type==="adjustment_out"?
 "out":
 "in";
 
 return `
-
 <tr>
-
 <td>${m.date}</td>
-
 <td>${m.number}</td>
-
 <td>
 <span class="badge ${badge}">
 ${movementTypeLabel(m.type)}
 </span>
 </td>
-
 <td>${i?i.name:""}</td>
-
 <td>${m.from||"-"}</td>
-
 <td>${m.to||"-"}</td>
-
 <td>${m.qty}</td>
-
 <td>${money(m.cost)}</td>
-
 <td>${money(m.value)}</td>
-
 <td>${m.note||""}</td>
-
 </tr>
-
 `;
 
 })
@@ -2502,20 +1794,14 @@ function renderCard(){
 
 const item=
 getItem(
-document.getElementById(
-"cardItem"
-).value
+document.getElementById("cardItem").value
 );
 
 const summary=
-document.getElementById(
-"cardSummary"
-);
+document.getElementById("cardSummary");
 
 const body=
-document.getElementById(
-"cardTable"
-);
+document.getElementById("cardTable");
 
 if(!item){
 
@@ -2526,78 +1812,44 @@ return;
 
 }
 
-summary.innerHTML=
-
-`
+summary.innerHTML=`
 <div class="total-box">
-
-الصنف:
-${item.name}
-
+الصنف: ${item.name}
 &nbsp; | &nbsp;
-
-متوسط التكلفة:
-${money(item.cost)}
-ر.س
-
+متوسط التكلفة: ${money(item.cost)} ر.س
 &nbsp; | &nbsp;
-
-إجمالي الرصيد:
-${totalQuantity(item)}
-${item.unit}
-
+إجمالي الرصيد: ${totalQuantity(item)} ${item.unit}
 &nbsp; | &nbsp;
-
-قيمة المخزون:
-${money(totalValue(item))}
-ر.س
-
+قيمة المخزون: ${money(totalValue(item))} ر.س
 </div>
 `;
 
 body.innerHTML=
 db.movements
-.filter(
-m=>m.itemId===item.id
-)
-.sort(
-(a,b)=>a.date.localeCompare(b.date)
-)
-.map(
-m=>`
+.filter(m=>m.itemId===item.id)
+.sort((a,b)=>a.date.localeCompare(b.date))
+.map(m=>`
 
 <tr>
-
 <td>${m.date}</td>
-
 <td>${m.number}</td>
-
 <td>${movementTypeLabel(m.type)}</td>
-
 <td>${m.from||"-"}</td>
-
 <td>${m.to||"-"}</td>
-
 <td>${m.qty}</td>
-
 <td>${money(m.cost)}</td>
-
 <td>${money(m.value)}</td>
-
 </tr>
 
-`
-)
+`)
 .join("");
 
 }
 
 function renderDashboard(){
 
-document.getElementById(
-"dashItems"
-).textContent=
-db.items.length;
+document.getElementById("dashItems")
+.textContent=db.items.length;
 
 let q=0;
 let v=0;
@@ -2609,80 +1861,51 @@ v+=totalValue(i);
 
 });
 
-document.getElementById(
-"dashQty"
-).textContent=
-q.toFixed(3);
+document.getElementById("dashQty")
+.textContent=q.toFixed(3);
 
-document.getElementById(
-"dashValue"
-).textContent=
-money(v);
+document.getElementById("dashValue")
+.textContent=money(v);
 
-document.getElementById(
-"dashMoves"
-).textContent=
-db.movements.length;
+document.getElementById("dashMoves")
+.textContent=db.movements.length;
 
-document.getElementById(
-"dashboardStock"
-).innerHTML=
+document.getElementById("dashboardStock")
+.innerHTML=
 db.items.map(i=>`
 
 <tr>
-
 <td>${i.name}</td>
-
 <td>${i.unit}</td>
-
-<td>${i.stock["المخزن الرئيسي"]}</td>
-
-<td>${i.stock["فرع جدة"]}</td>
-
-<td>${i.stock["فرع ينبع"]}</td>
-
-<td>${i.stock["فرع المدينة"]}</td>
-
+<td>${i.stock["المخزن الرئيسي"]||0}</td>
+<td>${i.stock["فرع جدة"]||0}</td>
+<td>${i.stock["فرع ينبع"]||0}</td>
+<td>${i.stock["فرع المدينة"]||0}</td>
 <td>${totalQuantity(i)}</td>
-
 <td>${money(totalValue(i))}</td>
-
 </tr>
 
 `).join("");
 
-document.getElementById(
-"recentMoves"
-).innerHTML=
+document.getElementById("recentMoves")
+.innerHTML=
 db.movements
 .slice(0,10)
 .map(m=>{
 
-const i=
-getItem(m.itemId);
+const i=getItem(m.itemId);
 
 return `
-
 <tr>
-
 <td>${m.date}</td>
-
 <td>${m.number}</td>
-
 <td>${movementTypeLabel(m.type)}</td>
-
 <td>${i?i.name:""}</td>
-
 <td>${m.from||"-"}</td>
-
 <td>${m.to||"-"}</td>
-
 <td>${m.qty}</td>
-
 <td>${money(m.value)}</td>
-
 </tr>
-
 `;
 
 })
@@ -2696,16 +1919,8 @@ function backupData(){
 
 const blob=
 new Blob(
-[
-JSON.stringify(
-db,
-null,
-2
-)
-],
-{
-type:"application/json"
-}
+[JSON.stringify(db,null,2)],
+{type:"application/json"}
 );
 
 const url=
@@ -2717,9 +1932,7 @@ document.createElement("a");
 a.href=url;
 
 a.download=
-"inventory-backup-"+
-today()+
-".json";
+"inventory-backup-"+today()+".json";
 
 a.click();
 
@@ -2742,10 +1955,7 @@ try{
 const data=
 JSON.parse(text);
 
-if(
-!data.items||
-!data.movements
-)
+if(!data.items||!data.movements)
 throw Error();
 
 alert(
@@ -2763,13 +1973,11 @@ alert("الملف غير صالح.");
 
 async function deleteAllData(){
 
-if(
-!confirm(
+if(!confirm(
 "تحذير!\n\n"+
 "سيتم إخفاء جميع الأصناف من النظام وحذف أرصدة المخزون والحركات.\n"+
 "هل أنت متأكد؟"
-)
-)
+))
 return;
 
 const {error}=
@@ -2805,38 +2013,36 @@ updateTransferCost();
 
 (async function init(){
 
-document.getElementById(
-"currentDate"
-).textContent=today();
+document.getElementById("currentDate")
+.textContent=today();
 
-document.getElementById(
-"openingDate"
-).value=today();
+document.getElementById("openingDate")
+.value=today();
 
-document.getElementById(
-"openingDate"
-).addEventListener(
+document.getElementById("openingDate")
+.addEventListener(
 "change",
 updateOpeningDatePreview
 );
 
 updateOpeningDatePreview();
 
-document.getElementById(
-"receiptDate"
-).value=today();
+document.getElementById("receiptDate")
+.value=today();
 
-document.getElementById(
-"issueDate"
-).value=today();
+document.getElementById("issueDate")
+.value=today();
 
-document.getElementById(
-"transferDate"
-).value=today();
+document.getElementById("transferDate")
+.value=today();
 
 try{
 
 await loadDatabase();
+
+fillAllSelects();
+
+renderAll();
 
 }
 catch(e){
@@ -2860,3 +2066,4 @@ renderAll();
 
 </body>
 </html>
+```
