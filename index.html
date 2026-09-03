@@ -232,6 +232,13 @@ color:#6b7280;
 margin-top:5px;
 }
 
+.date-info{
+background:#f9fafb;
+padding:10px;
+border-radius:8px;
+margin-top:12px;
+}
+
 @media(max-width:1000px){
 .cards{
 grid-template-columns:repeat(2,1fr);
@@ -322,11 +329,6 @@ min-width:120px;
 
 </nav>
 
-
-<!-- =====================================================
-لوحة التحكم
-===================================================== -->
-
 <section id="dashboard" class="page active">
 
 <div class="panel">
@@ -381,7 +383,6 @@ style="width:100%">
 
 </div>
 
-
 <div class="cards">
 
 <div class="card">
@@ -406,8 +407,7 @@ style="width:100%">
 
 </div>
 
-
-<!-- تقرير صرف الفروع -->
+</div>
 
 <div class="panel">
 
@@ -423,8 +423,7 @@ style="width:100%">
 <div class="branch-card">
 <h3>فرع جدة</h3>
 
-<div class="branch-number"
-id="jeddahQty">
+<div class="branch-number" id="jeddahQty">
 0
 </div>
 
@@ -432,8 +431,7 @@ id="jeddahQty">
 كمية ما تم صرفه للفرع
 </div>
 
-<div class="branch-number"
-id="jeddahValue">
+<div class="branch-number" id="jeddahValue">
 0.00 ر.س
 </div>
 
@@ -441,13 +439,11 @@ id="jeddahValue">
 قيمة الصرف
 </div>
 </div>
-
 
 <div class="branch-card">
 <h3>فرع ينبع</h3>
 
-<div class="branch-number"
-id="yanbuQty">
+<div class="branch-number" id="yanbuQty">
 0
 </div>
 
@@ -455,8 +451,7 @@ id="yanbuQty">
 كمية ما تم صرفه للفرع
 </div>
 
-<div class="branch-number"
-id="yanbuValue">
+<div class="branch-number" id="yanbuValue">
 0.00 ر.س
 </div>
 
@@ -464,13 +459,11 @@ id="yanbuValue">
 قيمة الصرف
 </div>
 </div>
-
 
 <div class="branch-card">
 <h3>فرع المدينة</h3>
 
-<div class="branch-number"
-id="madinahQty">
+<div class="branch-number" id="madinahQty">
 0
 </div>
 
@@ -478,8 +471,7 @@ id="madinahQty">
 كمية ما تم صرفه للفرع
 </div>
 
-<div class="branch-number"
-id="madinahValue">
+<div class="branch-number" id="madinahValue">
 0.00 ر.س
 </div>
 
@@ -488,12 +480,10 @@ id="madinahValue">
 </div>
 </div>
 
-
 <div class="branch-card">
 <h3>الإجمالي</h3>
 
-<div class="branch-number"
-id="allBranchQty">
+<div class="branch-number" id="allBranchQty">
 0
 </div>
 
@@ -501,8 +491,7 @@ id="allBranchQty">
 إجمالي الكمية
 </div>
 
-<div class="branch-number"
-id="allBranchValue">
+<div class="branch-number" id="allBranchValue">
 0.00 ر.س
 </div>
 
@@ -512,11 +501,7 @@ id="allBranchValue">
 </div>
 
 </div>
-
 </div>
-
-
-<!-- تفاصيل الصرف -->
 
 <div class="panel">
 
@@ -527,7 +512,6 @@ id="allBranchValue">
 <table>
 
 <thead>
-
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
@@ -539,7 +523,6 @@ id="allBranchValue">
 <th>التكلفة</th>
 <th>القيمة</th>
 </tr>
-
 </thead>
 
 <tbody id="branchReportTable"></tbody>
@@ -550,9 +533,6 @@ id="allBranchValue">
 
 </div>
 
-
-<!-- رصيد المخزون -->
-
 <div class="panel">
 
 <h2>📦 رصيد المخزون</h2>
@@ -562,7 +542,6 @@ id="allBranchValue">
 <table>
 
 <thead>
-
 <tr>
 <th>الصنف</th>
 <th>الوحدة</th>
@@ -573,7 +552,6 @@ id="allBranchValue">
 <th>الإجمالي</th>
 <th>القيمة</th>
 </tr>
-
 </thead>
 
 <tbody id="dashboardStock"></tbody>
@@ -584,7 +562,6 @@ id="allBranchValue">
 
 </div>
 
-
 <div class="panel">
 
 <h2>آخر الحركات</h2>
@@ -594,7 +571,6 @@ id="allBranchValue">
 <table>
 
 <thead>
-
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
@@ -605,7 +581,6 @@ id="allBranchValue">
 <th>الكمية</th>
 <th>القيمة</th>
 </tr>
-
 </thead>
 
 <tbody id="recentMoves"></tbody>
@@ -617,11 +592,6 @@ id="allBranchValue">
 </div>
 
 </section>
-
-
-<!-- =====================================================
-الأصناف
-===================================================== -->
 
 <section id="items" class="page">
 
@@ -665,7 +635,6 @@ id="allBranchValue">
 
 </div>
 
-
 <div class="panel">
 
 <h2>الأصناف</h2>
@@ -674,7 +643,7 @@ id="allBranchValue">
 class="search"
 id="itemSearch"
 placeholder="🔎 ابحث عن صنف..."
-oninput="renderItems()"
+oninput="renderItems"
 >
 
 <div class="table-wrap">
@@ -708,11 +677,6 @@ oninput="renderItems()"
 
 </section>
 
-
-<!-- =====================================================
-رصيد أول المدة
-===================================================== -->
-
 <section id="opening" class="page">
 
 <div class="panel">
@@ -741,6 +705,16 @@ oninput="renderItems()"
 <input id="openingCost" type="number" step="0.01">
 </div>
 
+<div>
+<label>تاريخ رصيد أول المدة</label>
+<input id="openingDate" type="date">
+</div>
+
+</div>
+
+<div class="date-info">
+📅 سيتم تسجيل رصيد أول المدة بتاريخ:
+<strong id="openingDatePreview">-</strong>
 </div>
 
 <br>
@@ -752,11 +726,6 @@ oninput="renderItems()"
 </div>
 
 </section>
-
-
-<!-- =====================================================
-إذن الاستلام
-===================================================== -->
 
 <section id="receipt" class="page">
 
@@ -813,11 +782,6 @@ oninput="renderItems()"
 
 </section>
 
-
-<!-- =====================================================
-إذن الصرف
-===================================================== -->
-
 <section id="issue" class="page">
 
 <div class="panel">
@@ -866,11 +830,9 @@ oninput="calculateIssue()"
 <br>
 
 <div class="total-box">
-
 إجمالي قيمة الصرف:
 <span id="issueTotal">0.00</span>
 ر.س
-
 </div>
 
 <br>
@@ -892,11 +854,6 @@ oninput="calculateIssue()"
 </div>
 
 </section>
-
-
-<!-- =====================================================
-التحويل
-===================================================== -->
 
 <section id="transfer" class="page">
 
@@ -947,11 +904,9 @@ oninput="calculateIssue()"
 <br>
 
 <div class="total-box">
-
 متوسط تكلفة الصنف:
 <span id="transferCost">0.00</span>
 ر.س
-
 </div>
 
 <br>
@@ -963,11 +918,6 @@ oninput="calculateIssue()"
 </div>
 
 </section>
-
-
-<!-- =====================================================
-الحركات
-===================================================== -->
 
 <section id="movements" class="page">
 
@@ -1013,11 +963,6 @@ oninput="renderMovements()"
 
 </section>
 
-
-<!-- =====================================================
-كارت الصنف
-===================================================== -->
-
 <section id="card" class="page">
 
 <div class="panel">
@@ -1059,11 +1004,6 @@ oninput="renderMovements()"
 
 </section>
 
-
-<!-- =====================================================
-النسخ الاحتياطي
-===================================================== -->
-
 <section id="backup" class="page">
 
 <div class="panel">
@@ -1071,8 +1011,8 @@ oninput="renderMovements()"
 <h2>💾 النسخ الاحتياطي</h2>
 
 <p>
-البيانات محفوظة تلقائيًا داخل المتصفح.
-يفضل تنزيل نسخة احتياطية بشكل دوري.
+البيانات الأساسية محفوظة أونلاين في Supabase.
+يمكنك تنزيل نسخة احتياطية من البيانات المعروضة حاليًا بشكل دوري.
 </p>
 
 <button class="primary" onclick="backupData()">
@@ -1101,160 +1041,1821 @@ onchange="restoreData(event)"
 
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-/* =====================================================
-   ProDiet Inventory ERP - Supabase Online Version
-   ===================================================== */
-const SUPABASE_URL = "https://zueadrbkksxruiwjsvty.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_p9NrtmLAwX2SANUKd8qZDg_pI-SdgyC";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+const SUPABASE_URL =
+"https://zueadrbkksxruiwjsvty.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_p9NrtmLAwX2SANUKd8qZDg_pI-SdgyC";
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
 
 const warehouseLabels = {
-  "المخزن الرئيسي":"المخزن الرئيسي",
-  "الزهراء":"فرع جدة",
-  "ينبع":"فرع ينبع",
-  "المدينة":"فرع المدينة"
+"المخزن الرئيسي":"المخزن الرئيسي",
+"الزهراء":"فرع جدة",
+"ينبع":"فرع ينبع",
+"المدينة":"فرع المدينة"
 };
+
 const displayToDbWarehouse = {
-  "المخزن الرئيسي":"المخزن الرئيسي",
-  "فرع جدة":"الزهراء",
-  "فرع ينبع":"ينبع",
-  "فرع المدينة":"المدينة"
+"المخزن الرئيسي":"المخزن الرئيسي",
+"فرع جدة":"الزهراء",
+"فرع ينبع":"ينبع",
+"فرع المدينة":"المدينة"
 };
-const warehouses=["المخزن الرئيسي","فرع جدة","فرع ينبع","فرع المدينة"];
-const branches=["فرع جدة","فرع ينبع","فرع المدينة"];
-let db={items:[],movements:[]};
+
+const warehouses=[
+"المخزن الرئيسي",
+"فرع جدة",
+"فرع ينبع",
+"فرع المدينة"
+];
+
+const branches=[
+"فرع جدة",
+"فرع ينبع",
+"فرع المدينة"
+];
+
+let db={
+items:[],
+movements:[]
+};
+
 let dbWarehouses=[];
 let dbProducts=[];
 
-function money(v){return Number(v||0).toLocaleString("ar-SA",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function today(){return new Date().toISOString().slice(0,10);}
-function generateID(){return crypto.randomUUID();}
-function getItem(id){return db.items.find(x=>String(x.id)===String(id));}
-function totalQuantity(item){return warehouses.reduce((s,w)=>s+Number(item.stock[w]||0),0);}
-function totalValue(item){return totalQuantity(item)*Number(item.cost||0);}
-function dbWarehouseId(displayName){const dbName=displayToDbWarehouse[displayName]||displayName;const w=dbWarehouses.find(x=>x.name===dbName);return w?w.id:null;}
-function displayWarehouseName(dbName){return warehouseLabels[dbName]||dbName||"";}
-function movementTypeLabel(t){return ({opening:"رصيد أول المدة",purchase:"إذن استلام",transfer_out:"تحويل مخزني",transfer_in:"تحويل مخزني",adjustment_in:"تسوية إضافة",adjustment_out:"تسوية خصم"})[t]||t;}
+function money(v){
+return Number(v||0).toLocaleString(
+"ar-SA",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+}
 
-function localSave(){localStorage.setItem("inventoryERP",JSON.stringify(db));}
+function today(){
+return new Date().toISOString().slice(0,10);
+}
+
+function generateID(){
+return crypto.randomUUID();
+}
+
+function getItem(id){
+return db.items.find(
+x=>String(x.id)===String(id)
+);
+}
+
+function totalQuantity(item){
+return warehouses.reduce(
+(s,w)=>s+Number(item.stock[w]||0),
+0
+);
+}
+
+function totalValue(item){
+return totalQuantity(item)*Number(item.cost||0);
+}
+
+function dbWarehouseId(displayName){
+
+const dbName =
+displayToDbWarehouse[displayName] ||
+displayName;
+
+const w =
+dbWarehouses.find(
+x=>x.name===dbName
+);
+
+return w?w.id:null;
+}
+
+function displayWarehouseName(dbName){
+return warehouseLabels[dbName]||dbName||"";
+}
+
+function movementTypeLabel(t){
+
+return ({
+opening:"رصيد أول المدة",
+purchase:"إذن استلام",
+transfer_out:"تحويل مخزني",
+transfer_in:"تحويل مخزني",
+adjustment_in:"تسوية إضافة",
+adjustment_out:"تسوية خصم"
+})[t]||t;
+
+}
+
+function localSave(){
+localStorage.setItem(
+"inventoryERP",
+JSON.stringify(db)
+);
+}
 
 async function loadDatabase(){
-  const [{data:products,error:pe},{data:whs,error:we},{data:stocks,error:se},{data:moves,error:me}]=await Promise.all([
-    supabaseClient.from("products").select("*").eq("active",true).order("name"),
-    supabaseClient.from("warehouses").select("*").eq("active",true).order("created_at"),
-    supabaseClient.from("stock_balances").select("warehouse_id,product_id,qty,avg_cost"),
-    supabaseClient.from("stock_movements").select("*").order("movement_date",{ascending:false})
-  ]);
-  if(pe||we||se||me){throw new Error((pe||we||se||me).message);}
-  dbProducts=products||[]; dbWarehouses=whs||[];
-  db.items=dbProducts.map(p=>{
-    const stock={"المخزن الرئيسي":0,"فرع جدة":0,"فرع ينبع":0,"فرع المدينة":0};
-    let cost=0;
-    (stocks||[]).filter(s=>s.product_id===p.id).forEach(s=>{
-      const w=dbWarehouses.find(x=>x.id===s.warehouse_id);
-      if(w && warehouseLabels[w.name]) stock[warehouseLabels[w.name]]=Number(s.qty||0);
-      if(w && w.warehouse_type==="main") cost=Number(s.avg_cost||0);
-    });
-    if(!cost){const vals=(stocks||[]).filter(s=>s.product_id===p.id);if(vals.length)cost=Number(vals[0].avg_cost||0);}
-    return {id:p.id,name:p.name,unit:p.unit,cost,stock};
-  });
-  db.movements=(moves||[]).map(m=>({
-    id:m.id,date:String(m.movement_date||"").slice(0,10),number:m.document_no||"",type:m.movement_type,
-    itemId:m.product_id,from:displayWarehouseName((dbWarehouses.find(w=>w.id===m.warehouse_id)||{}).name),
-    to:"",qty:Number(m.qty||0),cost:Number(m.unit_cost||0),value:Number(m.total_cost||0),note:m.notes||""
-  }));
-  localSave(); fillAllSelects(); renderAll();
+
+const [
+{data:products,error:pe},
+{data:whs,error:we},
+{data:stocks,error:se},
+{data:moves,error:me},
+{data:transfers,error:te}
+]=await Promise.all([
+
+supabaseClient
+.from("products")
+.select("*")
+.eq("active",true)
+.order("name"),
+
+supabaseClient
+.from("warehouses")
+.select("*")
+.eq("active",true)
+.order("created_at"),
+
+supabaseClient
+.from("stock_balances")
+.select("warehouse_id,product_id,qty,avg_cost"),
+
+supabaseClient
+.from("stock_movements")
+.select("*")
+.order("movement_date",{ascending:false}),
+
+supabaseClient
+.from("transfers")
+.select(
+"id,transfer_date,from_warehouse_id,to_warehouse_id,status"
+)
+.eq("status","posted")
+
+]);
+
+if(pe||we||se||me||te){
+throw new Error(
+(pe||we||se||me||te).message
+);
 }
 
-function showPage(page){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(page).classList.add("active");document.querySelectorAll("#menu button").forEach(x=>x.classList.remove("active"));const pages=["dashboard","items","opening","receipt","issue","transfer","movements","card","backup"];const i=pages.indexOf(page);if(i>=0)document.querySelectorAll("#menu button")[i].classList.add("active");renderAll();}
+dbProducts=products||[];
+dbWarehouses=whs||[];
 
-function fillWarehouseSelect(id){const s=document.getElementById(id);if(!s)return;s.innerHTML=warehouses.map(w=>`<option value="${w}">${w}</option>`).join("");}
-function fillItemSelect(id){const s=document.getElementById(id);if(!s)return;s.innerHTML=`<option value="">اختر الصنف</option>`+db.items.map(i=>`<option value="${i.id}">${i.name}</option>`).join("");}
-function fillAllSelects(){["openingWarehouse","receiptWarehouse","issueWarehouse","transferFrom","transferTo"].forEach(fillWarehouseSelect);["openingItem","receiptItem","issueItem","transferItem","cardItem"].forEach(fillItemSelect);}
+db.items=dbProducts.map(p=>{
+
+const stock={
+"المخزن الرئيسي":0,
+"فرع جدة":0,
+"فرع ينبع":0,
+"فرع المدينة":0
+};
+
+let cost=0;
+
+(stocks||[])
+.filter(
+s=>String(s.product_id)===String(p.id)
+)
+.forEach(s=>{
+
+const w=dbWarehouses.find(
+x=>String(x.id)===String(s.warehouse_id)
+);
+
+if(w && warehouseLabels[w.name])
+stock[warehouseLabels[w.name]]
+=Number(s.qty||0);
+
+if(w && w.warehouse_type==="main")
+cost=Number(s.avg_cost||0);
+
+});
+
+if(!cost){
+
+const vals=(stocks||[])
+.filter(
+s=>String(s.product_id)===String(p.id)
+);
+
+if(vals.length)
+cost=Number(vals[0].avg_cost||0);
+
+}
+
+return {
+id:p.id,
+name:p.name,
+unit:p.unit,
+cost,
+stock
+};
+
+});
+
+const transferMap={};
+
+(transfers||[]).forEach(t=>{
+
+transferMap[String(t.id)]={
+from:
+displayWarehouseName(
+(dbWarehouses.find(
+w=>String(w.id)===String(t.from_warehouse_id)
+)||{}).name
+),
+
+to:
+displayWarehouseName(
+(dbWarehouses.find(
+w=>String(w.id)===String(t.to_warehouse_id)
+)||{}).name
+),
+
+date:
+String(t.transfer_date||"").slice(0,10)
+
+};
+
+});
+
+db.movements=(moves||[]).map(m=>{
+
+const tr =
+transferMap[String(m.reference_id)]||{};
+
+const fromBase =
+displayWarehouseName(
+(dbWarehouses.find(
+w=>String(w.id)===String(m.warehouse_id)
+)||{}).name
+);
+
+let from=fromBase,
+to="";
+
+if(m.movement_type==="transfer_out"){
+from=tr.from||fromBase;
+to=tr.to||"";
+}
+
+if(m.movement_type==="transfer_in"){
+from=tr.from||"";
+to=tr.to||fromBase;
+}
+
+return {
+
+id:m.id,
+
+date:
+String(
+m.movement_date||
+tr.date||
+""
+).slice(0,10),
+
+number:m.document_no||"",
+
+type:m.movement_type,
+
+itemId:m.product_id,
+
+from,
+
+to,
+
+qty:Number(m.qty||0),
+
+cost:Number(m.unit_cost||0),
+
+value:Number(m.total_cost||0),
+
+note:m.notes||""
+
+};
+
+});
+
+localSave();
+
+fillAllSelects();
+renderAll();
+
+}
+
+function showPage(page){
+
+document
+.querySelectorAll(".page")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+document
+.getElementById(page)
+.classList.add("active");
+
+document
+.querySelectorAll("#menu button")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+const pages=[
+"dashboard",
+"items",
+"opening",
+"receipt",
+"issue",
+"transfer",
+"movements",
+"card",
+"backup"
+];
+
+const i=pages.indexOf(page);
+
+if(i>=0)
+document
+.querySelectorAll("#menu button")[i]
+.classList.add("active");
+
+renderAll();
+
+}
+
+function fillWarehouseSelect(id){
+
+const s=document.getElementById(id);
+
+if(!s)return;
+
+s.innerHTML=
+warehouses.map(
+w=>`<option value="${w}">${w}</option>`
+).join("");
+
+}
+
+function fillItemSelect(id){
+
+const s=document.getElementById(id);
+
+if(!s)return;
+
+s.innerHTML=
+`<option value="">اختر الصنف</option>`+
+db.items.map(
+i=>`<option value="${i.id}">${i.name}</option>`
+).join("");
+
+}
+
+function fillAllSelects(){
+
+[
+"openingWarehouse",
+"issueWarehouse",
+"transferFrom",
+"transferTo"
+].forEach(fillWarehouseSelect);
+
+fillWarehouseSelect("receiptWarehouse");
+
+const receipt=
+document.getElementById("receiptWarehouse");
+
+if(receipt){
+
+const main=warehouses[0];
+
+receipt.value=main;
+receipt.disabled=true;
+
+}
+
+[
+"openingItem",
+"receiptItem",
+"issueItem",
+"transferItem",
+"cardItem"
+].forEach(fillItemSelect);
+
+}
 
 async function addItem(){
- const name=document.getElementById("itemName").value.trim(),unit=document.getElementById("itemUnit").value,cost=Number(document.getElementById("itemCost").value||0);
- if(!name)return alert("اكتب اسم الصنف");
- if(db.items.some(i=>i.name.toLowerCase()===name.toLowerCase()))return alert("هذا الصنف موجود بالفعل");
- const {data,error}=await supabaseClient.from("products").insert({name,unit}).select("*").single();
- if(error)return alert("لم يتم إضافة الصنف:\n"+error.message);
- dbProducts.push(data);db.items.push({id:data.id,name:data.name,unit:data.unit,cost,stock:{"المخزن الرئيسي":0,"فرع جدة":0,"فرع ينبع":0,"فرع المدينة":0}});localSave();document.getElementById("itemName").value="";document.getElementById("itemCost").value="";fillAllSelects();renderAll();alert("تم إضافة الصنف أونلاين");
-}
-async function deleteItem(id){if(db.movements.some(m=>m.itemId===id))return alert("لا يمكن حذف صنف لديه حركات مخزون.");if(!confirm("هل تريد حذف الصنف؟"))return;const {error}=await supabaseClient.from("products").update({active:false}).eq("id",id);if(error)return alert("تعذر حذف الصنف:\n"+error.message);db.items=db.items.filter(i=>i.id!==id);localSave();fillAllSelects();renderAll();}
 
-function renderItems(){const q=(document.getElementById("itemSearch").value||"").toLowerCase(),body=document.getElementById("itemsTable");body.innerHTML=db.items.filter(i=>i.name.toLowerCase().includes(q)).map(i=>`<tr><td>${i.name}</td><td>${i.unit}</td><td>${money(i.cost)}</td><td>${i.stock["المخزن الرئيسي"]}</td><td>${i.stock["فرع جدة"]}</td><td>${i.stock["فرع ينبع"]}</td><td>${i.stock["فرع المدينة"]}</td><td>${totalQuantity(i)}</td><td>${money(totalValue(i))}</td><td><button class="danger" onclick="deleteItem('${i.id}')">حذف</button></td></tr>`).join("");}
+const name=
+document.getElementById("itemName")
+.value.trim();
+
+const unit=
+document.getElementById("itemUnit")
+.value;
+
+const cost=
+Number(
+document.getElementById("itemCost")
+.value||0
+);
+
+if(!name)
+return alert("اكتب اسم الصنف");
+
+if(
+db.items.some(
+i=>i.name.toLowerCase()===
+name.toLowerCase()
+)
+)
+return alert("هذا الصنف موجود بالفعل");
+
+const {data,error}=
+await supabaseClient
+.from("products")
+.insert({
+name,
+unit
+})
+.select("*")
+.single();
+
+if(error)
+return alert(
+"لم يتم إضافة الصنف:\n"+
+error.message
+);
+
+dbProducts.push(data);
+
+db.items.push({
+
+id:data.id,
+name:data.name,
+unit:data.unit,
+cost,
+
+stock:{
+"المخزن الرئيسي":0,
+"فرع جدة":0,
+"فرع ينبع":0,
+"فرع المدينة":0
+}
+
+});
+
+localSave();
+
+document.getElementById("itemName").value="";
+document.getElementById("itemCost").value="";
+
+fillAllSelects();
+renderAll();
+
+alert("تم إضافة الصنف أونلاين");
+
+}
+
+async function deleteItem(id){
+
+if(
+db.movements.some(
+m=>m.itemId===id
+)
+)
+return alert(
+"لا يمكن حذف صنف لديه حركات مخزون."
+);
+
+if(!confirm("هل تريد حذف الصنف؟"))
+return;
+
+const {error}=
+await supabaseClient
+.from("products")
+.update({active:false})
+.eq("id",id);
+
+if(error)
+return alert(
+"تعذر حذف الصنف:\n"+
+error.message
+);
+
+db.items=
+db.items.filter(
+i=>i.id!==id
+);
+
+localSave();
+
+fillAllSelects();
+renderAll();
+
+}
+
+function renderItems(){
+
+const q=
+(
+document.getElementById("itemSearch")
+.value||""
+).toLowerCase();
+
+const body=
+document.getElementById("itemsTable");
+
+body.innerHTML=
+db.items
+.filter(
+i=>i.name.toLowerCase().includes(q)
+)
+.map(
+i=>`
+
+<tr>
+
+<td>${i.name}</td>
+
+<td>${i.unit}</td>
+
+<td>${money(i.cost)}</td>
+
+<td>${i.stock["المخزن الرئيسي"]}</td>
+
+<td>${i.stock["فرع جدة"]}</td>
+
+<td>${i.stock["فرع ينبع"]}</td>
+
+<td>${i.stock["فرع المدينة"]}</td>
+
+<td>${totalQuantity(i)}</td>
+
+<td>${money(totalValue(i))}</td>
+
+<td>
+<button
+class="danger"
+onclick="deleteItem('${i.id}')">
+حذف
+</button>
+</td>
+
+</tr>
+
+`
+)
+.join("");
+
+}
+
+function updateOpeningDatePreview(){
+
+const value=
+document.getElementById("openingDate")
+.value;
+
+document.getElementById(
+"openingDatePreview"
+).textContent=
+value||"-";
+
+}
 
 async function saveOpening(){
- const warehouse=document.getElementById("openingWarehouse").value,itemId=document.getElementById("openingItem").value,qty=Number(document.getElementById("openingQty").value||0),cost=Number(document.getElementById("openingCost").value||0),item=getItem(itemId),wid=dbWarehouseId(warehouse);
- if(!item||qty<=0||!wid)return alert("أكمل البيانات");
- const {error}=await supabaseClient.rpc("post_opening",{p_warehouse:wid,p_date:today(),p_items:[{product_id:item.id,qty,unit_cost:cost}],p_notes:""});
- if(error)return alert("لم يتم حفظ رصيد أول المدة:\n"+error.message);
- await loadDatabase();document.getElementById("openingQty").value="";document.getElementById("openingCost").value="";alert("تم تسجيل رصيد أول المدة أونلاين");
+
+const warehouse=
+document.getElementById(
+"openingWarehouse"
+).value;
+
+const itemId=
+document.getElementById(
+"openingItem"
+).value;
+
+const qty=
+Number(
+document.getElementById(
+"openingQty"
+).value||0
+);
+
+const cost=
+Number(
+document.getElementById(
+"openingCost"
+).value||0
+);
+
+const openingDate=
+document.getElementById(
+"openingDate"
+).value;
+
+const item=getItem(itemId);
+
+const wid=
+dbWarehouseId(warehouse);
+
+if(!openingDate)
+return alert(
+"من فضلك اختر تاريخ رصيد أول المدة."
+);
+
+if(!item||qty<=0||!wid)
+return alert("أكمل البيانات");
+
+const {error}=
+await supabaseClient.rpc(
+"post_opening",
+{
+p_warehouse:wid,
+p_date:openingDate,
+p_items:[
+{
+product_id:item.id,
+qty,
+unit_cost:cost
+}
+],
+p_notes:""
+}
+);
+
+if(error)
+return alert(
+"لم يتم حفظ رصيد أول المدة:\n"+
+error.message
+);
+
+await loadDatabase();
+
+document.getElementById(
+"openingQty"
+).value="";
+
+document.getElementById(
+"openingCost"
+).value="";
+
+alert(
+"تم تسجيل رصيد أول المدة أونلاين بتاريخ "+
+openingDate
+);
+
 }
 
 async function saveReceipt(){
- const number=document.getElementById("receiptNo").value.trim(),date=document.getElementById("receiptDate").value||today(),itemId=document.getElementById("receiptItem").value,qty=Number(document.getElementById("receiptQty").value||0),cost=Number(document.getElementById("receiptCost").value||0),note=document.getElementById("receiptNote").value,item=getItem(itemId);
- if(!item||qty<=0)return alert("أكمل البيانات");
- const {error}=await supabaseClient.rpc("post_purchase",{p_supplier_id:null,p_purchase_date:date,p_invoice_no:number||null,p_notes:note,p_items:[{product_id:item.id,qty,unit_cost:cost}]});
- if(error)return alert("لم يتم حفظ إذن الاستلام:\n"+error.message);
- await loadDatabase();document.getElementById("receiptNo").value="";document.getElementById("receiptQty").value="";document.getElementById("receiptCost").value="";document.getElementById("receiptNote").value="";alert("تم حفظ إذن الاستلام أونلاين");
+
+const number=
+document.getElementById(
+"receiptNo"
+).value.trim();
+
+const date=
+document.getElementById(
+"receiptDate"
+).value||today();
+
+const itemId=
+document.getElementById(
+"receiptItem"
+).value;
+
+const qty=
+Number(
+document.getElementById(
+"receiptQty"
+).value||0
+);
+
+const cost=
+Number(
+document.getElementById(
+"receiptCost"
+).value||0
+);
+
+const note=
+document.getElementById(
+"receiptNote"
+).value;
+
+const item=getItem(itemId);
+
+if(!item||qty<=0||cost<0)
+return alert(
+"أكمل البيانات وتأكد أن الكمية والتكلفة صحيحتان"
+);
+
+const {error}=
+await supabaseClient.rpc(
+"post_purchase",
+{
+p_supplier_id:null,
+p_purchase_date:date,
+p_invoice_no:number||null,
+p_notes:
+note||
+"استلام للمخزن الرئيسي",
+
+p_items:[
+{
+product_id:item.id,
+qty,
+unit_cost:cost
+}
+]
+}
+);
+
+if(error)
+return alert(
+"لم يتم حفظ إذن الاستلام:\n"+
+error.message
+);
+
+await loadDatabase();
+
+document.getElementById(
+"receiptNo"
+).value="";
+
+document.getElementById(
+"receiptQty"
+).value="";
+
+document.getElementById(
+"receiptCost"
+).value="";
+
+document.getElementById(
+"receiptNote"
+).value="";
+
+alert(
+"تم حفظ إذن الاستلام أونلاين في المخزن الرئيسي."
+);
+
 }
 
-function updateIssueCost(){const item=getItem(document.getElementById("issueItem").value);document.getElementById("issueCost").value=item?Number(item.cost||0).toFixed(2):"0.00";calculateIssue();}
-function calculateIssue(){const qty=Number(document.getElementById("issueQty").value||0),cost=Number(document.getElementById("issueCost").value||0);document.getElementById("issueTotal").textContent=money(qty*cost);}
+function updateIssueCost(){
+
+const item=
+getItem(
+document.getElementById(
+"issueItem"
+).value
+);
+
+document.getElementById(
+"issueCost"
+).value=
+item?
+Number(item.cost||0).toFixed(2):
+"0.00";
+
+calculateIssue();
+
+}
+
+function calculateIssue(){
+
+const qty=
+Number(
+document.getElementById(
+"issueQty"
+).value||0
+);
+
+const cost=
+Number(
+document.getElementById(
+"issueCost"
+).value||0
+);
+
+document.getElementById(
+"issueTotal"
+).textContent=
+money(qty*cost);
+
+}
+
 async function saveIssue(){
- const number=document.getElementById("issueNo").value.trim()||"ISS-"+Date.now(),date=document.getElementById("issueDate").value||today(),warehouse=document.getElementById("issueWarehouse").value,itemId=document.getElementById("issueItem").value,qty=Number(document.getElementById("issueQty").value||0),receiver=document.getElementById("issueReceiver").value,note=document.getElementById("issueNote").value,item=getItem(itemId),wid=dbWarehouseId(warehouse);
- if(!item||qty<=0||!wid)return alert("أكمل البيانات");
- const {data:sb,error:se}=await supabaseClient.from("stock_balances").select("qty,avg_cost").eq("warehouse_id",wid).eq("product_id",item.id).maybeSingle();
- if(se)return alert("تعذر قراءة الرصيد:\n"+se.message);const available=Number(sb?.qty||0);if(qty>available)return alert("الرصيد غير كافٍ.\nالرصيد المتاح: "+available+" "+item.unit);
- const cost=Number(sb?.avg_cost||item.cost||0);
- const {error:ue}=await supabaseClient.from("stock_balances").update({qty:available-qty,updated_at:new Date().toISOString()}).eq("warehouse_id",wid).eq("product_id",item.id);if(ue)return alert("تعذر خصم المخزون:\n"+ue.message);
- const {error:me}=await supabaseClient.from("stock_movements").insert({movement_date:date+"T00:00:00",movement_type:"adjustment_out",document_no:number,warehouse_id:wid,product_id:item.id,qty,unit_cost:cost,total_cost:qty*cost,notes:(receiver?"الجهة: "+receiver+" | ":"")+note});
- if(me){await supabaseClient.from("stock_balances").update({qty:available,updated_at:new Date().toISOString()}).eq("warehouse_id",wid).eq("product_id",item.id);return alert("تم التراجع عن الخصم بسبب خطأ تسجيل الحركة:\n"+me.message);}
- await loadDatabase();document.getElementById("issueNo").value="";document.getElementById("issueQty").value="";document.getElementById("issueReceiver").value="";document.getElementById("issueNote").value="";alert("تم حفظ إذن الصرف وتم خصم الكمية أونلاين.");
+
+const number=
+document.getElementById(
+"issueNo"
+).value.trim()||
+"ISS-"+Date.now();
+
+const date=
+document.getElementById(
+"issueDate"
+).value||today();
+
+const warehouse=
+document.getElementById(
+"issueWarehouse"
+).value;
+
+const itemId=
+document.getElementById(
+"issueItem"
+).value;
+
+const qty=
+Number(
+document.getElementById(
+"issueQty"
+).value||0
+);
+
+const receiver=
+document.getElementById(
+"issueReceiver"
+).value;
+
+const note=
+document.getElementById(
+"issueNote"
+).value;
+
+const item=getItem(itemId);
+
+const wid=
+dbWarehouseId(warehouse);
+
+if(!item||qty<=0||!wid)
+return alert("أكمل البيانات");
+
+const {
+data:sb,
+error:se
+}=
+await supabaseClient
+.from("stock_balances")
+.select("qty,avg_cost")
+.eq("warehouse_id",wid)
+.eq("product_id",item.id)
+.maybeSingle();
+
+if(se)
+return alert(
+"تعذر قراءة الرصيد:\n"+
+se.message
+);
+
+const available=
+Number(sb?.qty||0);
+
+if(qty>available)
+return alert(
+"الرصيد غير كافٍ.\nالرصيد المتاح: "+
+available+
+" "+
+item.unit
+);
+
+const cost=
+Number(
+sb?.avg_cost||
+item.cost||
+0
+);
+
+const {error:ue}=
+await supabaseClient
+.from("stock_balances")
+.update({
+qty:available-qty,
+updated_at:
+new Date().toISOString()
+})
+.eq("warehouse_id",wid)
+.eq("product_id",item.id);
+
+if(ue)
+return alert(
+"تعذر خصم المخزون:\n"+
+ue.message
+);
+
+const {error:me}=
+await supabaseClient
+.from("stock_movements")
+.insert({
+movement_date:
+date+"T00:00:00",
+
+movement_type:
+"adjustment_out",
+
+document_no:number,
+
+warehouse_id:wid,
+
+product_id:item.id,
+
+qty,
+
+unit_cost:cost,
+
+total_cost:qty*cost,
+
+notes:
+(receiver?
+"الجهة: "+receiver+" | ":"")+
+note
+});
+
+if(me){
+
+await supabaseClient
+.from("stock_balances")
+.update({
+qty:available,
+updated_at:
+new Date().toISOString()
+})
+.eq("warehouse_id",wid)
+.eq("product_id",item.id);
+
+return alert(
+"تم التراجع عن الخصم بسبب خطأ تسجيل الحركة:\n"+
+me.message
+);
+
 }
 
-function updateTransferCost(){const item=getItem(document.getElementById("transferItem").value);document.getElementById("transferCost").textContent=item?money(item.cost):"0.00";}
+await loadDatabase();
+
+document.getElementById(
+"issueNo"
+).value="";
+
+document.getElementById(
+"issueQty"
+).value="";
+
+document.getElementById(
+"issueReceiver"
+).value="";
+
+document.getElementById(
+"issueNote"
+).value="";
+
+alert(
+"تم حفظ إذن الصرف وتم خصم الكمية أونلاين."
+);
+
+}
+
+function updateTransferCost(){
+
+const item=
+getItem(
+document.getElementById(
+"transferItem"
+).value
+);
+
+document.getElementById(
+"transferCost"
+).textContent=
+item?
+money(item.cost):
+"0.00";
+
+}
+
 async function saveTransfer(){
- const number=document.getElementById("transferNo").value.trim(),date=document.getElementById("transferDate").value||today(),from=document.getElementById("transferFrom").value,to=document.getElementById("transferTo").value,itemId=document.getElementById("transferItem").value,qty=Number(document.getElementById("transferQty").value||0),item=getItem(itemId),fromId=dbWarehouseId(from),toId=dbWarehouseId(to);
- if(from===to)return alert("لا يمكن التحويل لنفس المخزن.");if(!item||qty<=0||!fromId||!toId)return alert("أكمل البيانات");
- const {error}=await supabaseClient.rpc("post_transfer",{p_from:fromId,p_to:toId,p_transfer_date:date,p_notes:number?"رقم التحويل: "+number:"",p_items:[{product_id:item.id,qty}]});
- if(error)return alert("لم يتم تنفيذ التحويل:\n"+error.message);
- await loadDatabase();document.getElementById("transferNo").value="";document.getElementById("transferQty").value="";alert("تم تنفيذ التحويل أونلاين بنجاح.");
+
+const number=
+document.getElementById(
+"transferNo"
+).value.trim();
+
+const date=
+document.getElementById(
+"transferDate"
+).value||today();
+
+const from=
+document.getElementById(
+"transferFrom"
+).value;
+
+const to=
+document.getElementById(
+"transferTo"
+).value;
+
+const itemId=
+document.getElementById(
+"transferItem"
+).value;
+
+const qty=
+Number(
+document.getElementById(
+"transferQty"
+).value||0
+);
+
+const item=getItem(itemId);
+
+const fromId=
+dbWarehouseId(from);
+
+const toId=
+dbWarehouseId(to);
+
+if(from===to)
+return alert(
+"لا يمكن التحويل لنفس المخزن."
+);
+
+if(!item||qty<=0||!fromId||!toId)
+return alert("أكمل البيانات");
+
+const {error}=
+await supabaseClient.rpc(
+"post_transfer",
+{
+p_from:fromId,
+p_to:toId,
+p_transfer_date:date,
+p_notes:
+number?
+"رقم التحويل: "+number:
+"",
+p_items:[
+{
+product_id:item.id,
+qty
+}
+]
+}
+);
+
+if(error)
+return alert(
+"لم يتم تنفيذ التحويل:\n"+
+error.message
+);
+
+await loadDatabase();
+
+document.getElementById(
+"transferNo"
+).value="";
+
+document.getElementById(
+"transferQty"
+).value="";
+
+alert(
+"تم تنفيذ التحويل أونلاين بنجاح."
+);
+
 }
 
-function getReportMovements(){const from=document.getElementById("reportFrom").value,to=document.getElementById("reportTo").value,branch=document.getElementById("reportBranch").value;return db.movements.filter(m=>{if(from&&m.date<from)return false;if(to&&m.date>to)return false;let b="";if(m.type==="transfer_out"){const w=dbWarehouses.find(x=>x.id===undefined);/* label resolved below */}const rawFrom=m.from;if(m.type==="transfer_out"){const match=db.movements.find(x=>x.id===m.id);b=match?"":b;}if(m.type==="transfer_in")return false;if(m.type!=="transfer_out"&&m.type!=="adjustment_out")return false;/* transfer destination is recovered from reference in movement pair */return true;});}
+function getReportMovements(){
+
+const from=
+document.getElementById(
+"reportFrom"
+).value;
+
+const to=
+document.getElementById(
+"reportTo"
+).value;
+
+const branch=
+document.getElementById(
+"reportBranch"
+).value;
+
+return db.movements.filter(m=>{
+
+if(from&&m.date<from)
+return false;
+
+if(to&&m.date>to)
+return false;
+
+if(
+m.type!=="transfer_out"&&
+m.type!=="adjustment_out"
+)
+return false;
+
+const b=
+m.type==="transfer_out"
+?
+m.to
+:
+(branches.includes(m.from)?
+m.from:null);
+
+return b &&
+(
+branch==="ALL"||
+b===branch
+);
+
+});
+
+}
+
 function renderBranchReport(){
- const from=document.getElementById("reportFrom").value,to=document.getElementById("reportTo").value,selected=document.getElementById("reportBranch").value;let data={"فرع جدة":{qty:0,value:0},"فرع ينبع":{qty:0,value:0},"فرع المدينة":{qty:0,value:0}};let rows=[];
- const all=db.movements.filter(m=>{if(from&&m.date<from)return false;if(to&&m.date>to)return false;return true;});
- all.forEach(m=>{
-   let branch=null,label="";
-   if(m.type==="transfer_out"){
-     /* Find matching transfer_in by document number; destination is its warehouse. */
-     const dest=all.find(x=>x.type==="transfer_in"&&x.number===m.number&&x.itemId===m.itemId);
-     branch=dest?dest.to:null;label="صرف للفرع";
-   } else if(m.type==="adjustment_out" && branches.includes(m.from)){branch=m.from;label="استهلاك الفرع";}
-   if(branch && (!selected||selected==="ALL"||branch===selected)){data[branch].qty+=m.qty;data[branch].value+=m.value;rows.push({m,branch,label});}
- });
- document.getElementById("jeddahQty").textContent=data["فرع جدة"].qty.toFixed(3);document.getElementById("jeddahValue").textContent=money(data["فرع جدة"].value)+" ر.س";document.getElementById("yanbuQty").textContent=data["فرع ينبع"].qty.toFixed(3);document.getElementById("yanbuValue").textContent=money(data["فرع ينبع"].value)+" ر.س";document.getElementById("madinahQty").textContent=data["فرع المدينة"].qty.toFixed(3);document.getElementById("madinahValue").textContent=money(data["فرع المدينة"].value)+" ر.س";
- const tq=Object.values(data).reduce((s,x)=>s+x.qty,0),tv=Object.values(data).reduce((s,x)=>s+x.value,0);document.getElementById("allBranchQty").textContent=tq.toFixed(3);document.getElementById("allBranchValue").textContent=money(tv)+" ر.س";
- document.getElementById("branchReportTable").innerHTML=rows.map(r=>{const i=getItem(r.m.itemId);return `<tr><td>${r.m.date}</td><td>${r.m.number}</td><td>${r.branch}</td><td>${i?i.name:""}</td><td><span class="badge ${r.label==="صرف للفرع"?"transfer":"out"}">${r.label}</span></td><td>${r.m.from||"-"}</td><td>${r.m.qty}</td><td>${money(r.m.cost)}</td><td>${money(r.m.value)}</td></tr>`}).join("")||`<tr><td colspan="9">لا توجد حركات صرف خلال الفترة المحددة.</td></tr>`;
+
+const from=
+document.getElementById(
+"reportFrom"
+).value;
+
+const to=
+document.getElementById(
+"reportTo"
+).value;
+
+const selected=
+document.getElementById(
+"reportBranch"
+).value;
+
+let data={
+"فرع جدة":{qty:0,value:0},
+"فرع ينبع":{qty:0,value:0},
+"فرع المدينة":{qty:0,value:0}
+};
+
+let rows=[];
+
+const all=
+db.movements.filter(m=>{
+
+if(from&&m.date<from)
+return false;
+
+if(to&&m.date>to)
+return false;
+
+return true;
+
+});
+
+all.forEach(m=>{
+
+let branch=null;
+let label="";
+
+if(
+m.type==="transfer_out" &&
+branches.includes(m.to)
+){
+
+branch=m.to;
+label="صرف للفرع";
+
 }
-function applyReportFilter(){const a=document.getElementById("reportFrom").value,b=document.getElementById("reportTo").value;if(a&&b&&a>b)return alert("تاريخ البداية لا يمكن أن يكون بعد تاريخ النهاية.");renderBranchReport();}
-function clearReportFilter(){document.getElementById("reportFrom").value="";document.getElementById("reportTo").value="";document.getElementById("reportBranch").value="ALL";renderBranchReport();}
 
-function renderMovements(){const q=(document.getElementById("movementSearch").value||"").toLowerCase(),body=document.getElementById("movementTable");body.innerHTML=db.movements.filter(m=>{const i=getItem(m.itemId);return(JSON.stringify(m)+(i?i.name:" ")).toLowerCase().includes(q)}).map(m=>{const i=getItem(m.itemId);let badge=m.type==="transfer_out"||m.type==="transfer_in"?"transfer":m.type==="adjustment_out"?"out":"in";return `<tr><td>${m.date}</td><td>${m.number}</td><td><span class="badge ${badge}">${movementTypeLabel(m.type)}</span></td><td>${i?i.name:""}</td><td>${m.from||"-"}</td><td>${m.to||"-"}</td><td>${m.qty}</td><td>${money(m.cost)}</td><td>${money(m.value)}</td><td>${m.note||""}</td></tr>`}).join("");}
-function renderCard(){const item=getItem(document.getElementById("cardItem").value),summary=document.getElementById("cardSummary"),body=document.getElementById("cardTable");if(!item){summary.innerHTML="";body.innerHTML="";return;}summary.innerHTML=`<div class="total-box">الصنف: ${item.name} &nbsp; | &nbsp; متوسط التكلفة: ${money(item.cost)} ر.س &nbsp; | &nbsp; إجمالي الرصيد: ${totalQuantity(item)} ${item.unit} &nbsp; | &nbsp; قيمة المخزون: ${money(totalValue(item))} ر.س</div>`;body.innerHTML=db.movements.filter(m=>m.itemId===item.id).sort((a,b)=>a.date.localeCompare(b.date)).map(m=>`<tr><td>${m.date}</td><td>${m.number}</td><td>${movementTypeLabel(m.type)}</td><td>${m.from||"-"}</td><td>${m.to||"-"}</td><td>${m.qty}</td><td>${money(m.cost)}</td><td>${money(m.value)}</td></tr>`).join("");}
-function renderDashboard(){document.getElementById("dashItems").textContent=db.items.length;let q=0,v=0;db.items.forEach(i=>{q+=totalQuantity(i);v+=totalValue(i)});document.getElementById("dashQty").textContent=q.toFixed(3);document.getElementById("dashValue").textContent=money(v);document.getElementById("dashMoves").textContent=db.movements.length;document.getElementById("dashboardStock").innerHTML=db.items.map(i=>`<tr><td>${i.name}</td><td>${i.unit}</td><td>${i.stock["المخزن الرئيسي"]}</td><td>${i.stock["فرع جدة"]}</td><td>${i.stock["فرع ينبع"]}</td><td>${i.stock["فرع المدينة"]}</td><td>${totalQuantity(i)}</td><td>${money(totalValue(i))}</td></tr>`).join("");document.getElementById("recentMoves").innerHTML=db.movements.slice(0,10).map(m=>{const i=getItem(m.itemId);return `<tr><td>${m.date}</td><td>${m.number}</td><td>${movementTypeLabel(m.type)}</td><td>${i?i.name:""}</td><td>${m.from||"-"}</td><td>${m.to||"-"}</td><td>${m.qty}</td><td>${money(m.value)}</td></tr>`}).join("");renderBranchReport();}
-function backupData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="inventory-backup-"+today()+".json";a.click();URL.revokeObjectURL(url);}
-async function restoreData(event){const file=event.target.files[0];if(!file)return;const text=await file.text();try{const data=JSON.parse(text);if(!data.items||!data.movements)throw Error();alert("النسخة الاحتياطية المحلية لا يمكن رفعها مباشرة إلى قاعدة البيانات في هذه النسخة. استخدمها كنسخة احتياطية فقط.");}catch(e){alert("الملف غير صالح.");}}
-async function deleteAllData(){if(!confirm("تحذير!\n\nسيتم إخفاء جميع الأصناف من النظام وحذف أرصدة المخزون والحركات.\nهل أنت متأكد؟"))return;const {error}=await supabaseClient.from("products").update({active:false}).eq("active",true);if(error)return alert("تعذر تنفيذ العملية:\n"+error.message);alert("تم إخفاء الأصناف. لحذف الحركات نهائياً نحتاج صلاحية إدارية خاصة.");await loadDatabase();}
-function renderAll(){renderDashboard();renderItems();renderMovements();renderCard();updateIssueCost();updateTransferCost();}
+else if(
+m.type==="adjustment_out" &&
+branches.includes(m.from)
+){
 
-(async function init(){document.getElementById("currentDate").textContent=today();document.getElementById("receiptDate").value=today();document.getElementById("issueDate").value=today();document.getElementById("transferDate").value=today();try{await loadDatabase();}catch(e){console.error(e);alert("تعذر الاتصال بقاعدة Supabase:\n\n"+e.message+"\n\nتأكد أن SQL تم تنفيذه وأن سياسات RLS مفعلة.");fillAllSelects();renderAll();}})();
+branch=m.from;
+label="استهلاك الفرع";
+
+}
+
+if(
+branch &&
+(
+selected==="ALL"||
+branch===selected
+)
+){
+
+data[branch].qty+=
+Number(m.qty||0);
+
+data[branch].value+=
+Number(m.value||0);
+
+rows.push({
+m,
+branch,
+label
+});
+
+}
+
+});
+
+[
+"فرع جدة",
+"فرع ينبع",
+"فرع المدينة"
+].forEach((b,i)=>{
+
+const key=
+i===0?
+"jeddah":
+i===1?
+"yanbu":
+"madinah";
+
+document.getElementById(
+key+"Qty"
+).textContent=
+data[b].qty.toFixed(3);
+
+document.getElementById(
+key+"Value"
+).textContent=
+money(data[b].value)+" ر.س";
+
+});
+
+const tq=
+Object.values(data)
+.reduce(
+(s,x)=>s+x.qty,
+0
+);
+
+const tv=
+Object.values(data)
+.reduce(
+(s,x)=>s+x.value,
+0
+);
+
+document.getElementById(
+"allBranchQty"
+).textContent=
+tq.toFixed(3);
+
+document.getElementById(
+"allBranchValue"
+).textContent=
+money(tv)+" ر.س";
+
+document.getElementById(
+"branchReportTable"
+).innerHTML=
+rows.map(r=>{
+
+const i=
+getItem(r.m.itemId);
+
+return `
+
+<tr>
+
+<td>${r.m.date}</td>
+
+<td>${r.m.number}</td>
+
+<td>${r.branch}</td>
+
+<td>${i?i.name:""}</td>
+
+<td>
+<span class="badge ${
+r.label==="صرف للفرع"
+?
+"transfer":
+"out"
+}">
+${r.label}
+</span>
+</td>
+
+<td>${r.m.from||"-"}</td>
+
+<td>${r.m.qty}</td>
+
+<td>${money(r.m.cost)}</td>
+
+<td>${money(r.m.value)}</td>
+
+</tr>
+
+`;
+
+}).join("")||
+`
+<tr>
+<td colspan="9">
+لا توجد حركات صرف خلال الفترة المحددة.
+</td>
+</tr>
+`;
+
+}
+
+function applyReportFilter(){
+
+const a=
+document.getElementById(
+"reportFrom"
+).value;
+
+const b=
+document.getElementById(
+"reportTo"
+).value;
+
+if(a&&b&&a>b)
+return alert(
+"تاريخ البداية لا يمكن أن يكون بعد تاريخ النهاية."
+);
+
+renderBranchReport();
+
+}
+
+function clearReportFilter(){
+
+document.getElementById(
+"reportFrom"
+).value="";
+
+document.getElementById(
+"reportTo"
+).value="";
+
+document.getElementById(
+"reportBranch"
+).value="ALL";
+
+renderBranchReport();
+
+}
+
+function renderMovements(){
+
+const q=
+(
+document.getElementById(
+"movementSearch"
+).value||""
+).toLowerCase();
+
+const body=
+document.getElementById(
+"movementTable"
+);
+
+body.innerHTML=
+db.movements
+.filter(m=>{
+
+const i=
+getItem(m.itemId);
+
+return (
+JSON.stringify(m)+
+(i?i.name:" ")
+)
+.toLowerCase()
+.includes(q);
+
+})
+.map(m=>{
+
+const i=
+getItem(m.itemId);
+
+let badge=
+m.type==="transfer_out"||
+m.type==="transfer_in"
+?
+"transfer":
+m.type==="adjustment_out"
+?
+"out":
+"in";
+
+return `
+
+<tr>
+
+<td>${m.date}</td>
+
+<td>${m.number}</td>
+
+<td>
+<span class="badge ${badge}">
+${movementTypeLabel(m.type)}
+</span>
+</td>
+
+<td>${i?i.name:""}</td>
+
+<td>${m.from||"-"}</td>
+
+<td>${m.to||"-"}</td>
+
+<td>${m.qty}</td>
+
+<td>${money(m.cost)}</td>
+
+<td>${money(m.value)}</td>
+
+<td>${m.note||""}</td>
+
+</tr>
+
+`;
+
+})
+.join("");
+
+}
+
+function renderCard(){
+
+const item=
+getItem(
+document.getElementById(
+"cardItem"
+).value
+);
+
+const summary=
+document.getElementById(
+"cardSummary"
+);
+
+const body=
+document.getElementById(
+"cardTable"
+);
+
+if(!item){
+
+summary.innerHTML="";
+body.innerHTML="";
+
+return;
+
+}
+
+summary.innerHTML=
+
+`
+<div class="total-box">
+
+الصنف:
+${item.name}
+
+&nbsp; | &nbsp;
+
+متوسط التكلفة:
+${money(item.cost)}
+ر.س
+
+&nbsp; | &nbsp;
+
+إجمالي الرصيد:
+${totalQuantity(item)}
+${item.unit}
+
+&nbsp; | &nbsp;
+
+قيمة المخزون:
+${money(totalValue(item))}
+ر.س
+
+</div>
+`;
+
+body.innerHTML=
+db.movements
+.filter(
+m=>m.itemId===item.id
+)
+.sort(
+(a,b)=>a.date.localeCompare(b.date)
+)
+.map(
+m=>`
+
+<tr>
+
+<td>${m.date}</td>
+
+<td>${m.number}</td>
+
+<td>${movementTypeLabel(m.type)}</td>
+
+<td>${m.from||"-"}</td>
+
+<td>${m.to||"-"}</td>
+
+<td>${m.qty}</td>
+
+<td>${money(m.cost)}</td>
+
+<td>${money(m.value)}</td>
+
+</tr>
+
+`
+)
+.join("");
+
+}
+
+function renderDashboard(){
+
+document.getElementById(
+"dashItems"
+).textContent=
+db.items.length;
+
+let q=0;
+let v=0;
+
+db.items.forEach(i=>{
+
+q+=totalQuantity(i);
+v+=totalValue(i);
+
+});
+
+document.getElementById(
+"dashQty"
+).textContent=
+q.toFixed(3);
+
+document.getElementById(
+"dashValue"
+).textContent=
+money(v);
+
+document.getElementById(
+"dashMoves"
+).textContent=
+db.movements.length;
+
+document.getElementById(
+"dashboardStock"
+).innerHTML=
+db.items.map(i=>`
+
+<tr>
+
+<td>${i.name}</td>
+
+<td>${i.unit}</td>
+
+<td>${i.stock["المخزن الرئيسي"]}</td>
+
+<td>${i.stock["فرع جدة"]}</td>
+
+<td>${i.stock["فرع ينبع"]}</td>
+
+<td>${i.stock["فرع المدينة"]}</td>
+
+<td>${totalQuantity(i)}</td>
+
+<td>${money(totalValue(i))}</td>
+
+</tr>
+
+`).join("");
+
+document.getElementById(
+"recentMoves"
+).innerHTML=
+db.movements
+.slice(0,10)
+.map(m=>{
+
+const i=
+getItem(m.itemId);
+
+return `
+
+<tr>
+
+<td>${m.date}</td>
+
+<td>${m.number}</td>
+
+<td>${movementTypeLabel(m.type)}</td>
+
+<td>${i?i.name:""}</td>
+
+<td>${m.from||"-"}</td>
+
+<td>${m.to||"-"}</td>
+
+<td>${m.qty}</td>
+
+<td>${money(m.value)}</td>
+
+</tr>
+
+`;
+
+})
+.join("");
+
+renderBranchReport();
+
+}
+
+function backupData(){
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+db,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+const url=
+URL.createObjectURL(blob);
+
+const a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+"inventory-backup-"+
+today()+
+".json";
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+async function restoreData(event){
+
+const file=
+event.target.files[0];
+
+if(!file)return;
+
+const text=
+await file.text();
+
+try{
+
+const data=
+JSON.parse(text);
+
+if(
+!data.items||
+!data.movements
+)
+throw Error();
+
+alert(
+"النسخة الاحتياطية المحلية لا يمكن رفعها مباشرة إلى قاعدة البيانات في هذه النسخة. استخدمها كنسخة احتياطية فقط."
+);
+
+}
+catch(e){
+
+alert("الملف غير صالح.");
+
+}
+
+}
+
+async function deleteAllData(){
+
+if(
+!confirm(
+"تحذير!\n\n"+
+"سيتم إخفاء جميع الأصناف من النظام وحذف أرصدة المخزون والحركات.\n"+
+"هل أنت متأكد؟"
+)
+)
+return;
+
+const {error}=
+await supabaseClient
+.from("products")
+.update({active:false})
+.eq("active",true);
+
+if(error)
+return alert(
+"تعذر تنفيذ العملية:\n"+
+error.message
+);
+
+alert(
+"تم إخفاء الأصناف. لحذف الحركات نهائياً نحتاج صلاحية إدارية خاصة."
+);
+
+await loadDatabase();
+
+}
+
+function renderAll(){
+
+renderDashboard();
+renderItems();
+renderMovements();
+renderCard();
+updateIssueCost();
+updateTransferCost();
+
+}
+
+(async function init(){
+
+document.getElementById(
+"currentDate"
+).textContent=today();
+
+document.getElementById(
+"openingDate"
+).value=today();
+
+document.getElementById(
+"openingDate"
+).addEventListener(
+"change",
+updateOpeningDatePreview
+);
+
+updateOpeningDatePreview();
+
+document.getElementById(
+"receiptDate"
+).value=today();
+
+document.getElementById(
+"issueDate"
+).value=today();
+
+document.getElementById(
+"transferDate"
+).value=today();
+
+try{
+
+await loadDatabase();
+
+}
+catch(e){
+
+console.error(e);
+
+alert(
+"تعذر الاتصال بقاعدة Supabase:\n\n"+
+e.message+
+"\n\nتأكد أن SQL تم تنفيذه وأن سياسات RLS مفعلة."
+);
+
+fillAllSelects();
+renderAll();
+
+}
+
+})();
+
 </script>
 
 </body>
