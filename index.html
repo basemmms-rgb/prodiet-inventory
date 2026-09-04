@@ -121,9 +121,7 @@ textarea{
     gap:12px
 }
 
-button{
-    font-family:inherit
-}
+button{font-family:inherit}
 
 .btn{
     border:0;
@@ -279,21 +277,13 @@ tr:nth-child(even){background:#fafafa}
 
 @media(max-width:700px){
 
-    header{
-        position:static
-    }
+    header{position:static}
 
-    nav{
-        position:static
-    }
+    nav{position:static}
 
-    .container{
-        padding:10px
-    }
+    .container{padding:10px}
 
-    table{
-        font-size:12px
-    }
+    table{font-size:12px}
 
     .receipt-row-grid,
     .issue-row-grid{
@@ -333,63 +323,66 @@ tr:nth-child(even){background:#fafafa}
 <body>
 
 <header>
-    <div>
-        <h1>📦 نظام المخزون ERP</h1>
-        <small>ProDiet Inventory System</small>
-    </div>
 
-    <div id="connectionStatus">
-        جاري الاتصال...
-    </div>
+<div>
+<h1>📦 نظام المخزون ERP</h1>
+<small>ProDiet Inventory System</small>
+</div>
+
+<div id="connectionStatus">
+جاري الاتصال...
+</div>
+
 </header>
 
 <nav>
 
-    <button onclick="showPage('dashboard')" id="nav-dashboard">
-        لوحة التحكم
-    </button>
+<button onclick="showPage('dashboard')" id="nav-dashboard">
+لوحة التحكم
+</button>
 
-    <button onclick="showPage('items')" id="nav-items">
-        الأصناف
-    </button>
+<button onclick="showPage('items')" id="nav-items">
+الأصناف
+</button>
 
-    <button onclick="showPage('suppliers')" id="nav-suppliers">
-        الموردين
-    </button>
+<button onclick="showPage('suppliers')" id="nav-suppliers">
+الموردين
+</button>
 
-    <button onclick="showPage('opening')" id="nav-opening">
-        رصيد أول المدة
-    </button>
+<button onclick="showPage('opening')" id="nav-opening">
+رصيد أول المدة
+</button>
 
-    <button onclick="showPage('receipt')" id="nav-receipt">
-        إذن استلام
-    </button>
+<button onclick="showPage('receipt')" id="nav-receipt">
+إذن استلام
+</button>
 
-    <button onclick="showPage('issue')" id="nav-issue">
-        إذن صرف
-    </button>
+<button onclick="showPage('issue')" id="nav-issue">
+إذن صرف
+</button>
 
-    <button onclick="showPage('transfer')" id="nav-transfer">
-        تحويل مخزني
-    </button>
+<button onclick="showPage('transfer')" id="nav-transfer">
+تحويل مخزني
+</button>
 
-    <button onclick="showPage('movements')" id="nav-movements">
-        الحركات
-    </button>
+<button onclick="showPage('movements')" id="nav-movements">
+الحركات
+</button>
 
-    <button onclick="showPage('itemCard')" id="nav-itemCard">
-        كارت الصنف
-    </button>
+<button onclick="showPage('itemCard')" id="nav-itemCard">
+كارت الصنف
+</button>
 
-    <button onclick="showPage('backup')" id="nav-backup">
-        نسخ احتياطي
-    </button>
+<button onclick="showPage('backup')" id="nav-backup">
+نسخ احتياطي
+</button>
 
 </nav>
 
 <div class="container">
 
 <div id="alertBox" class="alert"></div>
+
 
 <!-- =====================================================
      DASHBOARD
@@ -434,6 +427,7 @@ tr:nth-child(even){background:#fafafa}
 
 </div>
 
+
 <div class="grid">
 
 <div class="stat">
@@ -458,6 +452,78 @@ tr:nth-child(even){background:#fafafa}
 
 </div>
 
+
+<!-- =====================================================
+     DAILY REPORT
+===================================================== -->
+
+<div class="card">
+
+<h2>📅 التقرير اليومي للمخزون</h2>
+
+<p class="small">
+يعرض حركة المخزون يومًا بيوم خلال الفترة المحددة، وليس إجمالي الفترة فقط.
+</p>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>التاريخ</th>
+<th>رصيد أول اليوم</th>
+<th>المشتريات</th>
+<th>تحويل وارد</th>
+<th>تحويل صادر</th>
+<th>إذن صرف</th>
+<th>صافي الحركة</th>
+<th>رصيد آخر اليوم</th>
+<th>قيمة الحركة</th>
+</tr>
+
+</thead>
+
+<tbody id="dailyStockBody"></tbody>
+
+<tfoot>
+
+<tr style="font-weight:bold;background:#eef1f4">
+
+<td>الإجمالي / الرصيد</td>
+
+<td id="dailyTotalOpening">0</td>
+
+<td id="dailyTotalPurchases">0</td>
+
+<td id="dailyTotalTransferIn">0</td>
+
+<td id="dailyTotalTransferOut">0</td>
+
+<td id="dailyTotalIssues">0</td>
+
+<td id="dailyTotalNet">0</td>
+
+<td id="dailyTotalClosing">0</td>
+
+<td id="dailyTotalValue">0.00</td>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     BRANCH SUMMARY
+===================================================== -->
+
 <div class="card">
 
 <h2>🏢 تقرير صرف الفروع</h2>
@@ -471,6 +537,11 @@ tr:nth-child(even){background:#fafafa}
 
 </div>
 
+
+<!-- =====================================================
+     BRANCH DETAILS
+===================================================== -->
+
 <div class="card">
 
 <h2>📋 تفاصيل صرف الفروع</h2>
@@ -480,6 +551,7 @@ tr:nth-child(even){background:#fafafa}
 <table>
 
 <thead>
+
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
@@ -492,6 +564,7 @@ tr:nth-child(even){background:#fafafa}
 <th>التكلفة</th>
 <th>القيمة</th>
 </tr>
+
 </thead>
 
 <tbody id="branchDetailsBody"></tbody>
@@ -502,6 +575,11 @@ tr:nth-child(even){background:#fafafa}
 
 </div>
 
+
+<!-- =====================================================
+     STOCK
+===================================================== -->
+
 <div class="card">
 
 <h2>📦 رصيد المخزون</h2>
@@ -511,6 +589,7 @@ tr:nth-child(even){background:#fafafa}
 <table>
 
 <thead>
+
 <tr>
 <th>الصنف</th>
 <th>الوحدة</th>
@@ -522,6 +601,7 @@ tr:nth-child(even){background:#fafafa}
 <th>الإجمالي</th>
 <th>القيمة</th>
 </tr>
+
 </thead>
 
 <tbody id="dashboardStockBody"></tbody>
@@ -532,6 +612,11 @@ tr:nth-child(even){background:#fafafa}
 
 </div>
 
+
+<!-- =====================================================
+     RECENT
+===================================================== -->
+
 <div class="card">
 
 <h2>آخر الحركات</h2>
@@ -541,6 +626,7 @@ tr:nth-child(even){background:#fafafa}
 <table>
 
 <thead>
+
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
@@ -551,6 +637,7 @@ tr:nth-child(even){background:#fafafa}
 <th>الكمية</th>
 <th>القيمة</th>
 </tr>
+
 </thead>
 
 <tbody id="recentMovementsBody"></tbody>
@@ -695,7 +782,6 @@ value="0"
 <div style="margin-top:12px">
 
 <label>ملاحظات</label>
-
 <textarea id="supplierNotes"></textarea>
 
 </div>
@@ -710,10 +796,6 @@ value="0"
 
 </div>
 
-
-<!-- =====================================================
-     SUPPLIER PAYMENT
-===================================================== -->
 
 <div class="card">
 
@@ -817,10 +899,6 @@ onclick="clearSupplierPayment()"
 </div>
 
 
-<!-- =====================================================
-     SUPPLIERS TABLE
-===================================================== -->
-
 <div class="card">
 
 <h2>📋 الموردين</h2>
@@ -857,10 +935,6 @@ oninput="renderSuppliers()"
 
 </div>
 
-
-<!-- =====================================================
-     SUPPLIER STATEMENT
-===================================================== -->
 
 <div class="card" id="supplierStatement">
 
@@ -1105,10 +1179,7 @@ onclick="addReceiptLine()"
 
 </div>
 
-<div
-id="receiptLines"
-style="margin-top:15px"
-></div>
+<div id="receiptLines" style="margin-top:15px"></div>
 
 <div class="total-box">
 
@@ -1223,17 +1294,11 @@ oninput="calculateIssue()"
 
 </div>
 
-<div
-class="form-grid"
-style="margin-top:15px"
->
+<div class="form-grid" style="margin-top:15px">
 
 <div>
-
 <label>الجهة المستلمة / سبب الصرف</label>
-
 <input id="issueReceiver">
-
 </div>
 
 </div>
@@ -1362,10 +1427,7 @@ placeholder="🔎 ابحث..."
 oninput="renderMovements()"
 >
 
-<div
-class="table-wrap"
-style="margin-top:15px"
->
+<div class="table-wrap" style="margin-top:15px">
 
 <table>
 
@@ -1437,10 +1499,7 @@ onchange="renderItemCard()"
 
 </div>
 
-<div
-class="table-wrap"
-style="margin-top:15px"
->
+<div class="table-wrap" style="margin-top:15px">
 
 <table>
 
@@ -1602,6 +1661,7 @@ function setTodayDefaults(){
     if(label){
         label.textContent=today;
     }
+
 }
 
 
@@ -1631,6 +1691,7 @@ function showAlert(
         box.className="alert";
 
     },5000);
+
 }
 
 
@@ -1644,6 +1705,7 @@ function money(value){
                 maximumFractionDigits:2
             }
         );
+
 }
 
 
@@ -1656,6 +1718,7 @@ function qty(value){
                 maximumFractionDigits:3
             }
         );
+
 }
 
 
@@ -1667,6 +1730,7 @@ function esc(value){
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
+
 }
 
 
@@ -1675,6 +1739,7 @@ function dateOnly(value){
     if(!value) return "";
 
     return String(value).substring(0,10);
+
 }
 
 
@@ -1683,6 +1748,7 @@ function getWarehouseById(id){
     return db.warehouses.find(
         w=>String(w.id)===String(id)
     );
+
 }
 
 
@@ -1694,6 +1760,7 @@ function warehouseName(id){
     if(!w) return "-";
 
     return w.name;
+
 }
 
 
@@ -1702,6 +1769,7 @@ function getItemById(id){
     return db.items.find(
         x=>String(x.id)===String(id)
     );
+
 }
 
 
@@ -1714,6 +1782,7 @@ function getStock(
         String(x.product_id)===String(itemId) &&
         String(x.warehouse_id)===String(warehouseId)
     );
+
 }
 
 
@@ -1724,6 +1793,7 @@ function findWarehouseByName(name){
         String(w.name).trim()===
         String(name).trim()
     );
+
 }
 
 
@@ -1865,10 +1935,6 @@ async function loadDatabase(){
             transfersRes.data||[];
 
 
-        /* =================================================
-           PRODUCTS
-        ================================================= */
-
         db.items=
             (productsRes.data||[])
             .map(p=>{
@@ -1884,11 +1950,6 @@ async function loadDatabase(){
 
                 stocks.forEach(s=>{
 
-                    /*
-                     مهم:
-                     قاعدة البيانات تستخدم qty
-                    */
-
                     totalQty +=
                         Number(s.qty||0);
 
@@ -1902,10 +1963,6 @@ async function loadDatabase(){
             });
 
 
-        /* =================================================
-           TRANSFER MAP
-        ================================================= */
-
         const transferMap=
             new Map();
 
@@ -1918,10 +1975,6 @@ async function loadDatabase(){
 
         });
 
-
-        /* =================================================
-           MOVEMENTS
-        ================================================= */
 
         db.movements=
             (movementsRes.data||[])
@@ -2069,10 +2122,6 @@ async function loadDatabase(){
                             m.total_cost||0
                         ),
 
-                    /*
-                     قاعدة البيانات qty
-                    */
-
                     quantity:
                         Number(
                             m.qty||0
@@ -2176,10 +2225,6 @@ function fillSupplierSelect(id){
 
 function fillAllSelects(){
 
-    /* =====================================================
-       WAREHOUSES
-    ===================================================== */
-
     const warehouseSelects=[
         "openingWarehouse",
         "issueWarehouse",
@@ -2210,10 +2255,6 @@ function fillAllSelects(){
 
     });
 
-
-    /* =====================================================
-       ITEMS
-    ===================================================== */
 
     const itemSelects=[
         "openingItem",
@@ -2247,20 +2288,12 @@ function fillAllSelects(){
     });
 
 
-    /* =====================================================
-       SUPPLIERS
-    ===================================================== */
-
     [
         "receiptSupplier",
         "paymentSupplier",
         "statementSupplier"
     ].forEach(fillSupplierSelect);
 
-
-    /* =====================================================
-       BRANCHES
-    ===================================================== */
 
     const branchSelects=[
         "dashboardBranch",
@@ -2455,11 +2488,6 @@ function renderItems(){
         )
         .map(item=>{
 
-            /*
-             مهم:
-             stock_balances.qty
-            */
-
             const q=id=>
                 id
                 ? Number(
@@ -2505,47 +2533,28 @@ function renderItems(){
 
             <tr>
 
-                <td>
-                    ${esc(item.name)}
-                </td>
+                <td>${esc(item.name)}</td>
+
+                <td>${esc(item.unit||"-")}</td>
+
+                <td>${money(item.cost)}</td>
+
+                <td>${qty(mainQty)}</td>
+
+                <td>${qty(jeddahQty)}</td>
+
+                <td>${qty(yanbuQty)}</td>
+
+                <td>${qty(madinahQty)}</td>
+
+                <td>${qty(kitchenQty)}</td>
+
+                <td>${qty(total)}</td>
+
+                <td>${money(value)}</td>
 
                 <td>
-                    ${esc(item.unit||"-")}
-                </td>
 
-                <td>
-                    ${money(item.cost)}
-                </td>
-
-                <td>
-                    ${qty(mainQty)}
-                </td>
-
-                <td>
-                    ${qty(jeddahQty)}
-                </td>
-
-                <td>
-                    ${qty(yanbuQty)}
-                </td>
-
-                <td>
-                    ${qty(madinahQty)}
-                </td>
-
-                <td>
-                    ${qty(kitchenQty)}
-                </td>
-
-                <td>
-                    ${qty(total)}
-                </td>
-
-                <td>
-                    ${money(value)}
-                </td>
-
-                <td>
                     ${
                         item.active!==false
 
@@ -2561,6 +2570,7 @@ function renderItems(){
                             موقوف
                         </span>`
                     }
+
                 </td>
 
                 <td>
@@ -2881,17 +2891,11 @@ function renderSuppliers(){
 
         <tr>
 
-            <td>
-                ${esc(s.name)}
-            </td>
+            <td>${esc(s.name)}</td>
 
-            <td>
-                ${esc(s.phone||"-")}
-            </td>
+            <td>${esc(s.phone||"-")}</td>
 
-            <td>
-                ${money(s.opening_balance)}
-            </td>
+            <td>${money(s.opening_balance)}</td>
 
             <td>
 
@@ -2908,9 +2912,7 @@ function renderSuppliers(){
 
             </td>
 
-            <td>
-                ${esc(s.notes||"-")}
-            </td>
+            <td>${esc(s.notes||"-")}</td>
 
             <td>
 
@@ -2986,7 +2988,7 @@ function renderSuppliers(){
 
 
 /* =========================================================
-   OPEN SUPPLIER STATEMENT
+   SUPPLIER STATEMENT
 ========================================================= */
 
 function openSupplierStatement(id){
@@ -3119,10 +3121,6 @@ async function saveSupplierPayment(){
         );
 
 
-    /*
-     لا نسمح بسداد أكبر من رصيد المورد
-     */
-
     if(amount>oldBalance){
 
         showAlert(
@@ -3145,10 +3143,6 @@ async function saveSupplierPayment(){
         oldBalance-amount;
 
 
-    /*
-     تحديث رصيد المورد
-    */
-
     const{
         error:updateError
     }=
@@ -3170,10 +3164,6 @@ async function saveSupplierPayment(){
         return;
     }
 
-
-    /*
-     تسجيل حركة المورد
-    */
 
     const finalDescription=
         (
@@ -3222,10 +3212,6 @@ async function saveSupplierPayment(){
 
     if(txError){
 
-        /*
-         Rollback
-        */
-
         await supabaseClient
             .from("suppliers")
             .update({
@@ -3255,9 +3241,7 @@ async function saveSupplierPayment(){
 
     clearSupplierPayment();
 
-
     await loadDatabase();
-
 
     document
     .getElementById(
@@ -3265,15 +3249,10 @@ async function saveSupplierPayment(){
     )
     .value=supplierId;
 
-
     await loadSupplierStatement();
 
 }
 
-
-/* =========================================================
-   CLEAR SUPPLIER PAYMENT
-========================================================= */
 
 function clearSupplierPayment(){
 
@@ -3562,13 +3541,9 @@ async function loadSupplierStatement(){
                 ${paymentMethod}
             </td>
 
-            <td>
-                ${money(debit)}
-            </td>
+            <td>${money(debit)}</td>
 
-            <td>
-                ${money(credit)}
-            </td>
+            <td>${money(credit)}</td>
 
             <td>
                 <strong>
@@ -3651,10 +3626,6 @@ async function loadSupplierStatement(){
 
 }
 
-
-/* =========================================================
-   TRANSACTION TYPE
-========================================================= */
 
 function transactionTypeName(type){
 
@@ -3811,7 +3782,6 @@ async function saveOpening(){
         )
         .value="";
 
-
         document
         .getElementById(
             "openingCost"
@@ -3945,13 +3915,11 @@ function addReceiptLine(){
     )
     .value="";
 
-
     document
     .getElementById(
         "receiptQty"
     )
     .value="";
-
 
     document
     .getElementById(
@@ -4268,10 +4236,6 @@ async function saveReceipt(){
             throw error;
 
 
-        const result=
-            data||{};
-
-
         showAlert(
             "تم حفظ إذن الاستلام بنجاح"
         );
@@ -4533,11 +4497,6 @@ async function saveIssue(){
     }
 
 
-    /*
-     مهم:
-     قاعدة البيانات تستخدم qty
-    */
-
     const available=
         Number(
             stock.qty||0
@@ -4567,10 +4526,6 @@ async function saveIssue(){
     const newQty=
         available-quantity;
 
-
-    /*
-     تحديث qty وليس quantity
-    */
 
     const{
         error:updateError
@@ -4633,11 +4588,6 @@ async function saveIssue(){
 
             product_id:
                 itemId,
-
-            /*
-             مهم:
-             قاعدة البيانات تستخدم qty
-            */
 
             qty:
                 quantity,
@@ -4893,11 +4843,6 @@ async function saveTransfer(){
         return;
     }
 
-
-    /*
-     مهم:
-     qty وليس quantity
-    */
 
     const available=
         Number(
@@ -5282,6 +5227,8 @@ function renderDashboard(){
 
     renderRecentMovements();
 
+    renderDailyStockReport();
+
 }
 
 
@@ -5307,6 +5254,614 @@ function clearDashboardFilter(){
 
 
     renderDashboard();
+
+}
+
+
+/* =========================================================
+   DAILY STOCK REPORT
+========================================================= */
+
+function nextDate(dateString){
+
+    const parts=
+        String(dateString).split("-");
+
+    const d=
+        new Date(
+            Number(parts[0]),
+            Number(parts[1])-1,
+            Number(parts[2])
+        );
+
+    d.setDate(
+        d.getDate()+1
+    );
+
+    return [
+        d.getFullYear(),
+        String(d.getMonth()+1).padStart(2,"0"),
+        String(d.getDate()).padStart(2,"0")
+    ].join("-");
+
+}
+
+
+function getDateRange(from,to){
+
+    const result=[];
+
+    if(!from || !to)
+        return result;
+
+    let current=from;
+
+    while(current<=to){
+
+        result.push(current);
+
+        current=
+            nextDate(current);
+
+    }
+
+    return result;
+
+}
+
+
+function renderDailyStockReport(){
+
+    const body=
+        document.getElementById(
+            "dailyStockBody"
+        );
+
+    if(!body) return;
+
+
+    let from=
+        document
+        .getElementById(
+            "dashboardFrom"
+        )
+        ?.value||"";
+
+    let to=
+        document
+        .getElementById(
+            "dashboardTo"
+        )
+        ?.value||"";
+
+    const branch=
+        document
+        .getElementById(
+            "dashboardBranch"
+        )
+        ?.value||"";
+
+
+    /*
+       إذا لم يتم تحديد البداية
+       نستخدم أول تاريخ حركة
+    */
+
+    if(!from){
+
+        const dates=
+            db.movements
+            .map(
+                m=>
+                dateOnly(
+                    m.movement_date
+                )
+            )
+            .filter(Boolean)
+            .sort();
+
+        if(dates.length)
+            from=dates[0];
+
+    }
+
+
+    /*
+       إذا لم يتم تحديد النهاية
+       نستخدم آخر تاريخ حركة
+    */
+
+    if(!to){
+
+        const dates=
+            db.movements
+            .map(
+                m=>
+                dateOnly(
+                    m.movement_date
+                )
+            )
+            .filter(Boolean)
+            .sort();
+
+        if(dates.length)
+            to=dates[dates.length-1];
+
+    }
+
+
+    if(!from || !to){
+
+        body.innerHTML=
+            `<tr>
+                <td colspan="9">
+                    لا توجد بيانات كافية لعرض التقرير
+                </td>
+            </tr>`;
+
+        resetDailyTotals();
+
+        return;
+
+    }
+
+
+    if(from>to){
+
+        body.innerHTML=
+            `<tr>
+                <td colspan="9">
+                    تاريخ البداية أكبر من تاريخ النهاية
+                </td>
+            </tr>`;
+
+        resetDailyTotals();
+
+        return;
+
+    }
+
+
+    /*
+       تحديد المخازن
+
+       عند اختيار فرع:
+       نحسب رصيد الفرع فقط.
+
+       عند اختيار كل الفروع:
+       نحسب إجمالي جميع المخازن.
+    */
+
+    let warehouseIds=[];
+
+
+    if(branch){
+
+        const warehouse=
+            findWarehouseByName(
+                branch
+            );
+
+        if(warehouse){
+
+            warehouseIds=[
+                String(warehouse.id)
+            ];
+
+        }
+
+    }else{
+
+        warehouseIds=
+            db.warehouses
+            .map(
+                w=>
+                String(w.id)
+            );
+
+    }
+
+
+    const movements=
+        db.movements
+        .slice()
+        .sort(
+            (a,b)=>
+                String(a.movement_date)
+                .localeCompare(
+                    String(b.movement_date)
+                )
+        );
+
+
+    function movementBelongsToScope(m){
+
+        return warehouseIds.includes(
+            String(m.warehouse_id)
+        );
+
+    }
+
+
+    function movementEffect(m){
+
+        if(!movementBelongsToScope(m))
+            return 0;
+
+        const q=
+            Number(
+                m.quantity||0
+            );
+
+
+        switch(m.movement_type){
+
+            case "opening":
+                return q;
+
+            case "purchase":
+                return q;
+
+            case "transfer_in":
+                return q;
+
+            case "transfer_out":
+                return -q;
+
+            case "adjustment_out":
+                return -q;
+
+            default:
+                return 0;
+
+        }
+
+    }
+
+
+    /*
+       رصيد أول يوم
+       = كل الحركات التي حدثت قبل بداية الفترة
+    */
+
+    let openingBalance=0;
+
+
+    movements.forEach(m=>{
+
+        const d=
+            dateOnly(
+                m.movement_date
+            );
+
+        if(d<from){
+
+            openingBalance +=
+                movementEffect(m);
+
+        }
+
+    });
+
+
+    let runningBalance=
+        openingBalance;
+
+
+    const dates=
+        getDateRange(
+            from,
+            to
+        );
+
+
+    let totalPurchases=0;
+    let totalTransferIn=0;
+    let totalTransferOut=0;
+    let totalIssues=0;
+    let totalNet=0;
+    let totalValue=0;
+
+
+    let html="";
+
+
+    dates.forEach(day=>{
+
+        let purchases=0;
+        let transferIn=0;
+        let transferOut=0;
+        let issues=0;
+        let net=0;
+        let value=0;
+
+
+        const dayMovements=
+            movements.filter(
+                m=>
+                dateOnly(
+                    m.movement_date
+                )===day &&
+                movementBelongsToScope(m)
+            );
+
+
+        dayMovements.forEach(m=>{
+
+            const q=
+                Number(
+                    m.quantity||0
+                );
+
+            const v=
+                Number(
+                    m.value||0
+                );
+
+
+            switch(m.movement_type){
+
+                case "purchase":
+
+                    purchases += q;
+                    net += q;
+                    value += v;
+
+                    break;
+
+
+                case "transfer_in":
+
+                    transferIn += q;
+                    net += q;
+                    value += v;
+
+                    break;
+
+
+                case "transfer_out":
+
+                    transferOut += q;
+                    net -= q;
+                    value -= v;
+
+                    break;
+
+
+                case "adjustment_out":
+
+                    issues += q;
+                    net -= q;
+                    value -= v;
+
+                    break;
+
+
+                case "opening":
+
+                    net += q;
+                    value += v;
+
+                    break;
+
+            }
+
+        });
+
+
+        const dayOpening=
+            runningBalance;
+
+
+        runningBalance +=
+            net;
+
+
+        const dayClosing=
+            runningBalance;
+
+
+        totalPurchases +=
+            purchases;
+
+        totalTransferIn +=
+            transferIn;
+
+        totalTransferOut +=
+            transferOut;
+
+        totalIssues +=
+            issues;
+
+        totalNet +=
+            net;
+
+        totalValue +=
+            value;
+
+
+        html+=`
+
+        <tr>
+
+            <td>
+                <strong>
+                    ${esc(day)}
+                </strong>
+            </td>
+
+            <td>
+                ${qty(dayOpening)}
+            </td>
+
+            <td class="text-green">
+                ${qty(purchases)}
+            </td>
+
+            <td class="text-green">
+                ${qty(transferIn)}
+            </td>
+
+            <td class="text-red">
+                ${qty(transferOut)}
+            </td>
+
+            <td class="text-red">
+                ${qty(issues)}
+            </td>
+
+            <td>
+
+                <strong>
+
+                    ${
+                        net>=0
+
+                        ?
+
+                        `<span class="text-green">
+                            +${qty(net)}
+                        </span>`
+
+                        :
+
+                        `<span class="text-red">
+                            ${qty(net)}
+                        </span>`
+                    }
+
+                </strong>
+
+            </td>
+
+            <td>
+
+                <strong>
+                    ${qty(dayClosing)}
+                </strong>
+
+            </td>
+
+            <td>
+                ${money(value)}
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+
+    body.innerHTML=
+        html||
+        `<tr>
+            <td colspan="9">
+                لا توجد حركات خلال الفترة المحددة
+            </td>
+        </tr>`;
+
+
+    /*
+       ملاحظة:
+       رصيد أول الفترة وآخر الفترة لا يتم جمعهما،
+       بل نعرض أول رصيد وآخر رصيد.
+    */
+
+    document
+    .getElementById(
+        "dailyTotalOpening"
+    )
+    .textContent=
+        qty(openingBalance);
+
+
+    document
+    .getElementById(
+        "dailyTotalPurchases"
+    )
+    .textContent=
+        qty(totalPurchases);
+
+
+    document
+    .getElementById(
+        "dailyTotalTransferIn"
+    )
+    .textContent=
+        qty(totalTransferIn);
+
+
+    document
+    .getElementById(
+        "dailyTotalTransferOut"
+    )
+    .textContent=
+        qty(totalTransferOut);
+
+
+    document
+    .getElementById(
+        "dailyTotalIssues"
+    )
+    .textContent=
+        qty(totalIssues);
+
+
+    document
+    .getElementById(
+        "dailyTotalNet"
+    )
+    .textContent=
+        qty(totalNet);
+
+
+    document
+    .getElementById(
+        "dailyTotalClosing"
+    )
+    .textContent=
+        qty(runningBalance);
+
+
+    document
+    .getElementById(
+        "dailyTotalValue"
+    )
+    .textContent=
+        money(totalValue);
+
+}
+
+
+function resetDailyTotals(){
+
+    [
+        "dailyTotalOpening",
+        "dailyTotalPurchases",
+        "dailyTotalTransferIn",
+        "dailyTotalTransferOut",
+        "dailyTotalIssues",
+        "dailyTotalNet",
+        "dailyTotalClosing"
+    ].forEach(id=>{
+
+        const el=
+            document.getElementById(id);
+
+        if(el)
+            el.textContent="0";
+
+    });
+
+
+    const value=
+        document.getElementById(
+            "dailyTotalValue"
+        );
+
+    if(value)
+        value.textContent="0.00";
 
 }
 
@@ -5599,11 +6154,6 @@ function renderDashboardStock(){
         db.items
         .map(item=>{
 
-            /*
-             مهم:
-             qty وليس quantity
-            */
-
             const get=id=>
                 id
                 ?Number(
@@ -5703,6 +6253,9 @@ function renderRecentMovements(){
         document.getElementById(
             "recentMovementsBody"
         );
+
+
+    if(!body) return;
 
 
     body.innerHTML=
