@@ -1480,6 +1480,14 @@ onchange="renderItemCard()"
 </div>
 
 <div>
+<label>الفرع / المخزن</label>
+<select
+id="cardWarehouse"
+onchange="renderItemCard()"
+></select>
+</div>
+
+<div>
 <label>من تاريخ</label>
 <input
 type="date"
@@ -1521,6 +1529,20 @@ onchange="renderItemCard()"
 <tbody id="itemCardBody"></tbody>
 
 </table>
+
+</div>
+
+<div class="total-box" style="margin-top:15px">
+
+<div class="total-item">
+إجمالي الكمية
+<strong id="itemCardTotalQty">0</strong>
+</div>
+
+<div class="total-item">
+إجمالي القيمة
+<strong id="itemCardTotalValue">0.00</strong>
+</div>
 
 </div>
 
@@ -2229,7 +2251,8 @@ function fillAllSelects(){
         "openingWarehouse",
         "issueWarehouse",
         "transferFrom",
-        "transferTo"
+        "transferTo",
+        "cardWarehouse"
     ];
 
     warehouseSelects.forEach(id=>{
@@ -2239,8 +2262,13 @@ function fillAllSelects(){
 
         if(!el) return;
 
+        const firstOption =
+            id==="cardWarehouse"
+            ? `<option value="">كل المخازن والفروع</option>`
+            : `<option value="">اختر المخزن</option>`;
+
         el.innerHTML=
-            `<option value="">اختر المخزن</option>`+
+            firstOption+
             db.warehouses
             .filter(
                 w=>w.active!==false
@@ -6120,9 +6148,7 @@ function renderDashboardStock(){
             "dashboardStockBody"
         );
 
-
     if(!body) return;
-
 
     const main=
         findWarehouseByName(
@@ -6149,56 +6175,78 @@ function renderDashboardStock(){
             "المطبخ"
         );
 
+    /*
+       تجميع الأصناف المتكررة بنفس الاسم والوحدة
+       بدون أي تغيير على قاعدة البيانات.
+    */
+    const grouped=new Map();
 
-    body.innerHTML=
-        db.items
-        .map(item=>{
+    db.items.forEach(item=>{
+
+        const name=String(item.name||"").trim();
+        const unit=String(item.unit||"").trim();
+        const key=name+"|||"+unit;
+
+        if(!grouped.has(key)){
+            grouped.set(key,{
+                name,
+                unit,
+                itemIds:[]
+            });
+        }
+
+        grouped.get(key).itemIds.push(item.id);
+    });
+
+    const rows=[...grouped.values()]
+        .map(group=>{
 
             const get=id=>
-                id
-                ?Number(
-                    getStock(
-                        item.id,
-                        id
-                    )?.qty||0
-                )
-                :0;
+                group.itemIds.reduce(
+                    (sum,itemId)=>
+                        sum+
+                        (id
+                            ? Number(
+                                getStock(
+                                    itemId,
+                                    id
+                                )?.qty||0
+                            )
+                            :0),
+                    0
+                );
 
-
-            const a=
-                get(main?.id);
-
-            const b=
-                get(jeddah?.id);
-
-            const c=
-                get(yanbu?.id);
-
-            const d=
-                get(madinah?.id);
-
-            const e=
-                get(kitchen?.id);
-
+            const a=get(main?.id);
+            const b=get(jeddah?.id);
+            const c=get(yanbu?.id);
+            const d=get(madinah?.id);
+            const e=get(kitchen?.id);
 
             const total=
                 a+b+c+d+e;
 
+            const value=
+                group.itemIds.reduce(
+                    (sum,itemId)=>
+                        sum+
+                        Number(
+                            calculateItemValue(
+                                itemId
+                            )||0
+                        ),
+                    0
+                );
 
             return`
 
             <tr>
 
                 <td>
-                    ${esc(
-                        item.name
-                    )}
+                    ${esc(group.name)}
                 </td>
 
                 <td>
-                    ${esc(
-                        item.unit||"-"
-                    )}
+                    ${esc(group.unit||"-")}
                 </td>
 
                 <td>
@@ -6226,11 +6274,7 @@ function renderDashboardStock(){
                 </td>
 
                 <td>
-                    ${money(
-                        calculateItemValue(
-                            item.id
-                        )
-                    )}
+                    ${money(value)}
                 </td>
 
             </tr>
@@ -6239,6 +6283,14 @@ function renderDashboardStock(){
 
         })
         .join("");
+
+    body.innerHTML=
+        rows||
+        `<tr>
+            <td colspan="9">
+                لا توجد أصناف
+            </td>
+        </tr>`;
 
 }
 
@@ -6329,36 +6381,42 @@ function renderRecentMovements(){
 
 function renderItemCard(){
 
-    const itemId=
+    const itemId =
         document
-        .getElementById(
-            "cardItem"
-        )
-        ?.value;
-
-    const from=
-        document
-        .getElementById(
-            "cardFrom"
-        )
+        .getElementById("cardItem")
         ?.value||"";
 
-    const to=
+    const warehouseId =
         document
-        .getElementById(
-            "cardTo"
-        )
+        .getElementById("cardWarehouse")
         ?.value||"";
 
+    const from =
+        document
+        .getElementById("cardFrom")
+        ?.value||"";
 
-    const body=
+    const to =
+        document
+        .getElementById("cardTo")
+        ?.value||"";
+
+    const body =
         document.getElementById(
             "itemCardBody"
         );
 
+    const totalQtyEl =
+        document.getElementById(
+            "itemCardTotalQty"
+        );
+
+    const totalValueEl =
+        document.getElementById(
+            "itemCardTotalValue"
+        );
 
     if(!body) return;
-
 
     if(!itemId){
 
@@ -6369,11 +6427,16 @@ function renderItemCard(){
                 </td>
             </tr>`;
 
+        if(totalQtyEl)
+            totalQtyEl.textContent=qty(0);
+
+        if(totalValueEl)
+            totalValueEl.textContent=money(0);
+
         return;
     }
 
-
-    const rows=
+    const movements=
         db.movements
         .filter(
             m=>
@@ -6381,6 +6444,14 @@ function renderItemCard(){
             String(itemId)
         )
         .filter(m=>{
+
+            if(
+                warehouseId &&
+                String(m.warehouse_id)!==
+                String(warehouseId)
+            ){
+                return false;
+            }
 
             const d=
                 dateOnly(
@@ -6401,7 +6472,34 @@ function renderItemCard(){
 
             return true;
 
-        })
+        });
+
+    const totalQty=
+        movements.reduce(
+            (sum,m)=>
+                sum+
+                Number(m.quantity||0),
+            0
+        );
+
+    const totalValue=
+        movements.reduce(
+            (sum,m)=>
+                sum+
+                Number(m.value||0),
+            0
+        );
+
+    if(totalQtyEl)
+        totalQtyEl.textContent=
+            qty(totalQty);
+
+    if(totalValueEl)
+        totalValueEl.textContent=
+            money(totalValue);
+
+    const rows=
+        movements
         .map(m=>`
 
         <tr>
@@ -6428,13 +6526,13 @@ function renderItemCard(){
 
             <td>
                 ${esc(
-                    m.from
+                    m.from||"-"
                 )}
             </td>
 
             <td>
                 ${esc(
-                    m.to
+                    m.to||"-"
                 )}
             </td>
 
@@ -6461,7 +6559,6 @@ function renderItemCard(){
         `)
         .join("");
 
-
     body.innerHTML=
         rows||
         `<tr>
@@ -6469,7 +6566,6 @@ function renderItemCard(){
                 لا توجد حركات
             </td>
         </tr>`;
-
 }
 
 
