@@ -1205,9 +1205,8 @@ async function loadDatabase(){
             let totalQty=0;
 
             stocks.forEach(s=>{
-                totalQty += Number(s.quantity||0);
-            });
-
+    totalQty += Number(s.qty||0);
+});
             return {
                 ...p,
                 stock:totalQty
