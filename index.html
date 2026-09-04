@@ -1270,12 +1270,7 @@ onclick="clearReceipt()"
 
 <div>
 <label>الكمية</label>
-<input
-type="number"
-step="0.001"
-id="issueQty"
-oninput="calculateIssue()"
->
+<input type="number" step="0.001" min="0" id="issueQty" oninput="calculateIssue()">
 </div>
 
 <div>
@@ -1285,41 +1280,51 @@ oninput="calculateIssue()"
 
 </div>
 
-<div class="total-box">
+<div class="actions">
+<button class="btn btn-primary" onclick="addIssueLine()">
+➕ إضافة صنف للإذن
+</button>
+</div>
 
+<div class="card" style="margin-top:15px;background:#f8f9fa">
+<h3>📋 أصناف إذن الصرف</h3>
+<div id="issueLines"></div>
+</div>
+
+<div class="total-box">
+<div class="total-item">
+عدد الأصناف
+<strong id="issueItemsCount">0</strong>
+</div>
+<div class="total-item">
+إجمالي الكمية
+<strong id="issueQtyTotal">0</strong>
+</div>
 <div class="total-item">
 إجمالي قيمة الصرف
 <strong id="issueTotal">0.00</strong>
 </div>
-
 </div>
 
 <div class="form-grid" style="margin-top:15px">
-
 <div>
 <label>الجهة المستلمة / سبب الصرف</label>
 <input id="issueReceiver">
 </div>
-
 </div>
 
 <div style="margin-top:12px">
-
 <label>ملاحظات</label>
-
 <textarea id="issueNote"></textarea>
-
 </div>
 
 <div class="actions">
-
-<button
-class="btn btn-success"
-onclick="saveIssue()"
->
+<button class="btn btn-success" onclick="saveIssue()">
 🧾 حفظ إذن الصرف
 </button>
-
+<button class="btn btn-light" onclick="clearIssue()">
+مسح
+</button>
 </div>
 
 </div>
@@ -1612,6 +1617,7 @@ let db={
 };
 
 let receiptLines=[];
+let issueLines=[];
 
 const branches=[
     "فرع جدة",
@@ -4323,377 +4329,361 @@ function clearReceipt(){
    ISSUE
 ========================================================= */
 
-document
-.getElementById("issueItem")
-?.addEventListener(
-    "change",
-    updateIssueCost
-);
+function getIssueItemOptions(selectedId=""){
 
-
-document
-.getElementById("issueWarehouse")
-?.addEventListener(
-    "change",
-    updateIssueCost
-);
-
-
-document
-.getElementById("transferItem")
-?.addEventListener(
-    "change",
-    updateTransferCost
-);
-
-
-document
-.getElementById("transferFrom")
-?.addEventListener(
-    "change",
-    updateTransferCost
-);
-
+    return `<option value="">اختر الصنف</option>`+
+        (db.items||[])
+        .map(item=>`
+            <option value="${esc(item.id)}" ${String(item.id)===String(selectedId)?"selected":""}>
+                ${esc(item.name)}${item.unit?" — "+esc(item.unit):""}
+            </option>
+        `)
+        .join("");
+}
 
 function updateIssueCost(){
 
-    const itemId=
-        document
-        .getElementById(
-            "issueItem"
-        )
-        .value;
+    const itemId=document.getElementById("issueItem")?.value||"";
+    const warehouseId=document.getElementById("issueWarehouse")?.value||"";
+    const stock=getStock(itemId,warehouseId);
 
-    const warehouseId=
-        document
-        .getElementById(
-            "issueWarehouse"
-        )
-        .value;
-
-
-    const stock=
-        getStock(
-            itemId,
-            warehouseId
-        );
-
-
-    document
-    .getElementById(
-        "issueCost"
-    )
-    .value=
-        stock
-        ?Number(
-            stock.avg_cost||0
-        ).toFixed(2)
-        :"0.00";
-
+    const costEl=document.getElementById("issueCost");
+    if(costEl){
+        costEl.value=stock?Number(stock.avg_cost||0).toFixed(2):"0.00";
+    }
 
     calculateIssue();
-
 }
-
 
 function calculateIssue(){
 
-    const q=
-        Number(
-            document
-            .getElementById(
-                "issueQty"
-            )
-            .value||0
-        );
+    const itemId=document.getElementById("issueItem")?.value||"";
+    const warehouseId=document.getElementById("issueWarehouse")?.value||"";
+    const q=Number(document.getElementById("issueQty")?.value||0);
+    const stock=getStock(itemId,warehouseId);
+    const c=Number(stock?.avg_cost||0);
 
-    const c=
-        Number(
-            document
-            .getElementById(
-                "issueCost"
-            )
-            .value||0
-        );
+    const totalEl=document.getElementById("issueTotal");
 
+    const linesTotal=issueLines.reduce(
+        (sum,line)=>sum+(Number(line.quantity)||0)*(Number(line.unit_cost)||0),
+        0
+    );
 
-    document
-    .getElementById(
-        "issueTotal"
-    )
-    .textContent=
-        money(q*c);
+    const currentTotal=(itemId&&q>0)?q*c:0;
 
+    if(totalEl)
+        totalEl.textContent=money(linesTotal+currentTotal);
 }
 
+function addIssueLine(){
+
+    const itemId=document.getElementById("issueItem")?.value||"";
+    const warehouseId=document.getElementById("issueWarehouse")?.value||"";
+    const quantity=Number(document.getElementById("issueQty")?.value||0);
+
+    if(!warehouseId){
+        showAlert("اختر المخزن المصدر أولاً","error");
+        return;
+    }
+
+    if(!itemId){
+        showAlert("اختر الصنف","error");
+        return;
+    }
+
+    if(quantity<=0){
+        showAlert("اكتب كمية صحيحة","error");
+        return;
+    }
+
+    const stock=getStock(itemId,warehouseId);
+
+    if(!stock){
+        showAlert("لا يوجد رصيد لهذا الصنف في المخزن","error");
+        return;
+    }
+
+    const available=Number(stock.qty||0);
+    const existing=issueLines.find(x=>String(x.product_id)===String(itemId));
+    const alreadyAdded=existing?Number(existing.quantity||0):0;
+
+    if(alreadyAdded+quantity>available){
+        showAlert("إجمالي الكمية المطلوبة أكبر من الرصيد المتاح: "+qty(available),"error");
+        return;
+    }
+
+    const cost=Number(stock.avg_cost||0);
+    const item=getItemById(itemId);
+
+    if(existing){
+        existing.quantity=alreadyAdded+quantity;
+        existing.unit_cost=cost;
+    }else{
+        issueLines.push({
+            product_id:itemId,
+            product_name:item?.name||"-",
+            unit:item?.unit||"",
+            quantity,
+            unit_cost:cost
+        });
+    }
+
+    document.getElementById("issueItem").value="";
+    document.getElementById("issueQty").value="";
+    document.getElementById("issueCost").value="0.00";
+
+    renderIssueLines();
+    calculateIssue();
+}
+
+function changeIssueLineQty(index,value){
+
+    const line=issueLines[index];
+    if(!line)return;
+
+    const newQty=Number(value||0);
+    const warehouseId=document.getElementById("issueWarehouse")?.value||"";
+    const stock=getStock(line.product_id,warehouseId);
+
+    if(newQty<=0){
+        showAlert("الكمية يجب أن تكون أكبر من صفر","error");
+        renderIssueLines();
+        return;
+    }
+
+    if(stock && newQty>Number(stock.qty||0)){
+        showAlert("الكمية أكبر من الرصيد المتاح: "+qty(stock.qty||0),"error");
+        renderIssueLines();
+        return;
+    }
+
+    line.quantity=newQty;
+    renderIssueLines();
+    calculateIssue();
+}
+
+function removeIssueLine(index){
+    issueLines.splice(index,1);
+    renderIssueLines();
+    calculateIssue();
+}
+
+function renderIssueLines(){
+
+    const box=document.getElementById("issueLines");
+    if(!box)return;
+
+    if(!issueLines.length){
+        box.innerHTML=`<div class="small">لم تتم إضافة أصناف للإذن بعد.</div>`;
+    }else{
+        box.innerHTML=`
+        <div class="table-wrap">
+        <table>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>الصنف</th>
+            <th>الوحدة</th>
+            <th>الكمية</th>
+            <th>متوسط التكلفة</th>
+            <th>القيمة</th>
+            <th>إجراء</th>
+        </tr>
+        </thead>
+        <tbody>
+        ${issueLines.map((line,index)=>{
+            const total=Number(line.quantity||0)*Number(line.unit_cost||0);
+            return `
+            <tr>
+                <td>${index+1}</td>
+                <td>${esc(line.product_name)}</td>
+                <td>${esc(line.unit||"")}</td>
+                <td>
+                    <input type="number" min="0.001" step="0.001" value="${Number(line.quantity||0)}"
+                        onchange="changeIssueLineQty(${index},this.value)" style="min-width:110px">
+                </td>
+                <td>${money(line.unit_cost)}</td>
+                <td>${money(total)}</td>
+                <td>
+                    <button class="btn btn-danger" onclick="removeIssueLine(${index})">🗑️ حذف</button>
+                </td>
+            </tr>`;
+        }).join("")}
+        </tbody>
+        </table>
+        </div>`;
+    }
+
+    const countEl=document.getElementById("issueItemsCount");
+    const qtyEl=document.getElementById("issueQtyTotal");
+    const totalEl=document.getElementById("issueTotal");
+
+    const totalQty=issueLines.reduce((sum,x)=>sum+Number(x.quantity||0),0);
+    const totalValue=issueLines.reduce((sum,x)=>sum+Number(x.quantity||0)*Number(x.unit_cost||0),0);
+
+    if(countEl)countEl.textContent=issueLines.length;
+    if(qtyEl)qtyEl.textContent=qty(totalQty);
+    if(totalEl)totalEl.textContent=money(totalValue);
+}
+
+function clearIssue(){
+
+    issueLines=[];
+
+    const fields=[
+        "issueNumber",
+        "issueQty",
+        "issueReceiver",
+        "issueNote"
+    ];
+
+    fields.forEach(id=>{
+        const el=document.getElementById(id);
+        if(el)el.value="";
+    });
+
+    const cost=document.getElementById("issueCost");
+    if(cost)cost.value="0.00";
+
+    const item=document.getElementById("issueItem");
+    if(item)item.value="";
+
+    renderIssueLines();
+    calculateIssue();
+}
 
 async function saveIssue(){
 
-    const number=
-        document
-        .getElementById(
-            "issueNumber"
-        )
-        .value
-        .trim();
+    const number=document.getElementById("issueNumber")?.value.trim()||"";
+    const date=document.getElementById("issueDate")?.value||"";
+    const warehouseId=document.getElementById("issueWarehouse")?.value||"";
+    const branch=document.getElementById("issueBranch")?.value||"";
+    const receiver=document.getElementById("issueReceiver")?.value.trim()||"";
+    const note=document.getElementById("issueNote")?.value.trim()||"";
 
-    const date=
-        document
-        .getElementById(
-            "issueDate"
-        )
-        .value;
-
-    const warehouseId=
-        document
-        .getElementById(
-            "issueWarehouse"
-        )
-        .value;
-
-    const branch=
-        document
-        .getElementById(
-            "issueBranch"
-        )
-        .value;
-
-    const itemId=
-        document
-        .getElementById(
-            "issueItem"
-        )
-        .value;
-
-    const quantity=
-        Number(
-            document
-            .getElementById(
-                "issueQty"
-            )
-            .value||0
-        );
-
-    const receiver=
-        document
-        .getElementById(
-            "issueReceiver"
-        )
-        .value
-        .trim();
-
-    const note=
-        document
-        .getElementById(
-            "issueNote"
-        )
-        .value
-        .trim();
-
-
-    if(
-        !date||
-        !warehouseId||
-        !itemId||
-        quantity<=0
-    ){
-
-        showAlert(
-            "أكمل بيانات إذن الصرف",
-            "error"
-        );
-
+    if(!date||!warehouseId){
+        showAlert("أكمل التاريخ والمخزن المصدر","error");
         return;
     }
 
-
-    const stock=
-        getStock(
-            itemId,
-            warehouseId
-        );
-
-
-    if(!stock){
-
-        showAlert(
-            "لا يوجد رصيد لهذا الصنف في المخزن",
-            "error"
-        );
-
+    if(!issueLines.length){
+        showAlert("أضف صنفًا واحدًا على الأقل إلى إذن الصرف","error");
         return;
     }
 
+    const ids=issueLines.map(x=>x.product_id);
 
-    const available=
-        Number(
-            stock.qty||0
-        );
-
-
-    if(quantity>available){
-
-        showAlert(
-            "الكمية المطلوبة أكبر من الرصيد المتاح: "+
-            qty(available),
-            "error"
-        );
-
-        return;
-    }
-
-
-    const cost=
-        Number(
-            stock.avg_cost||0
-        );
-
-    const total=
-        quantity*cost;
-
-    const newQty=
-        available-quantity;
-
-
-    const{
-        error:updateError
-    }=
-    await supabaseClient
+    const {data:latestStocks,error:stockError}=await supabaseClient
         .from("stock_balances")
-        .update({
-            qty:newQty
-        })
-        .eq(
-            "id",
-            stock.id
-        );
+        .select("id,product_id,warehouse_id,qty,avg_cost")
+        .eq("warehouse_id",warehouseId)
+        .in("product_id",ids);
 
-
-    if(updateError){
-
-        showAlert(
-            updateError.message,
-            "error"
-        );
-
+    if(stockError){
+        showAlert("تعذر قراءة أرصدة المخزون: "+stockError.message,"error");
         return;
     }
 
+    const stockMap={};
+    (latestStocks||[]).forEach(s=>stockMap[String(s.product_id)]=s);
+
+    for(const line of issueLines){
+        const stock=stockMap[String(line.product_id)];
+        const requested=Number(line.quantity||0);
+        const available=Number(stock?.qty||0);
+
+        if(!stock){
+            showAlert("لا يوجد رصيد للصنف: "+line.product_name,"error");
+            return;
+        }
+
+        if(requested<=0){
+            showAlert("الكمية غير صحيحة للصنف: "+line.product_name,"error");
+            return;
+        }
+
+        if(requested>available){
+            showAlert("الكمية المطلوبة للصنف "+line.product_name+" أكبر من الرصيد المتاح: "+qty(available),"error");
+            return;
+        }
+    }
 
     const notes=[
-        branch
-        ?"الفرع المصروف له: "+branch
-        :"",
-
-        receiver
-        ?"الجهة/السبب: "+receiver
-        :"",
-
+        branch?"الفرع المصروف له: "+branch:"",
+        receiver?"الجهة/السبب: "+receiver:"",
         note
+    ].filter(Boolean).join(" | ");
 
-    ]
-    .filter(Boolean)
-    .join(" | ");
+    const updatedStocks=[];
+    const insertedMovements=[];
 
+    try{
+        for(const line of issueLines){
+            const stock=stockMap[String(line.product_id)];
+            const quantity=Number(line.quantity||0);
+            const cost=Number(stock.avg_cost||line.unit_cost||0);
+            const newQty=Number(stock.qty||0)-quantity;
 
-    const{
-        error:movementError
-    }=
-    await supabaseClient
-        .from(
-            "stock_movements"
-        )
-        .insert({
+            const {error:updateError}=await supabaseClient
+                .from("stock_balances")
+                .update({qty:newQty})
+                .eq("id",stock.id)
+                .eq("warehouse_id",warehouseId)
+                .eq("product_id",line.product_id);
 
-            movement_date:
-                date,
+            if(updateError)throw new Error(updateError.message);
 
-            movement_type:
-                "adjustment_out",
+            updatedStocks.push({id:stock.id,qty:Number(stock.qty||0)});
 
-            warehouse_id:
-                warehouseId,
+            const {data:movement,error:movementError}=await supabaseClient
+                .from("stock_movements")
+                .insert({
+                    movement_date:date,
+                    movement_type:"adjustment_out",
+                    warehouse_id:warehouseId,
+                    product_id:line.product_id,
+                    qty:quantity,
+                    unit_cost:cost,
+                    total_cost:quantity*cost,
+                    document_no:number||null,
+                    notes:notes||null
+                })
+                .select("id")
+                .single();
 
-            product_id:
-                itemId,
+            if(movementError)throw new Error(movementError.message);
 
-            qty:
-                quantity,
+            if(movement?.id)insertedMovements.push(movement.id);
+        }
 
-            unit_cost:
-                cost,
+        showAlert("تم حفظ إذن الصرف بنجاح — عدد الأصناف: "+issueLines.length);
+        clearIssue();
+        await loadDatabase();
 
-            total_cost:
-                total,
+    }catch(error){
+        console.error(error);
 
-            document_no:
-                number||null,
+        for(const row of updatedStocks){
+            await supabaseClient
+                .from("stock_balances")
+                .update({qty:row.qty})
+                .eq("id",row.id);
+        }
 
-            notes:
-                notes||null
+        if(insertedMovements.length){
+            await supabaseClient
+                .from("stock_movements")
+                .delete()
+                .in("id",insertedMovements);
+        }
 
-        });
-
-
-    if(movementError){
-
-        await supabaseClient
-            .from(
-                "stock_balances"
-            )
-            .update({
-                qty:available
-            })
-            .eq(
-                "id",
-                stock.id
-            );
-
-
-        showAlert(
-            "تعذر تسجيل الحركة: "+
-            movementError.message,
-            "error"
-        );
-
-        return;
+        showAlert("تعذر حفظ إذن الصرف وتمت محاولة إرجاع الرصيد: "+error.message,"error");
     }
-
-
-    showAlert(
-        "تم حفظ إذن الصرف بنجاح"
-    );
-
-
-    document
-    .getElementById(
-        "issueNumber"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "issueQty"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "issueReceiver"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "issueNote"
-    )
-    .value="";
-
-
-    await loadDatabase();
-
 }
 
+document.getElementById("issueItem")?.addEventListener("change",updateIssueCost);
+document.getElementById("issueWarehouse")?.addEventListener("change",updateIssueCost);
 
 /* =========================================================
    TRANSFER
