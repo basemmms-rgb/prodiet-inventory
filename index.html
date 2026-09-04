@@ -49,6 +49,8 @@ th{background:#f9fafb}
 .branch-card h3{margin:0 0 10px;font-size:16px}
 .branch-number{font-size:23px;font-weight:bold}
 .branch-label{font-size:12px;color:#6b7280;margin-top:5px}
+.supplier-balance-positive{color:#dc2626;font-weight:bold}
+.supplier-balance-zero{color:#059669;font-weight:bold}
 
 @media(max-width:1000px){
 .cards{grid-template-columns:repeat(2,1fr)}
@@ -78,6 +80,7 @@ nav button{flex:1;min-width:120px}
 <nav id="menu">
 <button onclick="showPage('dashboard')" class="active">لوحة التحكم</button>
 <button onclick="showPage('items')">الأصناف</button>
+<button onclick="showPage('suppliers')">الموردين</button>
 <button onclick="showPage('opening')">رصيد أول المدة</button>
 <button onclick="showPage('receipt')">إذن استلام</button>
 <button onclick="showPage('issue')">إذن صرف</button>
@@ -328,6 +331,81 @@ nav button{flex:1;min-width:120px}
 <tbody id="itemsTable"></tbody>
 </table>
 </div>
+</div>
+
+</section>
+
+<!-- الموردين -->
+<section id="suppliers" class="page">
+
+<div class="panel">
+
+<h2>👨‍💼 إضافة مورد</h2>
+
+<div class="grid">
+
+<div>
+<label>اسم المورد *</label>
+<input id="supplierName" placeholder="اكتب اسم المورد">
+</div>
+
+<div>
+<label>رقم الجوال</label>
+<input id="supplierPhone" type="text" placeholder="05xxxxxxxx">
+</div>
+
+<div>
+<label>الرصيد الافتتاحي</label>
+<input id="supplierOpeningBalance" type="number" step="0.01" value="0">
+</div>
+
+</div>
+
+<br>
+
+<label>ملاحظات</label>
+<textarea id="supplierNotes" placeholder="ملاحظات عن المورد"></textarea>
+
+<br><br>
+
+<button class="primary" onclick="addSupplier()">
+➕ إضافة المورد
+</button>
+
+</div>
+
+<div class="panel">
+
+<h2>📋 الموردين</h2>
+
+<input
+class="search"
+id="supplierSearch"
+placeholder="🔎 ابحث عن مورد..."
+oninput="renderSuppliers()">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>اسم المورد</th>
+<th>الجوال</th>
+<th>الرصيد الافتتاحي</th>
+<th>الرصيد الحالي</th>
+<th>الملاحظات</th>
+<th>الحالة</th>
+<th>إجراء</th>
+</tr>
+</thead>
+
+<tbody id="suppliersTable"></tbody>
+
+</table>
+
+</div>
+
 </div>
 
 </section>
@@ -696,7 +774,8 @@ let db={
 items:[],
 warehouses:[],
 stocks:[],
-movements:[]
+movements:[],
+suppliers:[]
 };
 
 function today(){
@@ -747,6 +826,212 @@ return Object.values(item.stock||{})
 function totalValue(item){
 
 return totalQuantity(item)*Number(item.cost||0);
+
+}
+
+/* =========================
+   الموردين
+========================= */
+
+async function loadSuppliers(){
+
+const {data,error}=await supabaseClient
+.from("suppliers")
+.select("*")
+.order("name");
+
+if(error){
+
+console.error("Suppliers error:",error);
+
+throw new Error(
+"تعذر تحميل الموردين:\n"+error.message
+);
+
+}
+
+db.suppliers=data||[];
+
+}
+
+async function addSupplier(){
+
+const name=
+document.getElementById("supplierName")
+.value.trim();
+
+const phone=
+document.getElementById("supplierPhone")
+.value.trim();
+
+const notes=
+document.getElementById("supplierNotes")
+.value.trim();
+
+const opening=
+Number(
+document.getElementById("supplierOpeningBalance")
+.value||0
+);
+
+if(!name)
+return alert("اكتب اسم المورد.");
+
+if(opening<0)
+return alert("الرصيد الافتتاحي لا يمكن أن يكون سالبًا.");
+
+const {error}=await supabaseClient
+.from("suppliers")
+.insert({
+name:name,
+phone:phone||null,
+notes:notes||null,
+active:true,
+opening_balance:opening,
+balance:opening
+});
+
+if(error)
+return alert(
+"تعذر إضافة المورد:\n"+
+error.message
+);
+
+await loadSuppliers();
+
+document.getElementById("supplierName").value="";
+document.getElementById("supplierPhone").value="";
+document.getElementById("supplierNotes").value="";
+document.getElementById("supplierOpeningBalance").value="0";
+
+renderSuppliers();
+fillSupplierSelect();
+
+alert("تمت إضافة المورد بنجاح.");
+
+}
+
+function renderSuppliers(){
+
+const q=
+(document.getElementById("supplierSearch")?.value||"")
+.toLowerCase();
+
+const body=
+document.getElementById("suppliersTable");
+
+if(!body)return;
+
+body.innerHTML=
+db.suppliers
+.filter(s=>
+String(s.name||"")
+.toLowerCase()
+.includes(q) ||
+String(s.phone||"")
+.toLowerCase()
+.includes(q)
+)
+.map(s=>{
+
+const balance=
+Number(s.balance||0);
+
+return `
+<tr>
+
+<td>${s.name||""}</td>
+
+<td>${s.phone||"-"}</td>
+
+<td>${money(s.opening_balance)} ر.س</td>
+
+<td class="${
+balance>0?
+"supplier-balance-positive":
+"supplier-balance-zero"
+}">
+${money(balance)} ر.س
+</td>
+
+<td>${s.notes||"-"}</td>
+
+<td>
+<span class="badge ${
+s.active?
+"in":
+"out"
+}">
+${s.active?"نشط":"غير نشط"}
+</span>
+</td>
+
+<td>
+
+${
+s.active
+?
+`<button class="danger"
+onclick="deactivateSupplier('${s.id}')">
+إيقاف
+</button>`
+:
+`<button class="success"
+onclick="activateSupplier('${s.id}')">
+تفعيل
+</button>`
+}
+
+</td>
+
+</tr>
+`;
+
+})
+.join("")||
+
+`<tr>
+<td colspan="7">
+لا يوجد موردون.
+</td>
+</tr>`;
+
+}
+
+async function deactivateSupplier(id){
+
+if(!confirm("هل تريد إيقاف هذا المورد؟"))
+return;
+
+const {error}=await supabaseClient
+.from("suppliers")
+.update({active:false})
+.eq("id",id);
+
+if(error)
+return alert(error.message);
+
+await loadSuppliers();
+
+renderSuppliers();
+fillSupplierSelect();
+
+}
+
+async function activateSupplier(id){
+
+const {error}=await supabaseClient
+.from("suppliers")
+.update({active:true})
+.eq("id",id);
+
+if(error)
+return alert(error.message);
+
+await loadSuppliers();
+
+renderSuppliers();
+fillSupplierSelect();
 
 }
 
@@ -829,8 +1114,6 @@ stock
 
 db.movements=(moves||[]).map(m=>{
 
-const item=getItem(m.product_id);
-
 let from="";
 let to="";
 
@@ -859,6 +1142,10 @@ if(m.movement_type==="transfer_out"){
 from=warehouseName(m.warehouse_id);
 }
 
+if(m.movement_type==="transfer_in"){
+to=warehouseName(m.warehouse_id);
+}
+
 return{
 id:m.id,
 date:String(m.movement_date||"").slice(0,10),
@@ -874,6 +1161,8 @@ note:m.notes||""
 };
 
 });
+
+await loadSuppliers();
 
 }
 
@@ -921,12 +1210,21 @@ db.items
 
 function fillSupplierSelect(){
 
-const s=document.getElementById("receiptSupplier");
+const s=
+document.getElementById("receiptSupplier");
 
 if(!s)return;
 
 s.innerHTML=
-`<option value="">اختر المورد</option>`;
+`<option value="">اختر المورد</option>`+
+db.suppliers
+.filter(s=>s.active)
+.map(s=>
+`<option value="${s.id}">
+${s.name}
+</option>`
+)
+.join("");
 
 }
 
@@ -970,6 +1268,7 @@ document
 const pages=[
 "dashboard",
 "items",
+"suppliers",
 "opening",
 "receipt",
 "issue",
@@ -1511,45 +1810,6 @@ alert("تم تنفيذ التحويل أونلاين بنجاح.");
 
 }
 
-function getReportMovements(){
-
-const from=
-document.getElementById("reportFrom").value;
-
-const to=
-document.getElementById("reportTo").value;
-
-const branch=
-document.getElementById("reportBranch").value;
-
-return db.movements.filter(m=>{
-
-if(from&&m.date<from)
-return false;
-
-if(to&&m.date>to)
-return false;
-
-if(
-m.type!=="transfer_out"&&
-m.type!=="adjustment_out"
-)
-return false;
-
-const b=
-m.type==="transfer_out"
-?m.to
-:(branches.includes(m.from)?m.from:null);
-
-return b&&(
-branch==="ALL"||
-b===branch
-);
-
-});
-
-}
-
 function renderBranchReport(){
 
 const from=
@@ -1915,6 +2175,18 @@ renderBranchReport();
 
 }
 
+function renderAll(){
+
+renderDashboard();
+renderItems();
+renderSuppliers();
+renderMovements();
+renderCard();
+updateIssueCost();
+updateTransferCost();
+
+}
+
 function backupData(){
 
 const blob=
@@ -1968,46 +2240,6 @@ catch(e){
 alert("الملف غير صالح.");
 
 }
-
-}
-
-async function deleteAllData(){
-
-if(!confirm(
-"تحذير!\n\n"+
-"سيتم إخفاء جميع الأصناف من النظام وحذف أرصدة المخزون والحركات.\n"+
-"هل أنت متأكد؟"
-))
-return;
-
-const {error}=
-await supabaseClient
-.from("products")
-.update({active:false})
-.eq("active",true);
-
-if(error)
-return alert(
-"تعذر تنفيذ العملية:\n"+
-error.message
-);
-
-alert(
-"تم إخفاء الأصناف. لحذف الحركات نهائياً نحتاج صلاحية إدارية خاصة."
-);
-
-await loadDatabase();
-
-}
-
-function renderAll(){
-
-renderDashboard();
-renderItems();
-renderMovements();
-renderCard();
-updateIssueCost();
-updateTransferCost();
 
 }
 
