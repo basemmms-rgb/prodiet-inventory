@@ -223,7 +223,6 @@ tr:nth-child(even){background:#fafafa}
     table{font-size:12px}
 }
 
-/* receipt rows */
 .receipt-row,.issue-row{
     background:#f8f9fa;
     border:1px solid #ddd;
@@ -282,7 +281,6 @@ tr:nth-child(even){background:#fafafa}
 
 <div id="alertBox" class="alert"></div>
 
-<!-- ================= DASHBOARD ================= -->
 <section id="dashboard" class="page">
 
 <div class="card">
@@ -405,7 +403,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= ITEMS ================= -->
 <section id="items" class="page">
 
 <div class="card">
@@ -469,7 +466,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= SUPPLIERS ================= -->
 <section id="suppliers" class="page">
 
 <div class="card">
@@ -524,43 +520,6 @@ tr:nth-child(even){background:#fafafa}
 </div>
 </div>
 
-<!-- PAYMENT -->
-<div class="card">
-<h2>💰 سداد للمورد</h2>
-
-<div class="form-grid">
-<div>
-<label>المورد *</label>
-<select id="paymentSupplier"></select>
-</div>
-
-<div>
-<label>التاريخ *</label>
-<input type="date" id="paymentDate">
-</div>
-
-<div>
-<label>رقم السند</label>
-<input id="paymentDocument" placeholder="رقم السند">
-</div>
-
-<div>
-<label>المبلغ *</label>
-<input type="number" step="0.01" id="paymentAmount">
-</div>
-</div>
-
-<div style="margin-top:12px">
-<label>البيان</label>
-<input id="paymentDescription" placeholder="سداد دفعة للمورد">
-</div>
-
-<div class="actions">
-<button class="btn btn-success" onclick="saveSupplierPayment()">💰 حفظ السداد</button>
-</div>
-</div>
-
-<!-- STATEMENT -->
 <div class="card" id="supplierStatement">
 
 <h2>📑 كشف حساب المورد</h2>
@@ -629,7 +588,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= OPENING ================= -->
 <section id="opening" class="page">
 
 <div class="card">
@@ -676,7 +634,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= RECEIPT ================= -->
 <section id="receipt" class="page">
 
 <div class="card">
@@ -759,7 +716,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= ISSUE ================= -->
 <section id="issue" class="page">
 
 <div class="card">
@@ -831,7 +787,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= TRANSFER ================= -->
 <section id="transfer" class="page">
 
 <div class="card">
@@ -891,7 +846,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= MOVEMENTS ================= -->
 <section id="movements" class="page">
 
 <div class="card">
@@ -922,7 +876,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= ITEM CARD ================= -->
 <section id="itemCard" class="page">
 
 <div class="card">
@@ -966,7 +919,6 @@ tr:nth-child(even){background:#fafafa}
 
 </section>
 
-<!-- ================= BACKUP ================= -->
 <section id="backup" class="page">
 
 <div class="card">
@@ -986,6 +938,7 @@ tr:nth-child(even){background:#fafafa}
 </div>
 
 <script>
+
 /* =========================================================
    SUPABASE
 ========================================================= */
@@ -1399,8 +1352,6 @@ function fillSupplierSelect(id){
 
 function fillAllSelects(){
 
-    /* warehouses */
-
     const warehouseSelects=[
         "openingWarehouse",
         "issueWarehouse",
@@ -1422,8 +1373,6 @@ function fillAllSelects(){
                     `<option value="${esc(w.id)}">${esc(w.name)}</option>`
                 ).join("");
     });
-
-    /* items */
 
     const itemSelects=[
         "openingItem",
@@ -1448,15 +1397,11 @@ function fillAllSelects(){
                 ).join("");
     });
 
-    /* suppliers */
-
     [
         "receiptSupplier",
         "paymentSupplier",
         "statementSupplier"
     ].forEach(fillSupplierSelect);
-
-    /* branches */
 
     const branchSelects=[
         "dashboardBranch",
@@ -1660,11 +1605,6 @@ async function addSupplier(){
         showAlert(error.message,"error");
         return;
     }
-
-    /*
-       تسجيل الرصيد الافتتاحي في كشف المورد.
-       لا يوجد تسجيل إذا كان الرصيد = صفر.
-    */
 
     if(opening!==0){
 
@@ -2057,6 +1997,13 @@ function transactionTypeName(type){
 
 /* =========================================================
    OPENING BALANCE
+   تم تعديل هذه الدالة فقط لتتوافق مع:
+   post_opening(
+       p_warehouse uuid,
+       p_date date,
+       p_items jsonb,
+       p_notes text
+   )
 ========================================================= */
 
 document.getElementById("openingDate")?.addEventListener(
@@ -2069,43 +2016,78 @@ document.getElementById("openingDate")?.addEventListener(
 
 async function saveOpening(){
 
-    const warehouseId=
+    const warehouseId =
         document.getElementById("openingWarehouse").value;
 
-    const itemId=
+    const itemId =
         document.getElementById("openingItem").value;
 
-    const quantity=
-        Number(document.getElementById("openingQty").value||0);
+    const quantity =
+        Number(
+            document.getElementById("openingQty").value || 0
+        );
 
-    const date=
+    const date =
         document.getElementById("openingDate").value;
 
-    const cost=
-        Number(document.getElementById("openingCost").value||0);
+    const cost =
+        Number(
+            document.getElementById("openingCost").value || 0
+        );
 
-    if(!warehouseId||!itemId||quantity<=0||!date||cost<0){
+    if(
+        !warehouseId ||
+        !itemId ||
+        quantity <= 0 ||
+        !date ||
+        cost < 0
+    ){
 
-        showAlert("أكمل بيانات رصيد أول المدة","error");
+        showAlert(
+            "أكمل بيانات رصيد أول المدة",
+            "error"
+        );
+
         return;
     }
 
     try{
 
-        const {data,error}=await supabaseClient.rpc(
-            "post_opening",
+        /*
+         الدالة الموجودة في Supabase عندك
+         تستقبل:
+         p_warehouse
+         p_date
+         p_items
+         p_notes
+        */
+
+        const items = [
             {
-                p_warehouse_id:warehouseId,
-                p_product_id:itemId,
-                p_quantity:quantity,
-                p_date:date,
-                p_unit_cost:cost
+                product_id: itemId,
+                quantity: quantity,
+                unit_cost: cost
             }
+        ];
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                "post_opening",
+                {
+                    p_warehouse: warehouseId,
+                    p_date: date,
+                    p_items: items,
+                    p_notes: "رصيد أول المدة"
+                }
+            );
+
+        if(error){
+            throw error;
+        }
+
+        showAlert(
+            "تم حفظ رصيد أول المدة بنجاح"
         );
-
-        if(error) throw error;
-
-        showAlert("تم حفظ رصيد أول المدة بنجاح");
 
         document.getElementById("openingQty").value="";
         document.getElementById("openingCost").value="";
@@ -2114,7 +2096,13 @@ async function saveOpening(){
 
     }catch(error){
 
-        showAlert(error.message,"error");
+        console.error(error);
+
+        showAlert(
+            "تعذر حفظ رصيد أول المدة: " +
+            error.message,
+            "error"
+        );
     }
 }
 
@@ -2830,11 +2818,6 @@ function renderBranchSummary(movements){
             m.movement_type==="transfer_in" ||
             m.movement_type==="adjustment_out"
         ){
-
-            /*
-             إذن الصرف: يظهر كاستهلاك للفرع
-             والتحويل الوارد: يظهر كصرف للفرع من الرئيسي
-            */
 
             stats[m.to].qty+=Number(m.quantity||0);
             stats[m.to].value+=Number(m.value||0);
