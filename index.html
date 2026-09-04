@@ -4341,72 +4341,55 @@ function getIssueItemOptions(selectedId=""){
         .join("");
 }
 
-async function updateIssueCost(){
+async function getReliableAverageCost(itemId,warehouseId,fallbackStock=null){
+    if(!itemId || !warehouseId) return 0;
+    const stock=fallbackStock||getStock(itemId,warehouseId);
+    const storedCost=Number(stock?.avg_cost||0);
+    if(storedCost>0) return storedCost;
+    try{
+        const {data:rows,error}=await supabaseClient.from("stock_movements").select("movement_type,qty,unit_cost,total_cost,movement_date,created_at").eq("product_id",itemId).eq("warehouse_id",warehouseId).order("movement_date",{ascending:true}).order("created_at",{ascending:true});
+        if(error) throw error;
+        let runningQty=0,runningValue=0;
+        const inbound=["opening","purchase","transfer_in","adjustment_in"];
+        const outbound=["transfer_out","adjustment_out"];
+        for(const m of (rows||[])){
+            const type=String(m.movement_type||"");
+            const q=Number(m.qty||0);
+            if(!(q>0)) continue;
+            let cost=Number(m.unit_cost||0);
+            const total=Number(m.total_cost||0);
+            if(cost<=0 && total>0) cost=total/q;
+            if(inbound.includes(type)){
+                if(cost>0){ runningValue+=q*cost; runningQty+=q; }
+                else if(runningQty>0){ const avg=runningValue/runningQty; runningValue+=q*avg; runningQty+=q; }
+            }else if(outbound.includes(type)){
+                const avg=runningQty>0?runningValue/runningQty:0;
+                runningQty=Math.max(0,runningQty-q);
+                runningValue=Math.max(0,runningValue-q*avg);
+            }
+        }
+        if(runningQty>0 && runningValue>0) return runningValue/runningQty;
+        for(let i=(rows||[]).length-1;i>=0;i--){
+            const m=rows[i],q=Number(m.qty||0); let cost=Number(m.unit_cost||0); const total=Number(m.total_cost||0);
+            if(cost<=0&&q>0&&total>0) cost=total/q;
+            if(cost>0&&inbound.includes(String(m.movement_type||""))) return cost;
+        }
+    }catch(err){ console.error("تعذر حساب متوسط تكلفة الصنف:",err); }
+    const item=getItemById(itemId);
+    const itemCost=Number(item?.cost||0);
+    if(itemCost>0) return itemCost;
+    return 0;
+}
 
+async function updateIssueCost(){
     const itemId=document.getElementById("issueItem")?.value||"";
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
     const costEl=document.getElementById("issueCost");
-
     if(!costEl) return;
-
-    if(!itemId||!warehouseId){
-        costEl.value="0.00";
-        calculateIssue();
-        return;
-    }
-
-    /*
-       أولوية التكلفة:
-       1) متوسط التكلفة الموجود فعليًا في stock_balances.
-       2) إذا كان صفرًا/فارغًا، نحسبه مباشرة من حركات المخزن
-          من Supabase، وليس من db.movements فقط.
-       هذا يعالج الأصناف التي لها رصيد لكن avg_cost غير محفوظ.
-    */
-    let averageCost=0;
-
+    if(!itemId||!warehouseId){ costEl.value="0.00"; calculateIssue(); return; }
+    costEl.value="جارٍ الحساب...";
     const stock=getStock(itemId,warehouseId);
-    averageCost=Number(stock?.avg_cost||0);
-
-    if(averageCost<=0){
-        try{
-            const {data:rows,error}=await supabaseClient
-                .from("stock_movements")
-                .select("movement_type,qty,unit_cost,total_cost,movement_date,created_at")
-                .eq("product_id",itemId)
-                .eq("warehouse_id",warehouseId)
-                .order("movement_date",{ascending:true})
-                .order("created_at",{ascending:true});
-
-            if(error) throw error;
-
-            const inboundTypes=["opening","purchase","transfer_in"];
-            let totalQty=0;
-            let totalValue=0;
-
-            (rows||[]).forEach(m=>{
-                if(!inboundTypes.includes(String(m.movement_type))) return;
-
-                const q=Number(m.qty||0);
-                let c=Number(m.unit_cost||0);
-
-                if(c<=0 && q>0 && Number(m.total_cost||0)>0){
-                    c=Number(m.total_cost)/q;
-                }
-
-                if(q>0 && c>0){
-                    totalQty+=q;
-                    totalValue+=q*c;
-                }
-            });
-
-            if(totalQty>0){
-                averageCost=totalValue/totalQty;
-            }
-        }catch(error){
-            console.error("تعذر حساب متوسط تكلفة الصنف:",error);
-        }
-    }
-
+    const averageCost=await getReliableAverageCost(itemId,warehouseId,stock);
     costEl.value=Number(averageCost||0).toFixed(2);
     calculateIssue();
 }
@@ -4432,7 +4415,7 @@ function calculateIssue(){
         totalEl.textContent=money(linesTotal+currentTotal);
 }
 
-function addIssueLine(){
+async function addIssueLine(){
 
     const itemId=document.getElementById("issueItem")?.value||"";
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
@@ -4469,7 +4452,8 @@ function addIssueLine(){
         return;
     }
 
-    const cost=Number(document.getElementById("issueCost")?.value||stock.avg_cost||0);
+    let cost=Number(document.getElementById("issueCost")?.value||stock.avg_cost||0);
+    if(cost<=0) cost=await getReliableAverageCost(itemId,warehouseId,stock);
     const item=getItemById(itemId);
 
     if(existing){
@@ -4678,7 +4662,8 @@ async function saveIssue(){
         for(const line of issueLines){
             const stock=stockMap[String(line.product_id)];
             const quantity=Number(line.quantity||0);
-            const cost=Number(stock.avg_cost||line.unit_cost||0);
+            let cost=Number(stock.avg_cost||line.unit_cost||0);
+            if(cost<=0) cost=await getReliableAverageCost(line.product_id,warehouseId,stock);
             const newQty=Number(stock.qty||0)-quantity;
 
             const {error:updateError}=await supabaseClient
