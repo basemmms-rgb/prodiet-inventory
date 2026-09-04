@@ -4346,10 +4346,36 @@ function updateIssueCost(){
     const itemId=document.getElementById("issueItem")?.value||"";
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
     const stock=getStock(itemId,warehouseId);
+    let averageCost=Number(stock?.avg_cost||0);
+
+    if(averageCost<=0 && itemId && warehouseId){
+        const inboundTypes=["opening","purchase","transfer_in"];
+        let totalQty=0;
+        let totalValue=0;
+
+        (db.movements||[]).forEach(m=>{
+            if(
+                String(m.product_id)===String(itemId) &&
+                String(m.warehouse_id)===String(warehouseId) &&
+                inboundTypes.includes(String(m.movement_type))
+            ){
+                const q=Number(m.qty||0);
+                const c=Number(m.unit_cost||0);
+                if(q>0){
+                    totalQty+=q;
+                    totalValue+=q*c;
+                }
+            }
+        });
+
+        if(totalQty>0){
+            averageCost=totalValue/totalQty;
+        }
+    }
 
     const costEl=document.getElementById("issueCost");
     if(costEl){
-        costEl.value=stock?Number(stock.avg_cost||0).toFixed(2):"0.00";
+        costEl.value=itemId&&warehouseId?Number(averageCost||0).toFixed(2):"0.00";
     }
 
     calculateIssue();
@@ -4361,7 +4387,7 @@ function calculateIssue(){
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
     const q=Number(document.getElementById("issueQty")?.value||0);
     const stock=getStock(itemId,warehouseId);
-    const c=Number(stock?.avg_cost||0);
+    const c=Number(document.getElementById("issueCost")?.value||stock?.avg_cost||0);
 
     const totalEl=document.getElementById("issueTotal");
 
@@ -4413,7 +4439,7 @@ function addIssueLine(){
         return;
     }
 
-    const cost=Number(stock.avg_cost||0);
+    const cost=Number(document.getElementById("issueCost")?.value||stock.avg_cost||0);
     const item=getItemById(itemId);
 
     if(existing){
