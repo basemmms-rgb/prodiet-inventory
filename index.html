@@ -2,586 +2,567 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>نظام المخزون ERP</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{box-sizing:border-box}
 
 body{
-    margin:0;
-    font-family:Tahoma,Arial,sans-serif;
-    background:#f4f6f9;
-    color:#222
+margin:0;
+font-family:Tahoma,Arial,sans-serif;
+background:#f3f4f6;
+color:#111827;
 }
 
 header{
-    background:#17212b;
-    color:#fff;
-    padding:18px 25px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    position:sticky;
-    top:0;
-    z-index:50
+background:#111827;
+color:#fff;
+padding:15px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-header h1{
-    margin:0;
-    font-size:23px
-}
+header h1{margin:0;font-size:21px}
 
-header small{
-    opacity:.8
+.container{
+max-width:1450px;
+margin:auto;
+padding:15px;
 }
 
 nav{
-    background:#fff;
-    padding:10px;
-    display:flex;
-    gap:7px;
-    flex-wrap:wrap;
-    border-bottom:1px solid #ddd;
-    position:sticky;
-    top:70px;
-    z-index:40
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:15px;
 }
 
 nav button{
-    border:0;
-    background:#eef1f4;
-    padding:10px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold
+background:#fff;
+color:#111827;
+border:1px solid #d1d5db;
 }
 
 nav button.active{
-    background:#17212b;
-    color:white
-}
-
-.container{
-    max-width:1500px;
-    margin:auto;
-    padding:20px
-}
-
-.page{
-    display:none
-}
-
-.page.active{
-    display:block
-}
-
-.card{
-    background:white;
-    border-radius:12px;
-    padding:18px;
-    margin-bottom:18px;
-    box-shadow:0 2px 8px rgba(0,0,0,.06)
-}
-
-.card h2,
-.card h3{
-    margin-top:0
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px
-}
-
-.stat{
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,.06)
-}
-
-.stat .title{
-    color:#777;
-    font-size:14px
-}
-
-.stat .value{
-    font-size:25px;
-    font-weight:bold;
-    margin-top:8px
-}
-
-label{
-    display:block;
-    margin-bottom:6px;
-    font-weight:bold;
-    font-size:14px
-}
-
-input,
-select,
-textarea{
-    width:100%;
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:7px;
-    font-family:inherit;
-    background:white
-}
-
-textarea{
-    min-height:75px;
-    resize:vertical
-}
-
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:12px
+background:#2563eb;
+color:#fff;
 }
 
 button{
-    font-family:inherit
+border:0;
+border-radius:8px;
+padding:10px 14px;
+cursor:pointer;
+font-weight:bold;
 }
 
-.btn{
-    border:0;
-    border-radius:7px;
-    padding:10px 15px;
-    cursor:pointer;
-    font-weight:bold
+.primary{background:#2563eb;color:white}
+.success{background:#059669;color:white}
+.danger{background:#dc2626;color:white}
+.gray{background:#6b7280;color:white}
+
+.page{display:none}
+.page.active{display:block}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
 }
 
-.btn-primary{
-    background:#1677ff;
-    color:white
+.card{
+background:white;
+padding:18px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.btn-success{
-    background:#168a4a;
-    color:white
+.card-title{
+color:#6b7280;
+font-size:14px;
 }
 
-.btn-danger{
-    background:#d93025;
-    color:white
+.card-value{
+font-size:25px;
+font-weight:bold;
+margin-top:8px;
 }
 
-.btn-warning{
-    background:#e7a400;
-    color:white
+.panel{
+background:white;
+padding:18px;
+border-radius:12px;
+margin-top:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.07);
 }
 
-.btn-secondary{
-    background:#6c757d;
-    color:white
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
 }
 
-.btn-light{
-    background:#eee;
-    color:#222
+.grid2{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
 }
 
-.actions{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:15px
+.grid4{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
 }
+
+label{
+display:block;
+font-weight:bold;
+font-size:14px;
+margin-bottom:5px;
+}
+
+input,select,textarea{
+width:100%;
+padding:11px;
+border:1px solid #d1d5db;
+border-radius:8px;
+font-family:inherit;
+font-size:14px;
+}
+
+textarea{min-height:80px}
 
 .table-wrap{
-    overflow:auto;
-    width:100%
+overflow:auto;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:800px
+width:100%;
+border-collapse:collapse;
+min-width:750px;
 }
 
-th,
-td{
-    border:1px solid #ddd;
-    padding:9px;
-    text-align:center;
-    white-space:nowrap
+th,td{
+border-bottom:1px solid #e5e7eb;
+padding:10px;
+text-align:right;
+white-space:nowrap;
 }
 
 th{
-    background:#17212b;
-    color:white
-}
-
-tr:nth-child(even){
-    background:#fafafa
+background:#f9fafb;
 }
 
 .badge{
-    display:inline-block;
-    padding:5px 9px;
-    border-radius:15px;
-    font-size:12px;
-    font-weight:bold
+padding:5px 8px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
 }
 
-.badge-green{
-    background:#d9f5e4;
-    color:#16733b
+.in{
+background:#dcfce7;
+color:#166534;
 }
 
-.badge-red{
-    background:#ffe0df;
-    color:#a51d17
+.out{
+background:#fee2e2;
+color:#991b1b;
 }
 
-.badge-blue{
-    background:#dcecff;
-    color:#1259a8
+.transfer{
+background:#dbeafe;
+color:#1e40af;
+}
+
+.search{
+margin-bottom:12px;
 }
 
 .total-box{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:12px;
-    margin-top:15px
-}
-
-.total-item{
-    background:#f7f8fa;
-    padding:15px;
-    border-radius:8px;
-    text-align:center
-}
-
-.total-item strong{
-    display:block;
-    font-size:20px;
-    margin-top:5px
-}
-
-.alert{
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:15px;
-    display:none
-}
-
-.alert.success{
-    background:#dff6e7;
-    color:#12652f
-}
-
-.alert.error{
-    background:#ffe1df;
-    color:#a11b15
-}
-
-.alert.show{
-    display:block
-}
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:100
-}
-
-.modal.show{
-    display:flex
-}
-
-.modal-box{
-    background:#fff;
-    width:min(900px,95%);
-    max-height:90vh;
-    overflow:auto;
-    border-radius:12px;
-    padding:20px
+background:#f9fafb;
+padding:15px;
+border-radius:8px;
+margin-top:15px;
+font-size:18px;
+font-weight:bold;
 }
 
 .small{
-    font-size:12px;
-    color:#777
+color:#6b7280;
+font-size:13px;
 }
 
-.text-green{
-    color:#168a4a
+.filter-box{
+background:#eef2ff;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
 }
 
-.text-red{
-    color:#d93025
+.branch-summary{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-top:15px;
 }
 
-.text-blue{
-    color:#1677ff
+.branch-card{
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:10px;
+padding:15px;
 }
 
-.negative-stock{
-    color:#d93025;
-    font-weight:bold
+.branch-card h3{
+margin:0 0 10px;
+font-size:16px;
 }
 
-.receipt-row,
-.issue-row{
-    background:#f8f9fa;
-    border:1px solid #ddd;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:8px
+.branch-number{
+font-size:23px;
+font-weight:bold;
 }
 
-.receipt-row-grid,
-.issue-row-grid{
-    display:grid;
-    grid-template-columns:2fr 1fr 1fr auto;
-    gap:8px;
-    align-items:end
+.branch-label{
+font-size:12px;
+color:#6b7280;
+margin-top:5px;
 }
 
-.ending-stock-header{
-    background:#f7f8fa;
-    padding:15px;
-    border-radius:8px;
-    margin-top:15px
+@media(max-width:1000px){
+.cards{
+grid-template-columns:repeat(2,1fr);
 }
 
-.report-title{
-    font-size:20px;
-    font-weight:bold;
-    margin-bottom:8px
+.branch-summary{
+grid-template-columns:repeat(2,1fr);
 }
 
-@media(max-width:700px){
-
-    header{
-        position:static
-    }
-
-    nav{
-        position:static
-    }
-
-    .container{
-        padding:10px
-    }
-
-    table{
-        font-size:12px
-    }
-
-    .receipt-row-grid,
-    .issue-row-grid{
-        grid-template-columns:1fr
-    }
+.grid,.grid2,.grid4{
+grid-template-columns:1fr;
+}
 }
 
-.print-only{
-    display:none
+@media(max-width:500px){
+header h1{font-size:17px}
+
+.cards{
+grid-template-columns:1fr 1fr;
 }
 
-@media print{
-
-    body{
-        background:white
-    }
-
-    header,
-    nav,
-    .no-print{
-        display:none!important
-    }
-
-    .page{
-        display:none!important
-    }
-
-    #supplierStatement{
-        display:block!important
-    }
-
-    body.print-ending-stock .page{
-        display:none!important
-    }
-
-    body.print-ending-stock #endingStock{
-        display:block!important
-    }
-
-    body.print-ending-stock #supplierStatement{
-        display:none!important
-    }
-
-    .print-only{
-        display:block
-    }
-
-    .card{
-        box-shadow:none
-    }
+.branch-summary{
+grid-template-columns:1fr 1fr;
 }
+
+.card{
+padding:12px;
+}
+
+.card-value{
+font-size:19px;
+}
+
+nav button{
+flex:1;
+min-width:120px;
+}
+}
+
+#loginScreen{
+display:flex;
+position:fixed;
+inset:0;
+z-index:9999;
+background:#f3f4f6;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+#loginBox{
+width:100%;
+max-width:420px;
+background:white;
+padding:30px;
+border-radius:16px;
+box-shadow:0 4px 20px rgba(0,0,0,.12);
+}
+
+#loginBox h2{text-align:center;margin-top:0}
+#loginError{color:#dc2626;text-align:center;font-weight:bold;min-height:22px;margin-top:10px}
+#logoutBtn{margin-right:10px;background:#dc2626;color:white}
 </style>
 </head>
 
 <body>
 
+<div id="loginScreen">
+<div id="loginBox">
+<h2>🔐 ProDiet Inventory</h2>
+<p class="small" style="text-align:center">تسجيل الدخول إلى نظام المخزون</p>
+
+<label>اسم المستخدم</label>
+<input id="loginUsername" autocomplete="username" placeholder="اسم المستخدم">
+
+<br><br>
+
+<label>كلمة المرور</label>
+<input id="loginPassword" type="password" autocomplete="current-password" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')loginUser()">
+
+<div id="loginError"></div>
+
+<br>
+<button class="primary" onclick="loginUser()" style="width:100%">دخول</button>
+</div>
+</div>
+
 <header>
-
-    <div>
-        <h1>📦 نظام المخزون ERP</h1>
-        <small>ProDiet Inventory System</small>
-    </div>
-
-    <div id="connectionStatus">
-        جاري الاتصال...
-    </div>
-
+<h1>📦 نظام المخزون ERP</h1>
+<div><span id="currentDate"></span><button id="logoutBtn" onclick="logoutUser()">تسجيل خروج</button></div>
 </header>
-
-<nav>
-
-    <button onclick="showPage('dashboard')" id="nav-dashboard">
-        لوحة التحكم
-    </button>
-
-    <button onclick="showPage('endingStock')" id="nav-endingStock">
-        📊 رصيد آخر المدة
-    </button>
-
-    <button onclick="showPage('items')" id="nav-items">
-        الأصناف
-    </button>
-
-    <button onclick="showPage('suppliers')" id="nav-suppliers">
-        الموردين
-    </button>
-
-    <button onclick="showPage('opening')" id="nav-opening">
-        رصيد أول المدة
-    </button>
-
-    <button onclick="showPage('receipt')" id="nav-receipt">
-        إذن استلام
-    </button>
-
-    <button onclick="showPage('issue')" id="nav-issue">
-        إذن صرف
-    </button>
-
-    <button onclick="showPage('transfer')" id="nav-transfer">
-        تحويل مخزني
-    </button>
-
-    <button onclick="showPage('movements')" id="nav-movements">
-        الحركات
-    </button>
-
-    <button onclick="showPage('itemCard')" id="nav-itemCard">
-        كارت الصنف
-    </button>
-
-    <button onclick="showPage('backup')" id="nav-backup">
-        نسخ احتياطي
-    </button>
-
-</nav>
 
 <div class="container">
 
-<div id="alertBox" class="alert"></div>
+<nav id="menu">
+
+<button onclick="showPage('dashboard')" class="active">
+لوحة التحكم
+</button>
+
+<button onclick="showPage('items')">
+الأصناف
+</button>
+
+<button onclick="showPage('opening')">
+رصيد أول المدة
+</button>
+
+<button onclick="showPage('receipt')">
+إذن استلام
+</button>
+
+<button onclick="showPage('issue')">
+إذن صرف
+</button>
+
+<button onclick="showPage('transfer')">
+تحويل مخزني
+</button>
+
+<button onclick="showPage('movements')">
+الحركات
+</button>
+
+<button onclick="showPage('card')">
+كارت الصنف
+</button>
+
+<button onclick="showPage('backup')">
+نسخ احتياطي
+</button>
+
+</nav>
+
 
 <!-- =====================================================
-     DASHBOARD
+لوحة التحكم
 ===================================================== -->
 
-<section id="dashboard" class="page">
+<section id="dashboard" class="page active">
 
-<div class="card">
+<div class="panel">
 
 <h2>📊 لوحة التحكم</h2>
 
-<div class="form-grid">
+<div class="filter-box">
 
-    <div>
-        <label>من تاريخ</label>
-        <input type="date" id="dashboardFrom">
-    </div>
+<h3>🔎 فلترة تقرير صرف الفروع</h3>
 
-    <div>
-        <label>إلى تاريخ</label>
-        <input type="date" id="dashboardTo">
-    </div>
+<div class="grid4">
 
-    <div>
-        <label>الفرع</label>
-        <select id="dashboardBranch"></select>
-    </div>
+<div>
+<label>من تاريخ</label>
+<input type="date" id="reportFrom">
+</div>
+
+<div>
+<label>إلى تاريخ</label>
+<input type="date" id="reportTo">
+</div>
+
+<div>
+<label>الفرع</label>
+
+<select id="reportBranch">
+<option value="ALL">كل الفروع</option>
+<option value="فرع جدة">فرع جدة</option>
+<option value="فرع ينبع">فرع ينبع</option>
+<option value="فرع المدينة">فرع المدينة</option>
+</select>
 
 </div>
 
-<div class="actions">
+<div style="display:flex;align-items:end">
 
-    <button class="btn btn-primary"
-            onclick="renderDashboard()">
-        🔎 عرض التقرير
-    </button>
-
-    <button class="btn btn-light"
-            onclick="clearDashboardFilter()">
-        إلغاء الفلتر
-    </button>
+<button class="primary"
+onclick="applyReportFilter()"
+style="width:100%">
+🔎 عرض التقرير
+</button>
 
 </div>
 
 </div>
 
-<div class="grid">
+<br>
 
-    <div class="stat">
-        <div class="title">عدد الأصناف</div>
-        <div class="value" id="statItems">0</div>
-    </div>
+<button class="gray" onclick="clearReportFilter()">
+إلغاء الفلتر
+</button>
 
-    <div class="stat">
-        <div class="title">إجمالي كمية المخزون</div>
-        <div class="value" id="statQty">0</div>
-    </div>
+</div>
 
-    <div class="stat">
-        <div class="title">قيمة المخزون</div>
-        <div class="value" id="statValue">0.00</div>
-    </div>
 
-    <div class="stat">
-        <div class="title">عدد الحركات</div>
-        <div class="value" id="statMovements">0</div>
-    </div>
+<div class="cards">
 
+<div class="card">
+<div class="card-title">عدد الأصناف</div>
+<div class="card-value" id="dashItems">0</div>
 </div>
 
 <div class="card">
+<div class="card-title">إجمالي كمية المخزون</div>
+<div class="card-value" id="dashQty">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">قيمة المخزون</div>
+<div class="card-value" id="dashValue">0.00</div>
+</div>
+
+<div class="card">
+<div class="card-title">عدد الحركات</div>
+<div class="card-value" id="dashMoves">0</div>
+</div>
+
+</div>
+
+
+<!-- تقرير صرف الفروع -->
+
+<div class="panel">
 
 <h2>🏢 تقرير صرف الفروع</h2>
 
 <p class="small">
-التحويل من المخزن الرئيسي إلى الفرع يظهر كصرف للفرع،
-وإذن الصرف داخل الفرع يظهر كاستهلاك الفرع.
+التحويل من المخزن الرئيسي إلى الفرع يظهر هنا كـ "صرف للفرع".
+أما إذن الصرف الذي يتم من داخل الفرع فيظهر كـ "استهلاك الفرع".
 </p>
 
-<div class="grid" id="branchSummary"></div>
+<div class="branch-summary">
+
+<div class="branch-card">
+<h3>فرع جدة</h3>
+
+<div class="branch-number"
+id="jeddahQty">
+0
+</div>
+
+<div class="branch-label">
+كمية ما تم صرفه للفرع
+</div>
+
+<div class="branch-number"
+id="jeddahValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+قيمة الصرف
+</div>
+</div>
+
+
+<div class="branch-card">
+<h3>فرع ينبع</h3>
+
+<div class="branch-number"
+id="yanbuQty">
+0
+</div>
+
+<div class="branch-label">
+كمية ما تم صرفه للفرع
+</div>
+
+<div class="branch-number"
+id="yanbuValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+قيمة الصرف
+</div>
+</div>
+
+
+<div class="branch-card">
+<h3>فرع المدينة</h3>
+
+<div class="branch-number"
+id="madinahQty">
+0
+</div>
+
+<div class="branch-label">
+كمية ما تم صرفه للفرع
+</div>
+
+<div class="branch-number"
+id="madinahValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+قيمة الصرف
+</div>
+</div>
+
+
+<div class="branch-card">
+<h3>الإجمالي</h3>
+
+<div class="branch-number"
+id="allBranchQty">
+0
+</div>
+
+<div class="branch-label">
+إجمالي الكمية
+</div>
+
+<div class="branch-number"
+id="allBranchValue">
+0.00 ر.س
+</div>
+
+<div class="branch-label">
+إجمالي القيمة
+</div>
+</div>
 
 </div>
 
-<div class="card">
+</div>
+
+
+<!-- تفاصيل الصرف -->
+
+<div class="panel">
 
 <h2>📋 تفاصيل صرف الفروع</h2>
 
@@ -590,6 +571,7 @@ tr:nth-child(even){
 <table>
 
 <thead>
+
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
@@ -597,14 +579,14 @@ tr:nth-child(even){
 <th>الصنف</th>
 <th>نوع الحركة</th>
 <th>من</th>
-<th>إلى</th>
 <th>الكمية</th>
 <th>التكلفة</th>
 <th>القيمة</th>
 </tr>
+
 </thead>
 
-<tbody id="branchDetailsBody"></tbody>
+<tbody id="branchReportTable"></tbody>
 
 </table>
 
@@ -612,7 +594,10 @@ tr:nth-child(even){
 
 </div>
 
-<div class="card">
+
+<!-- رصيد المخزون -->
+
+<div class="panel">
 
 <h2>📦 رصيد المخزون</h2>
 
@@ -621,6 +606,7 @@ tr:nth-child(even){
 <table>
 
 <thead>
+
 <tr>
 <th>الصنف</th>
 <th>الوحدة</th>
@@ -628,13 +614,13 @@ tr:nth-child(even){
 <th>فرع جدة</th>
 <th>فرع ينبع</th>
 <th>فرع المدينة</th>
-<th>المطبخ</th>
 <th>الإجمالي</th>
 <th>القيمة</th>
 </tr>
+
 </thead>
 
-<tbody id="dashboardStockBody"></tbody>
+<tbody id="dashboardStock"></tbody>
 
 </table>
 
@@ -642,7 +628,8 @@ tr:nth-child(even){
 
 </div>
 
-<div class="card">
+
+<div class="panel">
 
 <h2>آخر الحركات</h2>
 
@@ -651,6 +638,7 @@ tr:nth-child(even){
 <table>
 
 <thead>
+
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
@@ -661,9 +649,10 @@ tr:nth-child(even){
 <th>الكمية</th>
 <th>القيمة</th>
 </tr>
+
 </thead>
 
-<tbody id="recentMovementsBody"></tbody>
+<tbody id="recentMoves"></tbody>
 
 </table>
 
@@ -675,216 +664,62 @@ tr:nth-child(even){
 
 
 <!-- =====================================================
-     ENDING STOCK
-===================================================== -->
-
-<section id="endingStock" class="page">
-
-<div class="card">
-
-<h2>📊 رصيد آخر المدة – المخزن الرئيسي</h2>
-
-<div class="form-grid">
-
-    <div>
-        <label>تاريخ التقرير *</label>
-        <input type="date"
-               id="endingStockDate">
-    </div>
-
-    <div>
-        <label>بحث عن صنف</label>
-        <input id="endingStockSearch"
-               placeholder="🔎 ابحث عن صنف..."
-               oninput="renderEndingStock()">
-    </div>
-
-</div>
-
-<div class="actions">
-
-    <button class="btn btn-primary"
-            onclick="renderEndingStock()">
-        🔎 عرض التقرير
-    </button>
-
-    <button class="btn btn-secondary"
-            onclick="printEndingStock()">
-        🖨️ طباعة
-    </button>
-
-</div>
-
-<div id="endingStockHeader"
-     class="ending-stock-header"></div>
-
-<div class="total-box">
-
-    <div class="total-item">
-        عدد الأصناف
-        <strong id="endingStockItemCount">0</strong>
-    </div>
-
-    <div class="total-item">
-        إجمالي أول المدة
-        <strong id="endingStockOpeningTotal">0</strong>
-    </div>
-
-    <div class="total-item">
-        إجمالي الوارد
-        <strong id="endingStockInboundTotal">0</strong>
-    </div>
-
-    <div class="total-item">
-        إجمالي المنصرف
-        <strong id="endingStockOutboundTotal">0</strong>
-    </div>
-
-    <div class="total-item">
-        إجمالي آخر المدة
-        <strong id="endingStockClosingTotal">0</strong>
-    </div>
-
-    <div class="total-item">
-        قيمة المخزون
-        <strong id="endingStockValueTotal">0.00</strong>
-    </div>
-
-</div>
-
-<div class="table-wrap"
-     style="margin-top:15px">
-
-<table>
-
-<thead>
-
-<tr>
-<th>الصنف</th>
-<th>الوحدة</th>
-<th>رصيد أول المدة</th>
-<th>الوارد</th>
-<th>المنصرف</th>
-<th>رصيد آخر المدة</th>
-<th>متوسط التكلفة</th>
-<th>قيمة المخزون</th>
-</tr>
-
-</thead>
-
-<tbody id="endingStockBody"></tbody>
-
-<tfoot>
-
-<tr>
-
-<th colspan="2">
-الإجمالي
-</th>
-
-<th id="endingStockOpeningFooter">
-0
-</th>
-
-<th id="endingStockInboundFooter">
-0
-</th>
-
-<th id="endingStockOutboundFooter">
-0
-</th>
-
-<th id="endingStockClosingFooter">
-0
-</th>
-
-<th>
--
-</th>
-
-<th id="endingStockValueFooter">
-0.00
-</th>
-
-</tr>
-
-</tfoot>
-
-</table>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     ITEMS
+الأصناف
 ===================================================== -->
 
 <section id="items" class="page">
 
-<div class="card">
+<div class="panel">
 
 <h2>📦 إضافة صنف</h2>
 
-<div class="form-grid">
+<div class="grid">
 
 <div>
-<label>اسم الصنف *</label>
-<input id="itemName"
-       placeholder="اكتب اسم الصنف">
+<label>اسم الصنف</label>
+<input id="itemName">
 </div>
 
 <div>
 <label>الوحدة</label>
 
 <select id="itemUnit">
-
-<option value="كيلو">كيلو</option>
-<option value="جرام">جرام</option>
-<option value="لتر">لتر</option>
-<option value="علبة">علبة</option>
-<option value="قطعة">قطعة</option>
-<option value="كرتون">كرتون</option>
-
+<option>كجم</option>
+<option>جرام</option>
+<option>لتر</option>
+<option>حبة</option>
+<option>علبة</option>
+<option>كرتون</option>
 </select>
 
 </div>
 
 <div>
-
 <label>التكلفة الحالية</label>
-
-<input type="number"
-       step="0.01"
-       id="itemCost"
-       value="0">
-
+<input id="itemCost" type="number" step="0.01">
 </div>
 
 </div>
 
-<div class="actions">
+<br>
 
-<button class="btn btn-success"
-        onclick="addItem()">
+<button class="primary" onclick="addItem()">
 ➕ إضافة الصنف
 </button>
 
 </div>
 
-</div>
 
-
-<div class="card">
+<div class="panel">
 
 <h2>الأصناف</h2>
 
-<input id="itemSearch"
-       placeholder="🔎 ابحث عن صنف..."
-       oninput="renderItems()">
+<input
+class="search"
+id="itemSearch"
+placeholder="🔎 ابحث عن صنف..."
+oninput="renderItems()"
+>
 
 <div class="table-wrap">
 
@@ -900,16 +735,14 @@ tr:nth-child(even){
 <th>جدة</th>
 <th>ينبع</th>
 <th>المدينة</th>
-<th>المطبخ</th>
 <th>الإجمالي</th>
 <th>القيمة</th>
-<th>الحالة</th>
 <th>إجراء</th>
 </tr>
 
 </thead>
 
-<tbody id="itemsBody"></tbody>
+<tbody id="itemsTable"></tbody>
 
 </table>
 
@@ -921,254 +754,21 @@ tr:nth-child(even){
 
 
 <!-- =====================================================
-     SUPPLIERS
-===================================================== -->
-
-<section id="suppliers" class="page">
-
-<div class="card">
-
-<h2>👨‍💼 إضافة مورد</h2>
-
-<div class="form-grid">
-
-<div>
-<label>اسم المورد *</label>
-<input id="supplierName"
-       placeholder="اكتب اسم المورد">
-</div>
-
-<div>
-<label>رقم الجوال</label>
-<input id="supplierPhone"
-       placeholder="05xxxxxxxx">
-</div>
-
-<div>
-<label>الرصيد الافتتاحي</label>
-<input type="number"
-       step="0.01"
-       id="supplierOpening"
-       value="0">
-</div>
-
-</div>
-
-<div style="margin-top:12px">
-
-<label>ملاحظات</label>
-
-<textarea id="supplierNotes"></textarea>
-
-</div>
-
-<div class="actions">
-
-<button class="btn btn-success"
-        onclick="addSupplier()">
-➕ إضافة المورد
-</button>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>📋 الموردين</h2>
-
-<input id="supplierSearch"
-       placeholder="🔎 ابحث عن مورد..."
-       oninput="renderSuppliers()">
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-<th>اسم المورد</th>
-<th>الجوال</th>
-<th>الرصيد الافتتاحي</th>
-<th>الرصيد الحالي</th>
-<th>الملاحظات</th>
-<th>الحالة</th>
-<th>إجراء</th>
-</tr>
-
-</thead>
-
-<tbody id="suppliersBody"></tbody>
-
-</table>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>💰 سداد للمورد</h2>
-
-<div class="form-grid">
-
-<div>
-<label>المورد *</label>
-<select id="paymentSupplier"></select>
-</div>
-
-<div>
-<label>التاريخ *</label>
-<input type="date"
-       id="paymentDate">
-</div>
-
-<div>
-<label>رقم السند</label>
-<input id="paymentDocument"
-       placeholder="رقم السند">
-</div>
-
-<div>
-<label>المبلغ *</label>
-<input type="number"
-       step="0.01"
-       id="paymentAmount">
-</div>
-
-</div>
-
-<div style="margin-top:12px">
-
-<label>البيان</label>
-
-<input id="paymentDescription"
-       placeholder="سداد دفعة للمورد">
-
-</div>
-
-<div class="actions">
-
-<button class="btn btn-success"
-        onclick="saveSupplierPayment()">
-💰 حفظ السداد
-</button>
-
-</div>
-
-</div>
-
-
-<div class="card"
-     id="supplierStatement">
-
-<h2>📑 كشف حساب المورد</h2>
-
-<div class="form-grid no-print">
-
-<div>
-<label>المورد</label>
-<select id="statementSupplier"></select>
-</div>
-
-<div>
-<label>من تاريخ</label>
-<input type="date"
-       id="statementFrom">
-</div>
-
-<div>
-<label>إلى تاريخ</label>
-<input type="date"
-       id="statementTo">
-</div>
-
-</div>
-
-<div class="actions no-print">
-
-<button class="btn btn-primary"
-        onclick="loadSupplierStatement()">
-🔎 عرض الكشف
-</button>
-
-<button class="btn btn-secondary"
-        onclick="window.print()">
-🖨️ طباعة
-</button>
-
-</div>
-
-<div id="statementHeader"></div>
-
-<div class="total-box">
-
-<div class="total-item">
-الرصيد قبل الفترة
-<strong id="statementOpening">0.00</strong>
-</div>
-
-<div class="total-item">
-إجمالي المشتريات
-<strong id="statementPurchases">0.00</strong>
-</div>
-
-<div class="total-item">
-إجمالي السداد
-<strong id="statementPayments">0.00</strong>
-</div>
-
-<div class="total-item">
-الرصيد النهائي
-<strong id="statementClosing">0.00</strong>
-</div>
-
-</div>
-
-<div class="table-wrap"
-     style="margin-top:15px">
-
-<table>
-
-<thead>
-
-<tr>
-<th>التاريخ</th>
-<th>النوع</th>
-<th>رقم المستند</th>
-<th>البيان</th>
-<th>مدين</th>
-<th>دائن</th>
-<th>الرصيد</th>
-</tr>
-
-</thead>
-
-<tbody id="statementBody"></tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     OPENING
+رصيد أول المدة
 ===================================================== -->
 
 <section id="opening" class="page">
 
-<div class="card">
+<div class="panel">
 
 <h2>📋 رصيد أول المدة</h2>
 
-<div class="form-grid">
+<div class="grid">
+
+<div>
+<label>تاريخ رصيد أول المدة</label>
+<input id="openingDate" type="date">
+</div>
 
 <div>
 <label>المخزن</label>
@@ -1182,42 +782,26 @@ tr:nth-child(even){
 
 <div>
 <label>الكمية</label>
-<input type="number"
-       step="0.001"
-       id="openingQty">
-</div>
-
-<div>
-<label>تاريخ رصيد أول المدة</label>
-<input type="date"
-       id="openingDate">
+<input id="openingQty" type="number" step="0.001">
 </div>
 
 <div>
 <label>تكلفة الوحدة</label>
-<input type="number"
-       step="0.01"
-       id="openingCost">
+<input id="openingCost" type="number" step="0.01">
 </div>
 
 </div>
 
-<p class="small">
-
+<div class="date-info" style="margin-top:12px;padding:10px;background:#eef2ff;border-radius:8px">
 📅 سيتم تسجيل رصيد أول المدة بتاريخ:
+<strong id="openingDatePreview">-</strong>
+</div>
 
-<span id="openingDateLabel">-</span>
+<br>
 
-</p>
-
-<div class="actions">
-
-<button class="btn btn-success"
-        onclick="saveOpening()">
+<button class="success" onclick="saveOpening()">
 حفظ رصيد أول المدة
 </button>
-
-</div>
 
 </div>
 
@@ -1225,48 +809,31 @@ tr:nth-child(even){
 
 
 <!-- =====================================================
-     RECEIPT
+إذن الاستلام
 ===================================================== -->
 
 <section id="receipt" class="page">
 
-<div class="card">
+<div class="panel">
 
-<h2>🧾 إذن استلام / فاتورة مشتريات</h2>
+<h2>📥 إذن استلام</h2>
 
-<div class="form-grid">
-
-<div>
-<label>المورد</label>
-<select id="receiptSupplier"></select>
-</div>
-
-<!-- التعديل الجديد -->
+<div class="grid">
 
 <div>
-<label>المخزن المستلم *</label>
-<select id="receiptWarehouse"></select>
-</div>
-
-<div>
-<label>رقم الفاتورة</label>
-<input id="receiptInvoice"
-       placeholder="رقم الفاتورة">
+<label>رقم الإذن</label>
+<input id="receiptNo">
 </div>
 
 <div>
 <label>التاريخ</label>
-<input type="date"
-       id="receiptDate">
+<input id="receiptDate" type="date">
 </div>
 
+<div>
+<label>المخزن</label>
+<select id="receiptWarehouse"></select>
 </div>
-
-<hr>
-
-<h3>الأصناف</h3>
-
-<div class="form-grid">
 
 <div>
 <label>الصنف</label>
@@ -1275,73 +842,26 @@ tr:nth-child(even){
 
 <div>
 <label>الكمية</label>
-<input type="number"
-       step="0.001"
-       id="receiptQty">
+<input id="receiptQty" type="number" step="0.001">
 </div>
 
 <div>
-<label>تكلفة الوحدة قبل الضريبة</label>
-<input type="number"
-       step="0.01"
-       id="receiptCost">
-</div>
-
-<div>
-
-<button class="btn btn-primary"
-        style="margin-top:24px"
-        onclick="addReceiptLine()">
-➕ إضافة صنف
-</button>
-
+<label>تكلفة الوحدة</label>
+<input id="receiptCost" type="number" step="0.01">
 </div>
 
 </div>
 
-<div id="receiptLines"
-     style="margin-top:15px"></div>
-
-<div class="total-box">
-
-<div class="total-item">
-الإجمالي قبل الضريبة
-<strong id="receiptSubtotal">0.00</strong>
-</div>
-
-<div class="total-item">
-ضريبة القيمة المضافة 15%
-<strong id="receiptVAT">0.00</strong>
-</div>
-
-<div class="total-item">
-الإجمالي شامل الضريبة
-<strong id="receiptGrandTotal">0.00</strong>
-</div>
-
-</div>
-
-<div style="margin-top:15px">
+<br>
 
 <label>ملاحظات</label>
-
 <textarea id="receiptNote"></textarea>
 
-</div>
+<br><br>
 
-<div class="actions">
-
-<button class="btn btn-success"
-        onclick="saveReceipt()">
-🧾 حفظ إذن الاستلام
+<button class="success" onclick="saveReceipt()">
+💾 حفظ إذن الاستلام
 </button>
-
-<button class="btn btn-light"
-        onclick="clearReceipt()">
-مسح
-</button>
-
-</div>
 
 </div>
 
@@ -1349,26 +869,25 @@ tr:nth-child(even){
 
 
 <!-- =====================================================
-     ISSUE
+إذن الصرف
 ===================================================== -->
 
 <section id="issue" class="page">
 
-<div class="card">
+<div class="panel">
 
 <h2>🧾 إذن صرف</h2>
 
-<div class="form-grid">
+<div class="grid">
 
 <div>
 <label>رقم إذن الصرف</label>
-<input id="issueNumber">
+<input id="issueNo">
 </div>
 
 <div>
 <label>التاريخ</label>
-<input type="date"
-       id="issueDate">
+<input id="issueDate" type="date">
 </div>
 
 <div>
@@ -1377,146 +896,123 @@ tr:nth-child(even){
 </div>
 
 <div>
-<label>الفرع المصروف له</label>
-<select id="issueBranch"></select>
-</div>
-
-<div>
 <label>الصنف</label>
-<select id="issueItem"></select>
+<select id="issueItem" onchange="updateIssueCost()"></select>
 </div>
 
 <div>
 <label>الكمية</label>
-<input type="number"
-       step="0.001"
-       id="issueQty"
-       oninput="calculateIssue()">
+<input
+id="issueQty"
+type="number"
+step="0.001"
+oninput="calculateIssue()"
+>
 </div>
 
 <div>
 <label>متوسط التكلفة</label>
-<input id="issueCost"
-       readonly>
+<input id="issueCost" readonly>
 </div>
 
 </div>
+
+<br>
 
 <div class="total-box">
 
-<div class="total-item">
-إجمالي قيمة الصرف
-<strong id="issueTotal">0.00</strong>
-</div>
+إجمالي قيمة الصرف:
+<span id="issueTotal">0.00</span>
+ر.س
 
 </div>
 
-<div class="form-grid"
-     style="margin-top:15px">
-
-<div>
+<br>
 
 <label>الجهة المستلمة / سبب الصرف</label>
-
 <input id="issueReceiver">
 
-</div>
-
-</div>
-
-<div style="margin-top:12px">
+<br><br>
 
 <label>ملاحظات</label>
-
 <textarea id="issueNote"></textarea>
 
-</div>
+<br><br>
 
-<div class="actions">
-
-<button class="btn btn-success"
-        onclick="saveIssue()">
+<button class="danger" onclick="saveIssue()">
 🧾 حفظ إذن الصرف
 </button>
 
 </div>
 
-</div>
-
 </section>
 
 
 <!-- =====================================================
-     TRANSFER
+التحويل
 ===================================================== -->
 
 <section id="transfer" class="page">
 
-<div class="card">
+<div class="panel">
 
 <h2>🔄 تحويل مخزني</h2>
 
-<div class="form-grid">
+<p class="small">
+مثال: صرف 20 كجم دجاج من المخزن الرئيسي إلى فرع جدة.
+سيتم خصم 20 كجم من الرئيسي وإضافة 20 كجم إلى جدة.
+وسيظهر ذلك في تقرير صرف الفروع.
+</p>
+
+<div class="grid">
 
 <div>
 <label>رقم التحويل</label>
-<input id="transferNumber">
+<input id="transferNo">
 </div>
 
 <div>
 <label>التاريخ</label>
-<input type="date"
-       id="transferDate">
+<input id="transferDate" type="date">
 </div>
 
 <div>
-<label>من</label>
+<label>من مخزن</label>
 <select id="transferFrom"></select>
 </div>
 
 <div>
-<label>إلى</label>
+<label>إلى مخزن</label>
 <select id="transferTo"></select>
 </div>
 
 <div>
 <label>الصنف</label>
-<select id="transferItem"></select>
+<select id="transferItem" onchange="updateTransferCost()"></select>
 </div>
 
 <div>
 <label>الكمية</label>
-<input type="number"
-       step="0.001"
-       id="transferQty"
-       oninput="calculateTransfer()">
-</div>
-
-<div>
-<label>متوسط التكلفة</label>
-<input id="transferCost"
-       readonly>
+<input id="transferQty" type="number" step="0.001">
 </div>
 
 </div>
+
+<br>
 
 <div class="total-box">
 
-<div class="total-item">
-قيمة التحويل
-<strong id="transferTotal">0.00</strong>
-</div>
+متوسط تكلفة الصنف:
+<span id="transferCost">0.00</span>
+ر.س
 
 </div>
 
-<div class="actions">
+<br>
 
-<button class="btn btn-primary"
-        onclick="saveTransfer()">
+<button class="primary" onclick="saveTransfer()">
 🔄 تنفيذ التحويل
 </button>
-
-</div>
 
 </div>
 
@@ -1524,21 +1020,23 @@ tr:nth-child(even){
 
 
 <!-- =====================================================
-     MOVEMENTS
+الحركات
 ===================================================== -->
 
 <section id="movements" class="page">
 
-<div class="card">
+<div class="panel">
 
-<h2>📋 الحركات</h2>
+<h2>📚 حركات المخزون</h2>
 
-<input id="movementSearch"
-       placeholder="🔎 ابحث..."
-       oninput="renderMovements()">
+<input
+class="search"
+id="movementSearch"
+placeholder="🔎 ابحث في الحركات..."
+oninput="renderMovements()"
+>
 
-<div class="table-wrap"
-     style="margin-top:15px">
+<div class="table-wrap">
 
 <table>
 
@@ -1559,7 +1057,7 @@ tr:nth-child(even){
 
 </thead>
 
-<tbody id="movementsBody"></tbody>
+<tbody id="movementTable"></tbody>
 
 </table>
 
@@ -1571,41 +1069,22 @@ tr:nth-child(even){
 
 
 <!-- =====================================================
-     ITEM CARD
+كارت الصنف
 ===================================================== -->
 
-<section id="itemCard" class="page">
+<section id="card" class="page">
 
-<div class="card">
+<div class="panel">
 
-<h2>📑 كارت الصنف</h2>
+<h2>📊 كارت الصنف</h2>
 
-<div class="form-grid">
+<select id="cardItem" onchange="renderCard()"></select>
 
-<div>
-<label>الصنف</label>
-<select id="cardItem"
-        onchange="renderItemCard()"></select>
-</div>
+<div id="cardSummary"></div>
 
-<div>
-<label>من تاريخ</label>
-<input type="date"
-       id="cardFrom"
-       onchange="renderItemCard()">
-</div>
+<br>
 
-<div>
-<label>إلى تاريخ</label>
-<input type="date"
-       id="cardTo"
-       onchange="renderItemCard()">
-</div>
-
-</div>
-
-<div class="table-wrap"
-     style="margin-top:15px">
+<div class="table-wrap">
 
 <table>
 
@@ -1614,7 +1093,7 @@ tr:nth-child(even){
 <tr>
 <th>التاريخ</th>
 <th>الرقم</th>
-<th>الحركة</th>
+<th>النوع</th>
 <th>من</th>
 <th>إلى</th>
 <th>الكمية</th>
@@ -1624,7 +1103,7 @@ tr:nth-child(even){
 
 </thead>
 
-<tbody id="itemCardBody"></tbody>
+<tbody id="cardTable"></tbody>
 
 </table>
 
@@ -1636,22 +1115,38 @@ tr:nth-child(even){
 
 
 <!-- =====================================================
-     BACKUP
+النسخ الاحتياطي
 ===================================================== -->
 
 <section id="backup" class="page">
 
-<div class="card">
+<div class="panel">
 
-<h2>💾 نسخ احتياطي</h2>
+<h2>💾 النسخ الاحتياطي</h2>
 
 <p>
-يمكنك تحميل نسخة من البيانات المحملة حاليًا في المتصفح.
+البيانات الأساسية محفوظة أونلاين في Supabase.
+يمكنك تنزيل نسخة احتياطية من البيانات المعروضة حاليًا بشكل دوري.
 </p>
 
-<button class="btn btn-primary"
-        onclick="downloadBackup()">
-💾 تحميل نسخة احتياطية
+<button class="primary" onclick="backupData()">
+⬇️ تنزيل نسخة احتياطية
+</button>
+
+<br><br>
+
+<label>استعادة نسخة احتياطية</label>
+
+<input
+type="file"
+accept=".json"
+onchange="restoreData(event)"
+>
+
+<br><br>
+
+<button class="danger" onclick="deleteAllData()">
+🗑️ حذف جميع البيانات
 </button>
 
 </div>
@@ -1661,5497 +1156,282 @@ tr:nth-child(even){
 </div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* =====================================================
+   ProDiet Inventory ERP - Supabase Online Version
+   ===================================================== */
+const SUPABASE_URL = "https://zueadrbkksxruiwjsvty.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_p9NrtmLAwX2SANUKd8qZDg_pI-SdgyC";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-/* =========================================================
-   SUPABASE
-========================================================= */
-
-const SUPABASE_URL =
-"https://zueadrbkksxruiwjsvty.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_p9NrtmLAwX2SANUKd8qZDg_pI-SdgyC";
-
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-
-/* =========================================================
-   GLOBAL DATA
-========================================================= */
-
-let db = {
-
-    items:[],
-    warehouses:[],
-    stocks:[],
-    movements:[],
-    transfers:[],
-    suppliers:[]
-
+const warehouseLabels = {
+  "المخزن الرئيسي":"المخزن الرئيسي",
+  "الزهراء":"فرع جدة",
+  "ينبع":"فرع ينبع",
+  "المدينة":"فرع المدينة"
 };
+const displayToDbWarehouse = {
+  "المخزن الرئيسي":"المخزن الرئيسي",
+  "فرع جدة":"الزهراء",
+  "فرع ينبع":"ينبع",
+  "فرع المدينة":"المدينة"
+};
+const warehouses=["المخزن الرئيسي","فرع جدة","فرع ينبع","فرع المدينة"];
+const branches=["فرع جدة","فرع ينبع","فرع المدينة"];
+let db={items:[],movements:[]};
+let dbWarehouses=[];
+let dbProducts=[];
 
-let receiptLines = [];
+function money(v){return Number(v||0).toLocaleString("ar-SA",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function today(){return new Date().toISOString().slice(0,10);}
+function generateID(){return crypto.randomUUID();}
+function updateOpeningDatePreview(){const el=document.getElementById("openingDate");const preview=document.getElementById("openingDatePreview");if(el&&preview)preview.textContent=el.value||"-";}
+function getItem(id){return db.items.find(x=>String(x.id)===String(id));}
+function totalQuantity(item){return warehouses.reduce((s,w)=>s+Number(item.stock[w]||0),0);}
+function totalValue(item){return totalQuantity(item)*Number(item.cost||0);}
+function dbWarehouseId(displayName){const dbName=displayToDbWarehouse[displayName]||displayName;const w=dbWarehouses.find(x=>x.name===dbName);return w?w.id:null;}
+function displayWarehouseName(dbName){return warehouseLabels[dbName]||dbName||"";}
+function movementTypeLabel(t){return ({opening:"رصيد أول المدة",purchase:"إذن استلام",transfer_out:"تحويل مخزني",transfer_in:"تحويل مخزني",adjustment_in:"تسوية إضافة",adjustment_out:"تسوية خصم"})[t]||t;}
 
-const branches = [
+function localSave(){localStorage.setItem("inventoryERP",JSON.stringify(db));}
 
-    "فرع جدة",
-    "فرع ينبع",
-    "فرع المدينة",
-    "المطبخ"
-
-];
-
-
-/* =========================================================
-   INIT
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async function(){
-
-        setTodayDefaults();
-
-        document
-        .getElementById("nav-dashboard")
-        .classList.add("active");
-
-        await loadDatabase();
-
-        showPage("dashboard");
-
-    }
-);
-
-
-/* =========================================================
-   DATE DEFAULTS
-========================================================= */
-
-function setTodayDefaults(){
-
-    const today =
-        new Date()
-        .toISOString()
-        .split("T")[0];
-
-    [
-
-        "dashboardFrom",
-        "dashboardTo",
-        "openingDate",
-        "receiptDate",
-        "issueDate",
-        "transferDate",
-        "paymentDate",
-        "statementFrom",
-        "statementTo",
-        "cardFrom",
-        "cardTo",
-        "endingStockDate"
-
-    ].forEach(id=>{
-
-        const el =
-            document.getElementById(id);
-
-        if(el){
-
-            el.value=today;
-
-        }
-
-    });
-
-    const openingLabel =
-        document.getElementById(
-            "openingDateLabel"
-        );
-
-    if(openingLabel){
-
-        openingLabel.textContent=today;
-
-    }
-
+function showApp(){
+  document.getElementById("loginScreen").style.display="none";
+  document.querySelector("header").style.display="flex";
+  document.querySelector(".container").style.display="block";
 }
 
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function showAlert(
-    message,
-    type="success"
-){
-
-    const box =
-        document.getElementById(
-            "alertBox"
-        );
-
-    box.className =
-        "alert "+
-        type+
-        " show";
-
-    box.textContent =
-        message;
-
-    setTimeout(()=>{
-
-        box.className="alert";
-
-    },5000);
-
+function logoutUser(){
+  localStorage.removeItem("inventoryLoggedIn");
+  location.reload();
 }
 
-
-function money(value){
-
-    return Number(value||0)
-    .toLocaleString(
-        "ar-SA",
-        {
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
-        }
-    );
-
+async function loginUser(){
+  const username=document.getElementById("loginUsername").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  const error=document.getElementById("loginError");
+  error.textContent="";
+  if(!username||!password){error.textContent="اكتب اسم المستخدم وكلمة المرور.";return;}
+  const {data,error:dbError}=await supabaseClient.from("app_users").select("id,username,active").eq("username",username).eq("password",password).maybeSingle();
+  if(dbError){error.textContent="تعذر الاتصال بقاعدة البيانات: "+dbError.message;return;}
+  if(!data){error.textContent="اسم المستخدم أو كلمة المرور غير صحيحة.";return;}
+  if(!data.active){error.textContent="هذا المستخدم غير مفعل.";return;}
+  localStorage.setItem("inventoryLoggedIn","1");
+  showApp();
+  await startApp();
 }
-
-
-function qty(value){
-
-    return Number(value||0)
-    .toLocaleString(
-        "ar-SA",
-        {
-            maximumFractionDigits:3
-        }
-    );
-
-}
-
-
-function esc(value){
-
-    return String(value??"")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-function dateOnly(value){
-
-    if(!value){
-
-        return "";
-
-    }
-
-    return String(value)
-        .substring(0,10);
-
-}
-
-
-function getWarehouseById(id){
-
-    return db.warehouses.find(
-        w=>
-        String(w.id)===
-        String(id)
-    );
-
-}
-
-
-function warehouseName(id){
-
-    const w =
-        getWarehouseById(id);
-
-    if(!w){
-
-        return "-";
-
-    }
-
-    return w.name;
-
-}
-
-
-function getItemById(id){
-
-    return db.items.find(
-        x=>
-        String(x.id)===
-        String(id)
-    );
-
-}
-
-
-function getStock(
-    itemId,
-    warehouseId
-){
-
-    return db.stocks.find(
-        x=>
-        String(x.product_id)===
-        String(itemId) &&
-        String(x.warehouse_id)===
-        String(warehouseId)
-    );
-
-}
-
-
-function findWarehouseByName(name){
-
-    return db.warehouses.find(
-        w=>
-        String(w.name)
-        .trim()===
-        String(name)
-        .trim()
-    );
-
-}
-
-
-/* =========================================================
-   PAGE NAVIGATION
-========================================================= */
-
-function showPage(page){
-
-    document
-    .querySelectorAll(".page")
-    .forEach(p=>{
-        p.classList.remove("active");
-    });
-
-    document
-    .querySelectorAll("nav button")
-    .forEach(b=>{
-        b.classList.remove("active");
-    });
-
-    const section =
-        document.getElementById(page);
-
-    if(section){
-
-        section.classList.add("active");
-
-    }
-
-    const nav =
-        document.getElementById(
-            "nav-"+page
-        );
-
-    if(nav){
-
-        nav.classList.add("active");
-
-    }
-
-    if(page==="dashboard"){
-
-        renderDashboard();
-
-    }
-
-    if(page==="endingStock"){
-
-        renderEndingStock();
-
-    }
-
-    if(page==="items"){
-
-        renderItems();
-
-    }
-
-    if(page==="suppliers"){
-
-        renderSuppliers();
-
-    }
-
-    if(page==="movements"){
-
-        renderMovements();
-
-    }
-
-    if(page==="itemCard"){
-
-        renderItemCard();
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD DATABASE
-========================================================= */
 
 async function loadDatabase(){
-
-    document
-    .getElementById(
-        "connectionStatus"
-    )
-    .textContent =
-        "جاري تحميل البيانات...";
-
-    try{
-
-        const [
-
-            productsRes,
-            warehousesRes,
-            stocksRes,
-            movementsRes,
-            transfersRes
-
-        ] = await Promise.all([
-
-            supabaseClient
-            .from("products")
-            .select("*")
-            .order("name"),
-
-            supabaseClient
-            .from("warehouses")
-            .select("*")
-            .order("name"),
-
-            supabaseClient
-            .from("stock_balances")
-            .select("*"),
-
-            supabaseClient
-            .from("stock_movements")
-            .select("*")
-            .order(
-                "movement_date",
-                {ascending:false}
-            )
-            .order(
-                "created_at",
-                {ascending:false}
-            ),
-
-            supabaseClient
-            .from("transfers")
-            .select("*")
-            .order(
-                "created_at",
-                {ascending:false}
-            )
-
-        ]);
-
-
-        if(productsRes.error)
-            throw productsRes.error;
-
-        if(warehousesRes.error)
-            throw warehousesRes.error;
-
-        if(stocksRes.error)
-            throw stocksRes.error;
-
-        if(movementsRes.error)
-            throw movementsRes.error;
-
-
-        db.warehouses =
-            warehousesRes.data||[];
-
-        db.stocks =
-            stocksRes.data||[];
-
-        db.transfers =
-            transfersRes.data||[];
-
-
-        /*
-           نحول الحركات إلى شكل موحد
-        */
-
-        const transferMap =
-            new Map();
-
-        db.transfers.forEach(t=>{
-
-            transferMap.set(
-                String(t.id),
-                t
-            );
-
-        });
-
-
-        db.items =
-            (productsRes.data||[])
-            .map(p=>{
-
-                return {
-
-                    ...p,
-                    stock:0
-
-                };
-
-            });
-
-
-        db.movements =
-            (movementsRes.data||[])
-            .map(m=>{
-
-                let from="-";
-                let to="-";
-
-                const item =
-                    getItemById(
-                        m.product_id
-                    );
-
-                const movementType =
-                    m.movement_type;
-
-
-                if(
-                    movementType==="opening"
-                ){
-
-                    from =
-                        "رصيد أول المدة";
-
-                    to =
-                        warehouseName(
-                            m.warehouse_id
-                        );
-
-                }
-
-                else if(
-                    movementType==="purchase"
-                ){
-
-                    to =
-                        warehouseName(
-                            m.warehouse_id
-                        );
-
-                }
-
-                else if(
-                    movementType==="adjustment_out"
-                ){
-
-                    from =
-                        warehouseName(
-                            m.warehouse_id
-                        );
-
-                    const note =
-                        String(
-                            m.notes||""
-                        );
-
-                    const match =
-                        note.match(
-                            /الفرع المصروف له\s*:\s*(.+)/
-                        );
-
-                    if(match){
-
-                        to=match[1];
-
-                    }
-
-                }
-
-                else if(
-                    movementType==="adjustment_in"
-                ){
-
-                    to =
-                        warehouseName(
-                            m.warehouse_id
-                        );
-
-                }
-
-                else if(
-                    movementType==="transfer_out" ||
-                    movementType==="transfer_in"
-                ){
-
-                    let tr=null;
-
-
-                    if(m.reference_id){
-
-                        tr =
-                            transferMap.get(
-                                String(
-                                    m.reference_id
-                                )
-                            );
-
-                    }
-
-
-                    if(
-                        !tr &&
-                        m.document_no
-                    ){
-
-                        tr =
-                            db.transfers.find(
-                                t=>
-                                String(
-                                    t.document_no
-                                )===
-                                String(
-                                    m.document_no
-                                )
-                            );
-
-                    }
-
-
-                    if(
-                        movementType==="transfer_out"
-                    ){
-
-                        from =
-                            warehouseName(
-                                m.warehouse_id
-                            );
-
-                        if(tr){
-
-                            to =
-                                warehouseName(
-                                    tr.to_warehouse_id
-                                );
-
-                        }
-
-                    }
-
-                    else{
-
-                        if(tr){
-
-                            from =
-                                warehouseName(
-                                    tr.from_warehouse_id
-                                );
-
-                        }
-
-                        to =
-                            warehouseName(
-                                m.warehouse_id
-                            );
-
-                    }
-
-                }
-
-
-                return {
-
-                    ...m,
-
-                    itemName:
-                        item?.name||"-",
-
-                    from,
-
-                    to,
-
-                    value:
-                        Number(
-                            m.total_cost||0
-                        ),
-
-                    quantity:
-                        Number(
-                            m.quantity||0
-                        ),
-
-                    cost:
-                        Number(
-                            m.unit_cost||0
-                        )
-
-                };
-
-            });
-
-
-        /*
-           مهم:
-           إعادة بناء الرصيد من الحركات الموجودة.
-           هذا لا يحذف ولا يعدل أي بيانات في Supabase.
-        */
-
-        rebuildDerivedStocks();
-
-
-        db.items =
-            db.items.map(item=>{
-
-                const total =
-                    db.stocks
-                    .filter(
-                        s=>
-                        String(s.product_id)===
-                        String(item.id)
-                    )
-                    .reduce(
-                        (sum,s)=>
-                        sum+
-                        Number(
-                            s.quantity||0
-                        ),
-                        0
-                    );
-
-                return {
-
-                    ...item,
-                    stock:total
-
-                };
-
-            });
-
-
-        await loadSuppliers();
-
-        fillAllSelects();
-
-
-        renderDashboard();
-        renderItems();
-        renderSuppliers();
-        renderMovements();
-
-
-        document
-        .getElementById(
-            "connectionStatus"
-        )
-        .textContent =
-            "🟢 متصل";
-
+  const [{data:products,error:pe},{data:whs,error:we},{data:stocks,error:se},{data:moves,error:me},{data:transfers,error:te}]=await Promise.all([
+    supabaseClient.from("products").select("*").eq("active",true).order("name"),
+    supabaseClient.from("warehouses").select("*").eq("active",true).order("created_at"),
+    supabaseClient.from("stock_balances").select("warehouse_id,product_id,qty,avg_cost"),
+    supabaseClient.from("stock_movements").select("*").order("movement_date",{ascending:false}),
+    supabaseClient.from("transfers").select("id,transfer_date,from_warehouse_id,to_warehouse_id,status").eq("status","posted")
+  ]);
+  if(pe||we||se||me||te){throw new Error((pe||we||se||me||te).message);}
+
+  dbProducts=products||[];
+  dbWarehouses=whs||[];
+
+  db.items=dbProducts.map(p=>{
+    const stock={"المخزن الرئيسي":0,"فرع جدة":0,"فرع ينبع":0,"فرع المدينة":0};
+    let cost=0;
+    (stocks||[]).filter(s=>String(s.product_id)===String(p.id)).forEach(s=>{
+      const w=dbWarehouses.find(x=>String(x.id)===String(s.warehouse_id));
+      if(w && warehouseLabels[w.name]) stock[warehouseLabels[w.name]]=Number(s.qty||0);
+      if(w && w.warehouse_type==="main") cost=Number(s.avg_cost||0);
+    });
+    if(!cost){
+      const vals=(stocks||[]).filter(s=>String(s.product_id)===String(p.id));
+      if(vals.length)cost=Number(vals[0].avg_cost||0);
     }
+    return {id:p.id,name:p.name,unit:p.unit,cost,stock};
+  });
 
-    catch(error){
+  const transferMap={};
+  (transfers||[]).forEach(t=>{
+    transferMap[String(t.id)]={
+      from:displayWarehouseName((dbWarehouses.find(w=>String(w.id)===String(t.from_warehouse_id))||{}).name),
+      to:displayWarehouseName((dbWarehouses.find(w=>String(w.id)===String(t.to_warehouse_id))||{}).name),
+      date:String(t.transfer_date||"").slice(0,10)
+    };
+  });
 
-        console.error(error);
+  db.movements=(moves||[]).map(m=>{
+    const tr=transferMap[String(m.reference_id)]||{};
+    const fromBase=displayWarehouseName((dbWarehouses.find(w=>String(w.id)===String(m.warehouse_id))||{}).name);
+    let from=fromBase,to="";
+    if(m.movement_type==="transfer_out"){from=tr.from||fromBase;to=tr.to||"";}
+    if(m.movement_type==="transfer_in"){from=tr.from||"";to=tr.to||fromBase;}
+    return {
+      id:m.id,
+      date:String(m.movement_date||tr.date||"").slice(0,10),
+      number:m.document_no||"",
+      type:m.movement_type,
+      itemId:m.product_id,
+      from,
+      to,
+      qty:Number(m.qty||0),
+      cost:Number(m.unit_cost||0),
+      value:Number(m.total_cost||0),
+      note:m.notes||""
+    };
+  });
 
-        document
-        .getElementById(
-            "connectionStatus"
-        )
-        .textContent =
-            "🔴 خطأ في الاتصال";
-
-        showAlert(
-            "حدث خطأ أثناء تحميل البيانات: "+
-            error.message,
-            "error"
-        );
-
-    }
-
+  localSave();
+  fillAllSelects();
+  renderAll();
 }
 
+function showPage(page){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(page).classList.add("active");document.querySelectorAll("#menu button").forEach(x=>x.classList.remove("active"));const pages=["dashboard","items","opening","receipt","issue","transfer","movements","card","backup"];const i=pages.indexOf(page);if(i>=0)document.querySelectorAll("#menu button")[i].classList.add("active");renderAll();}
 
-/* =========================================================
-   REBUILD STOCK FROM MOVEMENTS
-========================================================= */
-
-function rebuildDerivedStocks(){
-
-    const movementKeys =
-        new Set();
-
-
-    db.movements.forEach(m=>{
-
-        if(
-            !m.product_id ||
-            !m.warehouse_id
-        ){
-
-            return;
-
-        }
-
-        movementKeys.add(
-            String(m.product_id)+
-            "|"+
-            String(m.warehouse_id)
-        );
-
-    });
-
-
-    const map =
-        new Map();
-
-
-    /*
-       نبدأ من stock_balances الحالي،
-       لكن إذا كان هناك حركات للصنف/المخزن
-       نعيد حسابه من الحركات.
-    */
-
-    db.stocks.forEach(s=>{
-
-        const key =
-            String(s.product_id)+
-            "|"+
-            String(s.warehouse_id);
-
-        map.set(
-            key,
-            {
-
-                ...s,
-
-                quantity:
-                    movementKeys.has(key)
-                    ? 0
-                    : Number(
-                        s.quantity||0
-                    ),
-
-                avg_cost:
-                    movementKeys.has(key)
-                    ? 0
-                    : Number(
-                        s.avg_cost||0
-                    )
-
-            }
-        );
-
-    });
-
-
-    const movements =
-        [...db.movements]
-        .sort((a,b)=>{
-
-            const dateA =
-                dateOnly(
-                    a.movement_date
-                );
-
-            const dateB =
-                dateOnly(
-                    b.movement_date
-                );
-
-            if(
-                dateA!==dateB
-            ){
-
-                return dateA
-                    .localeCompare(
-                        dateB
-                    );
-
-            }
-
-            return String(
-                a.created_at||""
-            ).localeCompare(
-                String(
-                    b.created_at||""
-                )
-            );
-
-        });
-
-
-    movements.forEach(m=>{
-
-        if(
-            !m.product_id ||
-            !m.warehouse_id
-        ){
-
-            return;
-
-        }
-
-        const key =
-            String(m.product_id)+
-            "|"+
-            String(m.warehouse_id);
-
-
-        if(!map.has(key)){
-
-            map.set(
-                key,
-                {
-
-                    id:null,
-
-                    product_id:
-                        m.product_id,
-
-                    warehouse_id:
-                        m.warehouse_id,
-
-                    quantity:0,
-
-                    avg_cost:0
-
-                }
-            );
-
-        }
-
-
-        const stock =
-            map.get(key);
-
-        const q =
-            Number(
-                m.quantity||0
-            );
-
-        const c =
-            Number(
-                m.cost||0
-            );
-
-
-        if(q<=0){
-
-            return;
-
-        }
-
-
-        const inbound = [
-
-            "opening",
-            "purchase",
-            "transfer_in",
-            "adjustment_in",
-            "receipt"
-
-        ];
-
-
-        const outbound = [
-
-            "transfer_out",
-            "adjustment_out",
-            "issue"
-
-        ];
-
-
-        if(
-            inbound.includes(
-                m.movement_type
-            )
-        ){
-
-            const oldQty =
-                Number(
-                    stock.quantity||0
-                );
-
-            const oldCost =
-                Number(
-                    stock.avg_cost||0
-                );
-
-            const newQty =
-                oldQty+q;
-
-
-            if(newQty>0){
-
-                if(oldQty>0){
-
-                    stock.avg_cost =
-                        (
-                            (
-                                oldQty*
-                                oldCost
-                            )+
-                            (
-                                q*
-                                c
-                            )
-                        )/
-                        newQty;
-
-                }
-
-                else{
-
-                    stock.avg_cost =
-                        c;
-
-                }
-
-            }
-
-
-            stock.quantity =
-                newQty;
-
-        }
-
-        else if(
-            outbound.includes(
-                m.movement_type
-            )
-        ){
-
-            stock.quantity =
-                Number(
-                    stock.quantity||0
-                )-q;
-
-        }
-
-    });
-
-
-    db.stocks =
-        [...map.values()]
-        .map(s=>({
-
-            ...s,
-
-            quantity:
-                Math.round(
-                    Number(
-                        s.quantity||0
-                    )*1000
-                )/1000,
-
-            avg_cost:
-                Math.round(
-                    Number(
-                        s.avg_cost||0
-                    )*100
-                )/100
-
-        }));
-
-}
-
-
-/* =========================================================
-   SUPPLIERS
-========================================================= */
-
-async function loadSuppliers(){
-
-    const {data,error} =
-        await supabaseClient
-        .from("suppliers")
-        .select("*")
-        .order("name");
-
-    if(error)
-        throw error;
-
-    db.suppliers =
-        data||[];
-
-}
-
-
-function fillSupplierSelect(id){
-
-    const select =
-        document.getElementById(id);
-
-    if(!select)
-        return;
-
-    select.innerHTML =
-        `<option value="">اختر المورد</option>`+
-        db.suppliers
-        .filter(
-            s=>s.active!==false
-        )
-        .map(
-            s=>
-            `<option value="${esc(s.id)}">
-                ${esc(s.name)}
-            </option>`
-        )
-        .join("");
-
-}
-
-
+function fillWarehouseSelect(id){const s=document.getElementById(id);if(!s)return;s.innerHTML=warehouses.map(w=>`<option value="${w}">${w}</option>`).join("");}
+function fillItemSelect(id){const s=document.getElementById(id);if(!s)return;s.innerHTML=`<option value="">اختر الصنف</option>`+db.items.map(i=>`<option value="${i.id}">${i.name}</option>`).join("");}
 function fillAllSelects(){
-
-    const warehouseSelects = [
-
-        "openingWarehouse",
-        "receiptWarehouse",
-        "issueWarehouse",
-        "transferFrom",
-        "transferTo"
-
-    ];
-
-
-    warehouseSelects.forEach(id=>{
-
-        const el =
-            document.getElementById(id);
-
-        if(!el)
-            return;
-
-
-        el.innerHTML =
-            `<option value="">
-                اختر المخزن
-            </option>`+
-            db.warehouses
-            .filter(
-                w=>w.active!==false
-            )
-            .map(
-                w=>
-                `<option value="${esc(w.id)}">
-                    ${esc(w.name)}
-                </option>`
-            )
-            .join("");
-
-    });
-
-
-    const itemSelects = [
-
-        "openingItem",
-        "receiptItem",
-        "issueItem",
-        "transferItem",
-        "cardItem"
-
-    ];
-
-
-    itemSelects.forEach(id=>{
-
-        const el =
-            document.getElementById(id);
-
-        if(!el)
-            return;
-
-
-        el.innerHTML =
-            `<option value="">
-                اختر الصنف
-            </option>`+
-            db.items
-            .filter(
-                i=>i.active!==false
-            )
-            .map(
-                i=>
-                `<option value="${esc(i.id)}">
-                    ${esc(i.name)}
-                </option>`
-            )
-            .join("");
-
-    });
-
-
-    [
-
-        "receiptSupplier",
-        "paymentSupplier",
-        "statementSupplier"
-
-    ].forEach(
-        fillSupplierSelect
-    );
-
-
-    const branchSelects = [
-
-        "dashboardBranch",
-        "issueBranch"
-
-    ];
-
-
-    branchSelects.forEach(id=>{
-
-        const el =
-            document.getElementById(id);
-
-        if(!el)
-            return;
-
-
-        el.innerHTML =
-            `<option value="">
-                كل الفروع
-            </option>`+
-            branches
-            .map(
-                b=>
-                `<option value="${esc(b)}">
-                    ${esc(b)}
-                </option>`
-            )
-            .join("");
-
-    });
-
+  ["openingWarehouse","issueWarehouse","transferFrom","transferTo"].forEach(fillWarehouseSelect);
+  fillWarehouseSelect("receiptWarehouse");
+  const receipt=document.getElementById("receiptWarehouse");
+  if(receipt){
+    const main=warehouses[0];
+    receipt.value=main;
+    receipt.disabled=true;
+  }
+  ["openingItem","receiptItem","issueItem","transferItem","cardItem"].forEach(fillItemSelect);
 }
 
-
-/* =========================================================
-   ITEMS
-========================================================= */
 
 async function addItem(){
-
-    const name =
-        document
-        .getElementById("itemName")
-        .value
-        .trim();
-
-    const unit =
-        document
-        .getElementById("itemUnit")
-        .value;
-
-    const cost =
-        Number(
-            document
-            .getElementById("itemCost")
-            .value||0
-        );
-
-
-    if(!name){
-
-        showAlert(
-            "اكتب اسم الصنف",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const {data,error} =
-        await supabaseClient
-        .from("products")
-        .insert({
-
-            name,
-            unit,
-            cost,
-            active:true
-
-        })
-        .select()
-        .single();
-
-
-    if(error){
-
-        showAlert(
-            error.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    showAlert(
-        "تم إضافة الصنف بنجاح"
-    );
-
-
-    document
-    .getElementById("itemName")
-    .value="";
-
-    document
-    .getElementById("itemCost")
-    .value="0";
-
-
-    await loadDatabase();
-
+ const name=document.getElementById("itemName").value.trim(),unit=document.getElementById("itemUnit").value,cost=Number(document.getElementById("itemCost").value||0);
+ if(!name)return alert("اكتب اسم الصنف");
+ if(db.items.some(i=>i.name.toLowerCase()===name.toLowerCase()))return alert("هذا الصنف موجود بالفعل");
+ const {data,error}=await supabaseClient.from("products").insert({name,unit}).select("*").single();
+ if(error)return alert("لم يتم إضافة الصنف:\n"+error.message);
+ dbProducts.push(data);db.items.push({id:data.id,name:data.name,unit:data.unit,cost,stock:{"المخزن الرئيسي":0,"فرع جدة":0,"فرع ينبع":0,"فرع المدينة":0}});localSave();document.getElementById("itemName").value="";document.getElementById("itemCost").value="";fillAllSelects();renderAll();alert("تم إضافة الصنف أونلاين");
 }
+async function deleteItem(id){if(db.movements.some(m=>m.itemId===id))return alert("لا يمكن حذف صنف لديه حركات مخزون.");if(!confirm("هل تريد حذف الصنف؟"))return;const {error}=await supabaseClient.from("products").update({active:false}).eq("id",id);if(error)return alert("تعذر حذف الصنف:\n"+error.message);db.items=db.items.filter(i=>i.id!==id);localSave();fillAllSelects();renderAll();}
 
-
-async function toggleItem(
-    id,
-    current
-){
-
-    const {error} =
-        await supabaseClient
-        .from("products")
-        .update({
-
-            active:!current
-
-        })
-        .eq("id",id);
-
-
-    if(error){
-
-        showAlert(
-            error.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    await loadDatabase();
-
-}
-
-
-function renderItems(){
-
-    const body =
-        document.getElementById(
-            "itemsBody"
-        );
-
-    if(!body)
-        return;
-
-
-    const search =
-        document
-        .getElementById(
-            "itemSearch"
-        )?.value
-        .trim()
-        .toLowerCase()||"";
-
-
-    const main =
-        findWarehouseByName(
-            "المخزن الرئيسي"
-        );
-
-    const jeddah =
-        findWarehouseByName(
-            "فرع جدة"
-        );
-
-    const yanbu =
-        findWarehouseByName(
-            "فرع ينبع"
-        );
-
-    const madinah =
-        findWarehouseByName(
-            "فرع المدينة"
-        );
-
-    const kitchen =
-        findWarehouseByName(
-            "المطبخ"
-        );
-
-
-    const rows =
-        db.items
-        .filter(
-            i=>
-            String(i.name||"")
-            .toLowerCase()
-            .includes(search)
-        )
-        .map(item=>{
-
-            const q=id=>
-
-                id
-                ? Number(
-                    getStock(
-                        item.id,
-                        id
-                    )?.quantity||0
-                )
-                : 0;
-
-
-            const mainQty =
-                q(main?.id);
-
-            const jeddahQty =
-                q(jeddah?.id);
-
-            const yanbuQty =
-                q(yanbu?.id);
-
-            const madinahQty =
-                q(madinah?.id);
-
-            const kitchenQty =
-                q(kitchen?.id);
-
-
-            const total =
-                mainQty+
-                jeddahQty+
-                yanbuQty+
-                madinahQty+
-                kitchenQty;
-
-
-            const value =
-                calculateItemValue(
-                    item.id
-                );
-
-
-            return `
-
-            <tr>
-
-                <td>
-                    ${esc(item.name)}
-                </td>
-
-                <td>
-                    ${esc(item.unit||"-")}
-                </td>
-
-                <td>
-                    ${money(item.cost)}
-                </td>
-
-                <td>
-                    ${qty(mainQty)}
-                </td>
-
-                <td>
-                    ${qty(jeddahQty)}
-                </td>
-
-                <td>
-                    ${qty(yanbuQty)}
-                </td>
-
-                <td>
-                    ${qty(madinahQty)}
-                </td>
-
-                <td>
-                    ${qty(kitchenQty)}
-                </td>
-
-                <td>
-                    ${qty(total)}
-                </td>
-
-                <td>
-                    ${money(value)}
-                </td>
-
-                <td>
-
-                    ${
-                        item.active!==false
-
-                        ? `<span class="badge badge-green">
-                            فعال
-                           </span>`
-
-                        : `<span class="badge badge-red">
-                            موقوف
-                           </span>`
-                    }
-
-                </td>
-
-                <td>
-
-                    <button
-                        class="btn ${
-                            item.active!==false
-                            ?"btn-danger"
-                            :"btn-success"
-                        }"
-                        onclick="
-                            toggleItem(
-                                '${item.id}',
-                                ${item.active!==false}
-                            )
-                        "
-                    >
-
-                    ${
-                        item.active!==false
-                        ?"إيقاف"
-                        :"تفعيل"
-                    }
-
-                    </button>
-
-                </td>
-
-            </tr>
-
-            `;
-
-        })
-        .join("");
-
-
-    body.innerHTML =
-        rows||
-        `<tr>
-            <td colspan="12">
-                لا توجد أصناف
-            </td>
-        </tr>`;
-
-}
-
-
-function calculateItemValue(
-    itemId
-){
-
-    return db.stocks
-        .filter(
-            s=>
-            String(s.product_id)===
-            String(itemId)
-        )
-        .reduce(
-            (sum,s)=>
-            sum+
-            Number(
-                s.quantity||0
-            )*
-            Number(
-                s.avg_cost||0
-            ),
-            0
-        );
-
-}
-
-
-/* =========================================================
-   SUPPLIERS
-========================================================= */
-
-async function addSupplier(){
-
-    const name =
-        document
-        .getElementById(
-            "supplierName"
-        )
-        .value
-        .trim();
-
-    const phone =
-        document
-        .getElementById(
-            "supplierPhone"
-        )
-        .value
-        .trim();
-
-    const opening =
-        Number(
-            document
-            .getElementById(
-                "supplierOpening"
-            )
-            .value||0
-        );
-
-    const notes =
-        document
-        .getElementById(
-            "supplierNotes"
-        )
-        .value
-        .trim();
-
-
-    if(!name){
-
-        showAlert(
-            "اكتب اسم المورد",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const {data,error} =
-        await supabaseClient
-        .from("suppliers")
-        .insert({
-
-            name,
-            phone:phone||null,
-            notes:notes||null,
-            active:true,
-            opening_balance:opening,
-            balance:opening
-
-        })
-        .select()
-        .single();
-
-
-    if(error){
-
-        showAlert(
-            error.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(opening!==0){
-
-        const {error:txError} =
-            await supabaseClient
-            .from(
-                "supplier_transactions"
-            )
-            .insert({
-
-                supplier_id:data.id,
-
-                transaction_date:
-                    document
-                    .getElementById(
-                        "paymentDate"
-                    )
-                    .value ||
-                    new Date()
-                    .toISOString()
-                    .split("T")[0],
-
-                transaction_type:
-                    "opening",
-
-                document_no:null,
-
-                description:
-                    "رصيد أول المدة",
-
-                debit:
-                    opening<0
-                    ?Math.abs(opening)
-                    :0,
-
-                credit:
-                    opening>0
-                    ?opening
-                    :0,
-
-                balance_after:
-                    opening
-
-            });
-
-
-        if(txError){
-
-            await supabaseClient
-            .from("suppliers")
-            .delete()
-            .eq(
-                "id",
-                data.id
-            );
-
-            showAlert(
-                "تعذر تسجيل الرصيد الافتتاحي: "+
-                txError.message,
-                "error"
-            );
-
-            return;
-
-        }
-
-    }
-
-
-    showAlert(
-        "تم إضافة المورد بنجاح"
-    );
-
-
-    document
-    .getElementById(
-        "supplierName"
-    ).value="";
-
-    document
-    .getElementById(
-        "supplierPhone"
-    ).value="";
-
-    document
-    .getElementById(
-        "supplierOpening"
-    ).value="0";
-
-    document
-    .getElementById(
-        "supplierNotes"
-    ).value="";
-
-
-    await loadDatabase();
-
-}
-
-
-async function toggleSupplier(
-    id,
-    current
-){
-
-    const {error} =
-        await supabaseClient
-        .from("suppliers")
-        .update({
-
-            active:!current
-
-        })
-        .eq("id",id);
-
-
-    if(error){
-
-        showAlert(
-            error.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    await loadDatabase();
-
-}
-
-
-function renderSuppliers(){
-
-    const body =
-        document.getElementById(
-            "suppliersBody"
-        );
-
-    if(!body)
-        return;
-
-
-    const search =
-        document
-        .getElementById(
-            "supplierSearch"
-        )?.value
-        .trim()
-        .toLowerCase()||"";
-
-
-    const rows =
-        db.suppliers
-        .filter(
-            s=>
-            String(s.name||"")
-            .toLowerCase()
-            .includes(search)
-        )
-        .map(s=>`
-
-        <tr>
-
-            <td>
-                ${esc(s.name)}
-            </td>
-
-            <td>
-                ${esc(s.phone||"-")}
-            </td>
-
-            <td>
-                ${money(
-                    s.opening_balance
-                )}
-            </td>
-
-            <td>
-
-                <strong class="${
-                    Number(s.balance||0)>0
-                    ?"text-red"
-                    :"text-green"
-                }">
-
-                ${money(s.balance)}
-
-                </strong>
-
-            </td>
-
-            <td>
-                ${esc(s.notes||"-")}
-            </td>
-
-            <td>
-
-                ${
-                    s.active!==false
-
-                    ? `<span class="badge badge-green">
-                        فعال
-                       </span>`
-
-                    : `<span class="badge badge-red">
-                        موقوف
-                       </span>`
-                }
-
-            </td>
-
-            <td>
-
-                <button
-                    class="btn ${
-                        s.active!==false
-                        ?"btn-danger"
-                        :"btn-success"
-                    }"
-                    onclick="
-                        toggleSupplier(
-                            '${s.id}',
-                            ${s.active!==false}
-                        )
-                    "
-                >
-
-                ${
-                    s.active!==false
-                    ?"إيقاف"
-                    :"تفعيل"
-                }
-
-                </button>
-
-
-                <button
-                    class="btn btn-primary"
-                    onclick="
-                        openSupplierStatement(
-                            '${s.id}'
-                        )
-                    "
-                >
-
-                كشف الحساب
-
-                </button>
-
-            </td>
-
-        </tr>
-
-        `)
-        .join("");
-
-
-    body.innerHTML =
-        rows||
-        `<tr>
-            <td colspan="7">
-                لا يوجد موردون
-            </td>
-        </tr>`;
-
-}
-
-
-function openSupplierStatement(id){
-
-    document
-    .getElementById(
-        "statementSupplier"
-    )
-    .value=id;
-
-    showPage(
-        "suppliers"
-    );
-
-    loadSupplierStatement();
-
-}
-
-
-/* =========================================================
-   SUPPLIER PAYMENT
-========================================================= */
-
-async function saveSupplierPayment(){
-
-    const supplierId =
-        document
-        .getElementById(
-            "paymentSupplier"
-        )
-        .value;
-
-    const date =
-        document
-        .getElementById(
-            "paymentDate"
-        )
-        .value;
-
-    const documentNo =
-        document
-        .getElementById(
-            "paymentDocument"
-        )
-        .value
-        .trim();
-
-    const amount =
-        Number(
-            document
-            .getElementById(
-                "paymentAmount"
-            )
-            .value||0
-        );
-
-    const description =
-        document
-        .getElementById(
-            "paymentDescription"
-        )
-        .value
-        .trim();
-
-
-    if(!supplierId){
-
-        showAlert(
-            "اختر المورد",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(!amount || amount<=0){
-
-        showAlert(
-            "اكتب مبلغ السداد",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const supplier =
-        db.suppliers.find(
-            s=>
-            String(s.id)===
-            String(supplierId)
-        );
-
-
-    if(!supplier){
-
-        showAlert(
-            "المورد غير موجود",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const oldBalance =
-        Number(
-            supplier.balance||0
-        );
-
-    const newBalance =
-        oldBalance-amount;
-
-
-    const {error:updateError} =
-        await supabaseClient
-        .from("suppliers")
-        .update({
-
-            balance:newBalance
-
-        })
-        .eq(
-            "id",
-            supplierId
-        );
-
-
-    if(updateError){
-
-        showAlert(
-            updateError.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const {error:txError} =
-        await supabaseClient
-        .from(
-            "supplier_transactions"
-        )
-        .insert({
-
-            supplier_id:supplierId,
-
-            transaction_date:date,
-
-            transaction_type:
-                "payment",
-
-            document_no:
-                documentNo||null,
-
-            description:
-                description||
-                "سداد للمورد",
-
-            debit:amount,
-
-            credit:0,
-
-            balance_after:
-                newBalance
-
-        });
-
-
-    if(txError){
-
-        await supabaseClient
-        .from("suppliers")
-        .update({
-
-            balance:oldBalance
-
-        })
-        .eq(
-            "id",
-            supplierId
-        );
-
-
-        showAlert(
-            "تعذر تسجيل حركة السداد: "+
-            txError.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    showAlert(
-        "تم تسجيل السداد بنجاح"
-    );
-
-
-    document
-    .getElementById(
-        "paymentAmount"
-    ).value="";
-
-    document
-    .getElementById(
-        "paymentDocument"
-    ).value="";
-
-    document
-    .getElementById(
-        "paymentDescription"
-    ).value="";
-
-
-    await loadDatabase();
-
-
-    document
-    .getElementById(
-        "statementSupplier"
-    ).value=
-        supplierId;
-
-
-    await loadSupplierStatement();
-
-}
-
-
-/* =========================================================
-   SUPPLIER STATEMENT
-========================================================= */
-
-async function loadSupplierStatement(){
-
-    const supplierId =
-        document
-        .getElementById(
-            "statementSupplier"
-        )
-        .value;
-
-    const from =
-        document
-        .getElementById(
-            "statementFrom"
-        )
-        .value;
-
-    const to =
-        document
-        .getElementById(
-            "statementTo"
-        )
-        .value;
-
-    const body =
-        document
-        .getElementById(
-            "statementBody"
-        );
-
-
-    if(!supplierId){
-
-        body.innerHTML =
-            `<tr>
-                <td colspan="7">
-                    اختر المورد
-                </td>
-            </tr>`;
-
-        return;
-
-    }
-
-
-    const supplier =
-        db.suppliers.find(
-            s=>
-            String(s.id)===
-            String(supplierId)
-        );
-
-
-    if(!supplier)
-        return;
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-        .from(
-            "supplier_transactions"
-        )
-        .select("*")
-        .eq(
-            "supplier_id",
-            supplierId
-        )
-        .order(
-            "transaction_date",
-            {ascending:true}
-        )
-        .order(
-            "created_at",
-            {ascending:true}
-        );
-
-
-    if(error){
-
-        showAlert(
-            error.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const transactions =
-        data||[];
-
-
-    let openingBalance=0;
-
-
-    transactions.forEach(t=>{
-
-        const d =
-            dateOnly(
-                t.transaction_date
-            );
-
-
-        if(
-            from &&
-            d<from
-        ){
-
-            openingBalance +=
-                Number(
-                    t.credit||0
-                )-
-                Number(
-                    t.debit||0
-                );
-
-        }
-
-    });
-
-
-    const periodTransactions =
-        transactions.filter(t=>{
-
-            const d =
-                dateOnly(
-                    t.transaction_date
-                );
-
-            if(
-                from &&
-                d<from
-            )
-                return false;
-
-            if(
-                to &&
-                d>to
-            )
-                return false;
-
-            return true;
-
-        });
-
-
-    let running =
-        openingBalance;
-
-    let purchases=0;
-    let payments=0;
-
-    let html="";
-
-
-    periodTransactions.forEach(t=>{
-
-        const debit =
-            Number(t.debit||0);
-
-        const credit =
-            Number(t.credit||0);
-
-
-        running +=
-            credit-debit;
-
-
-        if(
-            t.transaction_type===
-            "purchase"
-        ){
-
-            purchases +=
-                credit;
-
-        }
-
-
-        if(
-            t.transaction_type===
-            "payment"
-        ){
-
-            payments +=
-                debit;
-
-        }
-
-
-        html += `
-
-        <tr>
-
-            <td>
-                ${esc(
-                    dateOnly(
-                        t.transaction_date
-                    )
-                )}
-            </td>
-
-            <td>
-                ${transactionTypeName(
-                    t.transaction_type
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    t.document_no||"-"
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    t.description||"-"
-                )}
-            </td>
-
-            <td>
-                ${money(debit)}
-            </td>
-
-            <td>
-                ${money(credit)}
-            </td>
-
-            <td>
-                <strong>
-                    ${money(running)}
-                </strong>
-            </td>
-
-        </tr>
-
-        `;
-
-    });
-
-
-    body.innerHTML =
-        html||
-        `<tr>
-            <td colspan="7">
-                لا توجد حركات في الفترة
-            </td>
-        </tr>`;
-
-
-    document
-    .getElementById(
-        "statementOpening"
-    )
-    .textContent =
-        money(openingBalance);
-
-
-    document
-    .getElementById(
-        "statementPurchases"
-    )
-    .textContent =
-        money(purchases);
-
-
-    document
-    .getElementById(
-        "statementPayments"
-    )
-    .textContent =
-        money(payments);
-
-
-    document
-    .getElementById(
-        "statementClosing"
-    )
-    .textContent =
-        money(running);
-
-
-    document
-    .getElementById(
-        "statementHeader"
-    )
-    .innerHTML = `
-
-        <div style="margin-top:15px">
-
-            <strong>المورد:</strong>
-            ${esc(supplier.name)}
-
-            &nbsp;&nbsp;
-
-            <strong>الفترة:</strong>
-
-            ${from||"من البداية"}
-            إلى
-            ${to||"اليوم"}
-
-        </div>
-
-    `;
-
-}
-
-
-function transactionTypeName(
-    type
-){
-
-    switch(type){
-
-        case "opening":
-            return "رصيد أول المدة";
-
-        case "purchase":
-            return "مشتريات";
-
-        case "payment":
-            return "سداد";
-
-        case "adjustment":
-            return "تسوية";
-
-        default:
-            return type||"-";
-
-    }
-
-}
-
-
-/* =========================================================
-   OPENING BALANCE
-========================================================= */
-
-document
-.getElementById("openingDate")
-?.addEventListener(
-    "change",
-    function(){
-
-        document
-        .getElementById(
-            "openingDateLabel"
-        )
-        .textContent =
-            this.value||"-";
-
-    }
-);
-
+function renderItems(){const q=(document.getElementById("itemSearch").value||"").toLowerCase(),body=document.getElementById("itemsTable");body.innerHTML=db.items.filter(i=>i.name.toLowerCase().includes(q)).map(i=>`<tr><td>${i.name}</td><td>${i.unit}</td><td>${money(i.cost)}</td><td>${i.stock["المخزن الرئيسي"]}</td><td>${i.stock["فرع جدة"]}</td><td>${i.stock["فرع ينبع"]}</td><td>${i.stock["فرع المدينة"]}</td><td>${totalQuantity(i)}</td><td>${money(totalValue(i))}</td><td><button class="danger" onclick="deleteItem('${i.id}')">حذف</button></td></tr>`).join("");}
 
 async function saveOpening(){
-
-    const warehouseId =
-        document
-        .getElementById(
-            "openingWarehouse"
-        )
-        .value;
-
-    const itemId =
-        document
-        .getElementById(
-            "openingItem"
-        )
-        .value;
-
-    const quantity =
-        Number(
-            document
-            .getElementById(
-                "openingQty"
-            )
-            .value||0
-        );
-
-    const date =
-        document
-        .getElementById(
-            "openingDate"
-        )
-        .value;
-
-    const cost =
-        Number(
-            document
-            .getElementById(
-                "openingCost"
-            )
-            .value||0
-        );
-
-
-    if(
-        !warehouseId||
-        !itemId||
-        quantity<=0||
-        !date||
-        cost<0
-    ){
-
-        showAlert(
-            "أكمل بيانات رصيد أول المدة",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    try{
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "post_opening",
-                {
-
-                    p_warehouse_id:
-                        warehouseId,
-
-                    p_product_id:
-                        itemId,
-
-                    p_quantity:
-                        quantity,
-
-                    p_date:
-                        date,
-
-                    p_unit_cost:
-                        cost
-
-                }
-            );
-
-
-        if(error)
-            throw error;
-
-
-        showAlert(
-            "تم حفظ رصيد أول المدة بنجاح"
-        );
-
-
-        document
-        .getElementById(
-            "openingQty"
-        )
-        .value="";
-
-        document
-        .getElementById(
-            "openingCost"
-        )
-        .value="";
-
-
-        await loadDatabase();
-
-    }
-
-    catch(error){
-
-        showAlert(
-            error.message,
-            "error"
-        );
-
-    }
-
+  const warehouse=document.getElementById("openingWarehouse").value,itemId=document.getElementById("openingItem").value,openingDate=document.getElementById("openingDate").value,qty=Number(document.getElementById("openingQty").value||0),cost=Number(document.getElementById("openingCost").value||0),item=getItem(itemId),wid=dbWarehouseId(warehouse);
+  if(!openingDate)return alert("من فضلك اختر تاريخ رصيد أول المدة.");
+  if(!item||qty<=0||!wid)return alert("أكمل البيانات");
+  const {error}=await supabaseClient.rpc("post_opening",{p_warehouse:wid,p_date:openingDate,p_items:[{product_id:item.id,qty,unit_cost:cost}],p_notes:""});
+ if(error)return alert("لم يتم حفظ رصيد أول المدة:\n"+error.message);
+ await loadDatabase();document.getElementById("openingQty").value="";document.getElementById("openingCost").value="";alert("تم تسجيل رصيد أول المدة أونلاين");
 }
-
-
-/* =========================================================
-   RECEIPT
-========================================================= */
-
-function addReceiptLine(){
-
-    const itemId =
-        document
-        .getElementById(
-            "receiptItem"
-        )
-        .value;
-
-    const quantity =
-        Number(
-            document
-            .getElementById(
-                "receiptQty"
-            )
-            .value||0
-        );
-
-    const cost =
-        Number(
-            document
-            .getElementById(
-                "receiptCost"
-            )
-            .value||0
-        );
-
-
-    if(!itemId){
-
-        showAlert(
-            "اختر الصنف",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(quantity<=0){
-
-        showAlert(
-            "اكتب كمية صحيحة",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(cost<0){
-
-        showAlert(
-            "اكتب تكلفة صحيحة",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const duplicate =
-        receiptLines.find(
-            x=>
-            String(x.product_id)===
-            String(itemId)
-        );
-
-
-    if(duplicate){
-
-        showAlert(
-            "الصنف موجود بالفعل في الفاتورة، عدّل الكمية بدل إضافته مرة أخرى",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const item =
-        getItemById(itemId);
-
-
-    receiptLines.push({
-
-        product_id:itemId,
-
-        product_name:
-            item?.name||"-",
-
-        quantity,
-
-        unit_cost:cost
-
-    });
-
-
-    document
-    .getElementById(
-        "receiptItem"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "receiptQty"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "receiptCost"
-    )
-    .value="";
-
-
-    renderReceiptLines();
-
-}
-
-
-function removeReceiptLine(
-    index
-){
-
-    receiptLines.splice(
-        index,
-        1
-    );
-
-    renderReceiptLines();
-
-}
-
-
-function renderReceiptLines(){
-
-    const box =
-        document
-        .getElementById(
-            "receiptLines"
-        );
-
-
-    if(!receiptLines.length){
-
-        box.innerHTML =
-            `<div class="small">
-                لم تتم إضافة أصناف للفاتورة.
-            </div>`;
-
-        calculateReceiptTotals();
-
-        return;
-
-    }
-
-
-    box.innerHTML =
-        receiptLines
-        .map(
-            (line,index)=>{
-
-                const total =
-                    Number(
-                        line.quantity
-                    )*
-                    Number(
-                        line.unit_cost
-                    );
-
-
-                return `
-
-                <div class="receipt-row">
-
-                    <div class="receipt-row-grid">
-
-                        <div>
-
-                            <label>
-                                الصنف
-                            </label>
-
-                            <strong>
-                                ${esc(
-                                    line.product_name
-                                )}
-                            </strong>
-
-                        </div>
-
-                        <div>
-
-                            <label>
-                                الكمية
-                            </label>
-
-                            ${qty(
-                                line.quantity
-                            )}
-
-                        </div>
-
-                        <div>
-
-                            <label>
-                                التكلفة
-                            </label>
-
-                            ${money(
-                                line.unit_cost
-                            )}
-
-                        </div>
-
-                        <div>
-
-                            <label>
-                                الإجمالي
-                            </label>
-
-                            <strong>
-                                ${money(total)}
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                    <div class="actions">
-
-                        <button
-                            class="btn btn-danger"
-                            onclick="
-                                removeReceiptLine(
-                                    ${index}
-                                )
-                            "
-                        >
-                            حذف
-                        </button>
-
-                    </div>
-
-                </div>
-
-                `;
-
-            }
-        )
-        .join("");
-
-
-    calculateReceiptTotals();
-
-}
-
-
-function calculateReceiptTotals(){
-
-    const subtotal =
-        receiptLines.reduce(
-            (sum,line)=>
-            sum+
-            Number(
-                line.quantity
-            )*
-            Number(
-                line.unit_cost
-            ),
-            0
-        );
-
-
-    const vat =
-        Math.round(
-            subtotal*
-            0.15*
-            100
-        )/100;
-
-
-    const grand =
-        subtotal+vat;
-
-
-    document
-    .getElementById(
-        "receiptSubtotal"
-    )
-    .textContent =
-        money(subtotal);
-
-
-    document
-    .getElementById(
-        "receiptVAT"
-    )
-    .textContent =
-        money(vat);
-
-
-    document
-    .getElementById(
-        "receiptGrandTotal"
-    )
-    .textContent =
-        money(grand);
-
-
-    return {
-
-        subtotal,
-        vat,
-        grand
-
-    };
-
-}
-
-
-/* =========================================================
-   SAVE RECEIPT
-========================================================= */
 
 async function saveReceipt(){
-
-    const supplierId =
-        document
-        .getElementById(
-            "receiptSupplier"
-        )
-        .value||null;
-
-
-    /*
-       الجديد:
-       المخزن المستلم
-    */
-
-    const warehouseId =
-        document
-        .getElementById(
-            "receiptWarehouse"
-        )
-        .value;
-
-
-    const invoiceNo =
-        document
-        .getElementById(
-            "receiptInvoice"
-        )
-        .value
-        .trim();
-
-
-    const date =
-        document
-        .getElementById(
-            "receiptDate"
-        )
-        .value;
-
-
-    const notes =
-        document
-        .getElementById(
-            "receiptNote"
-        )
-        .value
-        .trim();
-
-
-    if(!warehouseId){
-
-        showAlert(
-            "اختر المخزن المستلم",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(!date){
-
-        showAlert(
-            "اختر تاريخ الفاتورة",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(!receiptLines.length){
-
-        showAlert(
-            "أضف صنفًا واحدًا على الأقل",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const finalInvoice =
-        invoiceNo||
-        (
-            "PUR-"+
-            Date.now()
-        );
-
-
-    const items =
-        receiptLines.map(
-            x=>({
-
-                product_id:
-                    x.product_id,
-
-                quantity:
-                    Number(
-                        x.quantity
-                    ),
-
-                unit_cost:
-                    Number(
-                        x.unit_cost
-                    )
-
-            })
-        );
-
-
-    try{
-
-        /*
-           p_warehouse_id
-           هو التعديل الأساسي
-        */
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "post_purchase",
-                {
-
-                    p_supplier_id:
-                        supplierId,
-
-                    p_warehouse_id:
-                        warehouseId,
-
-                    p_purchase_date:
-                        date,
-
-                    p_invoice_no:
-                        finalInvoice,
-
-                    p_notes:
-                        notes,
-
-                    p_items:
-                        items
-
-                }
-            );
-
-
-        if(error)
-            throw error;
-
-
-        const result =
-            data||{};
-
-
-        showAlert(
-            "تم حفظ إذن الاستلام بنجاح — المخزن المستلم: "+
-            warehouseName(warehouseId)+
-            " — الإجمالي شامل الضريبة: "+
-            money(
-                result.grand_total
-            )
-        );
-
-
-        clearReceipt();
-
-
-        await loadDatabase();
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        showAlert(
-            "تعذر حفظ إذن الاستلام: "+
-            error.message,
-            "error"
-        );
-
-    }
-
+ const number=document.getElementById("receiptNo").value.trim(),date=document.getElementById("receiptDate").value||today(),itemId=document.getElementById("receiptItem").value,qty=Number(document.getElementById("receiptQty").value||0),cost=Number(document.getElementById("receiptCost").value||0),note=document.getElementById("receiptNote").value,item=getItem(itemId);
+ if(!item||qty<=0||cost<0)return alert("أكمل البيانات وتأكد أن الكمية والتكلفة صحيحتان");
+ const {error}=await supabaseClient.rpc("post_purchase",{p_supplier_id:null,p_purchase_date:date,p_invoice_no:number||null,p_notes:note||"استلام للمخزن الرئيسي",p_items:[{product_id:item.id,qty,unit_cost:cost}]});
+ if(error)return alert("لم يتم حفظ إذن الاستلام:\n"+error.message);
+ await loadDatabase();
+ document.getElementById("receiptNo").value="";
+ document.getElementById("receiptQty").value="";
+ document.getElementById("receiptCost").value="";
+ document.getElementById("receiptNote").value="";
+ alert("تم حفظ إذن الاستلام أونلاين في المخزن الرئيسي.");
 }
 
 
-function clearReceipt(){
-
-    receiptLines=[];
-
-
-    document
-    .getElementById(
-        "receiptInvoice"
-    )
-    .value="";
-
-
-    document
-    .getElementById(
-        "receiptNote"
-    )
-    .value="";
-
-
-    document
-    .getElementById(
-        "receiptItem"
-    )
-    .value="";
-
-
-    document
-    .getElementById(
-        "receiptQty"
-    )
-    .value="";
-
-
-    document
-    .getElementById(
-        "receiptCost"
-    )
-    .value="";
-
-
-    const main =
-        findWarehouseByName(
-            "المخزن الرئيسي"
-        );
-
-
-    document
-    .getElementById(
-        "receiptWarehouse"
-    )
-    .value =
-        main?.id||"";
-
-
-    renderReceiptLines();
-
-}
-
-
-/* =========================================================
-   ISSUE
-========================================================= */
-
-document
-.getElementById("issueItem")
-?.addEventListener(
-    "change",
-    updateIssueCost
-);
-
-
-document
-.getElementById("issueWarehouse")
-?.addEventListener(
-    "change",
-    updateIssueCost
-);
-
-
-document
-.getElementById("transferItem")
-?.addEventListener(
-    "change",
-    updateTransferCost
-);
-
-
-document
-.getElementById("transferFrom")
-?.addEventListener(
-    "change",
-    updateTransferCost
-);
-
-
-function updateIssueCost(){
-
-    const itemId =
-        document
-        .getElementById(
-            "issueItem"
-        )
-        .value;
-
-
-    const warehouseId =
-        document
-        .getElementById(
-            "issueWarehouse"
-        )
-        .value;
-
-
-    const stock =
-        getStock(
-            itemId,
-            warehouseId
-        );
-
-
-    document
-    .getElementById(
-        "issueCost"
-    )
-    .value =
-        stock
-        ? Number(
-            stock.avg_cost||0
-        ).toFixed(2)
-        : "0.00";
-
-
-    calculateIssue();
-
-}
-
-
-function calculateIssue(){
-
-    const q =
-        Number(
-            document
-            .getElementById(
-                "issueQty"
-            )
-            .value||0
-        );
-
-
-    const c =
-        Number(
-            document
-            .getElementById(
-                "issueCost"
-            )
-            .value||0
-        );
-
-
-    document
-    .getElementById(
-        "issueTotal"
-    )
-    .textContent =
-        money(q*c);
-
-}
-
-
+function updateIssueCost(){const item=getItem(document.getElementById("issueItem").value);document.getElementById("issueCost").value=item?Number(item.cost||0).toFixed(2):"0.00";calculateIssue();}
+function calculateIssue(){const qty=Number(document.getElementById("issueQty").value||0),cost=Number(document.getElementById("issueCost").value||0);document.getElementById("issueTotal").textContent=money(qty*cost);}
 async function saveIssue(){
-
-    const number =
-        document
-        .getElementById(
-            "issueNumber"
-        )
-        .value
-        .trim();
-
-
-    const date =
-        document
-        .getElementById(
-            "issueDate"
-        )
-        .value;
-
-
-    const warehouseId =
-        document
-        .getElementById(
-            "issueWarehouse"
-        )
-        .value;
-
-
-    const branch =
-        document
-        .getElementById(
-            "issueBranch"
-        )
-        .value;
-
-
-    const itemId =
-        document
-        .getElementById(
-            "issueItem"
-        )
-        .value;
-
-
-    const quantity =
-        Number(
-            document
-            .getElementById(
-                "issueQty"
-            )
-            .value||0
-        );
-
-
-    const receiver =
-        document
-        .getElementById(
-            "issueReceiver"
-        )
-        .value
-        .trim();
-
-
-    const note =
-        document
-        .getElementById(
-            "issueNote"
-        )
-        .value
-        .trim();
-
-
-    if(
-        !date||
-        !warehouseId||
-        !itemId||
-        quantity<=0
-    ){
-
-        showAlert(
-            "أكمل بيانات إذن الصرف",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const stock =
-        getStock(
-            itemId,
-            warehouseId
-        );
-
-
-    if(!stock){
-
-        showAlert(
-            "لا يوجد رصيد لهذا الصنف في المخزن",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const available =
-        Number(
-            stock.quantity||0
-        );
-
-
-    if(
-        quantity>available
-    ){
-
-        showAlert(
-            "الكمية المطلوبة أكبر من الرصيد المتاح: "+
-            qty(available),
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const cost =
-        Number(
-            stock.avg_cost||0
-        );
-
-
-    const total =
-        quantity*cost;
-
-
-    const newQty =
-        available-quantity;
-
-
-    const {error:updateError} =
-        await supabaseClient
-        .from(
-            "stock_balances"
-        )
-        .update({
-
-            quantity:newQty
-
-        })
-        .eq(
-            "id",
-            stock.id
-        );
-
-
-    if(updateError){
-
-        showAlert(
-            updateError.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const notes = [
-
-        branch
-        ? "الفرع المصروف له: "+branch
-        : "",
-
-        receiver
-        ? "الجهة/السبب: "+receiver
-        : "",
-
-        note
-
-    ]
-    .filter(Boolean)
-    .join(" | ");
-
-
-    const {
-        error:movementError
-    } =
-        await supabaseClient
-        .from(
-            "stock_movements"
-        )
-        .insert({
-
-            movement_date:
-                date,
-
-            movement_type:
-                "adjustment_out",
-
-            warehouse_id:
-                warehouseId,
-
-            product_id:
-                itemId,
-
-            quantity:
-                quantity,
-
-            unit_cost:
-                cost,
-
-            total_cost:
-                total,
-
-            document_no:
-                number||null,
-
-            notes:
-                notes||null
-
-        });
-
-
-    if(movementError){
-
-        await supabaseClient
-        .from(
-            "stock_balances"
-        )
-        .update({
-
-            quantity:available
-
-        })
-        .eq(
-            "id",
-            stock.id
-        );
-
-
-        showAlert(
-            "تعذر تسجيل الحركة: "+
-            movementError.message,
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    showAlert(
-        "تم حفظ إذن الصرف بنجاح"
-    );
-
-
-    document
-    .getElementById(
-        "issueNumber"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "issueQty"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "issueReceiver"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "issueNote"
-    )
-    .value="";
-
-
-    await loadDatabase();
-
+ const number=document.getElementById("issueNo").value.trim()||"ISS-"+Date.now(),date=document.getElementById("issueDate").value||today(),warehouse=document.getElementById("issueWarehouse").value,itemId=document.getElementById("issueItem").value,qty=Number(document.getElementById("issueQty").value||0),receiver=document.getElementById("issueReceiver").value,note=document.getElementById("issueNote").value,item=getItem(itemId),wid=dbWarehouseId(warehouse);
+ if(!item||qty<=0||!wid)return alert("أكمل البيانات");
+ const {data:sb,error:se}=await supabaseClient.from("stock_balances").select("qty,avg_cost").eq("warehouse_id",wid).eq("product_id",item.id).maybeSingle();
+ if(se)return alert("تعذر قراءة الرصيد:\n"+se.message);const available=Number(sb?.qty||0);if(qty>available)return alert("الرصيد غير كافٍ.\nالرصيد المتاح: "+available+" "+item.unit);
+ const cost=Number(sb?.avg_cost||item.cost||0);
+ const {error:ue}=await supabaseClient.from("stock_balances").update({qty:available-qty,updated_at:new Date().toISOString()}).eq("warehouse_id",wid).eq("product_id",item.id);if(ue)return alert("تعذر خصم المخزون:\n"+ue.message);
+ const {error:me}=await supabaseClient.from("stock_movements").insert({movement_date:date+"T00:00:00",movement_type:"adjustment_out",document_no:number,warehouse_id:wid,product_id:item.id,qty,unit_cost:cost,total_cost:qty*cost,notes:(receiver?"الجهة: "+receiver+" | ":"")+note});
+ if(me){await supabaseClient.from("stock_balances").update({qty:available,updated_at:new Date().toISOString()}).eq("warehouse_id",wid).eq("product_id",item.id);return alert("تم التراجع عن الخصم بسبب خطأ تسجيل الحركة:\n"+me.message);}
+ await loadDatabase();document.getElementById("issueNo").value="";document.getElementById("issueQty").value="";document.getElementById("issueReceiver").value="";document.getElementById("issueNote").value="";alert("تم حفظ إذن الصرف وتم خصم الكمية أونلاين.");
 }
 
-
-/* =========================================================
-   TRANSFER
-========================================================= */
-
-function updateTransferCost(){
-
-    const itemId =
-        document
-        .getElementById(
-            "transferItem"
-        )
-        .value;
-
-
-    const warehouseId =
-        document
-        .getElementById(
-            "transferFrom"
-        )
-        .value;
-
-
-    const stock =
-        getStock(
-            itemId,
-            warehouseId
-        );
-
-
-    const cost =
-        stock
-        ?Number(
-            stock.avg_cost||0
-        )
-        :0;
-
-
-    document
-    .getElementById(
-        "transferCost"
-    )
-    .value =
-        cost.toFixed(2);
-
-
-    calculateTransfer();
-
-}
-
-
-function calculateTransfer(){
-
-    const q =
-        Number(
-            document
-            .getElementById(
-                "transferQty"
-            )
-            .value||0
-        );
-
-
-    const c =
-        Number(
-            document
-            .getElementById(
-                "transferCost"
-            )
-            .value||0
-        );
-
-
-    document
-    .getElementById(
-        "transferTotal"
-    )
-    .textContent =
-        money(q*c);
-
-}
-
-
+function updateTransferCost(){const item=getItem(document.getElementById("transferItem").value);document.getElementById("transferCost").textContent=item?money(item.cost):"0.00";}
 async function saveTransfer(){
-
-    const number =
-        document
-        .getElementById(
-            "transferNumber"
-        )
-        .value
-        .trim();
-
-
-    const date =
-        document
-        .getElementById(
-            "transferDate"
-        )
-        .value;
-
-
-    const fromId =
-        document
-        .getElementById(
-            "transferFrom"
-        )
-        .value;
-
-
-    const toId =
-        document
-        .getElementById(
-            "transferTo"
-        )
-        .value;
-
-
-    const itemId =
-        document
-        .getElementById(
-            "transferItem"
-        )
-        .value;
-
-
-    const quantity =
-        Number(
-            document
-            .getElementById(
-                "transferQty"
-            )
-            .value||0
-        );
-
-
-    if(
-        !date||
-        !fromId||
-        !toId||
-        !itemId||
-        quantity<=0
-    ){
-
-        showAlert(
-            "أكمل بيانات التحويل",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(
-        String(fromId)===
-        String(toId)
-    ){
-
-        showAlert(
-            "لا يمكن التحويل لنفس المخزن",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const stock =
-        getStock(
-            itemId,
-            fromId
-        );
-
-
-    if(!stock){
-
-        showAlert(
-            "لا يوجد رصيد للصنف في المخزن المصدر",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    if(
-        quantity>
-        Number(
-            stock.quantity||0
-        )
-    ){
-
-        showAlert(
-            "الرصيد المتاح: "+
-            qty(
-                stock.quantity
-            ),
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    try{
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.rpc(
-                "post_transfer",
-                {
-
-                    p_from_warehouse_id:
-                        fromId,
-
-                    p_to_warehouse_id:
-                        toId,
-
-                    p_product_id:
-                        itemId,
-
-                    p_quantity:
-                        quantity,
-
-                    p_transfer_date:
-                        date,
-
-                    p_notes:
-                        number
-                        ? "رقم التحويل: "+number
-                        : ""
-
-                }
-            );
-
-
-        if(error)
-            throw error;
-
-
-        showAlert(
-            "تم تنفيذ التحويل بنجاح"
-        );
-
-
-        document
-        .getElementById(
-            "transferNumber"
-        )
-        .value="";
-
-        document
-        .getElementById(
-            "transferQty"
-        )
-        .value="";
-
-
-        await loadDatabase();
-
-    }
-
-    catch(error){
-
-        showAlert(
-            "تعذر تنفيذ التحويل: "+
-            error.message,
-            "error"
-        );
-
-    }
-
+ const number=document.getElementById("transferNo").value.trim(),date=document.getElementById("transferDate").value||today(),from=document.getElementById("transferFrom").value,to=document.getElementById("transferTo").value,itemId=document.getElementById("transferItem").value,qty=Number(document.getElementById("transferQty").value||0),item=getItem(itemId),fromId=dbWarehouseId(from),toId=dbWarehouseId(to);
+ if(from===to)return alert("لا يمكن التحويل لنفس المخزن.");if(!item||qty<=0||!fromId||!toId)return alert("أكمل البيانات");
+ const {error}=await supabaseClient.rpc("post_transfer",{p_from:fromId,p_to:toId,p_transfer_date:date,p_notes:number?"رقم التحويل: "+number:"",p_items:[{product_id:item.id,qty}]});
+ if(error)return alert("لم يتم تنفيذ التحويل:\n"+error.message);
+ await loadDatabase();document.getElementById("transferNo").value="";document.getElementById("transferQty").value="";alert("تم تنفيذ التحويل أونلاين بنجاح.");
 }
 
-
-/* =========================================================
-   MOVEMENTS
-========================================================= */
-
-function movementTypeName(
-    type
-){
-
-    switch(type){
-
-        case "opening":
-            return "رصيد أول المدة";
-
-        case "purchase":
-            return "استلام مشتريات";
-
-        case "transfer_out":
-            return "تحويل صادر";
-
-        case "transfer_in":
-            return "تحويل وارد";
-
-        case "adjustment_out":
-            return "إذن صرف";
-
-        case "adjustment_in":
-            return "إضافة مخزنية";
-
-        default:
-            return type||"-";
-
-    }
-
+function getReportMovements(){
+  const from=document.getElementById("reportFrom").value;
+  const to=document.getElementById("reportTo").value;
+  const branch=document.getElementById("reportBranch").value;
+  return db.movements.filter(m=>{
+    if(from&&m.date<from)return false;
+    if(to&&m.date>to)return false;
+    if(m.type!=="transfer_out"&&m.type!=="adjustment_out")return false;
+    const b=m.type==="transfer_out"?m.to:(branches.includes(m.from)?m.from:null);
+    return b && (branch==="ALL"||b===branch);
+  });
 }
 
-
-function renderMovements(){
-
-    const body =
-        document.getElementById(
-            "movementsBody"
-        );
-
-    if(!body)
-        return;
-
-
-    const search =
-        document
-        .getElementById(
-            "movementSearch"
-        )?.value
-        .trim()
-        .toLowerCase()||"";
-
-
-    const rows =
-        db.movements
-        .filter(m=>{
-
-            const text = [
-
-                m.itemName,
-                m.document_no,
-                movementTypeName(
-                    m.movement_type
-                ),
-                m.from,
-                m.to,
-                m.notes
-
-            ]
-            .join(" ")
-            .toLowerCase();
-
-
-            return text.includes(
-                search
-            );
-
-        })
-        .map(m=>`
-
-        <tr>
-
-            <td>
-                ${esc(
-                    dateOnly(
-                        m.movement_date
-                    )
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.document_no||"-"
-                )}
-            </td>
-
-            <td>
-                ${movementTypeName(
-                    m.movement_type
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.itemName
-                )}
-            </td>
-
-            <td>
-                ${esc(m.from)}
-            </td>
-
-            <td>
-                ${esc(m.to)}
-            </td>
-
-            <td>
-                ${qty(m.quantity)}
-            </td>
-
-            <td>
-                ${money(m.cost)}
-            </td>
-
-            <td>
-                ${money(m.value)}
-            </td>
-
-            <td>
-                ${esc(m.notes||"-")}
-            </td>
-
-        </tr>
-
-        `)
-        .join("");
-
-
-    body.innerHTML =
-        rows||
-        `<tr>
-            <td colspan="10">
-                لا توجد حركات
-            </td>
-        </tr>`;
-
+function renderBranchReport(){
+ const from=document.getElementById("reportFrom").value,to=document.getElementById("reportTo").value,selected=document.getElementById("reportBranch").value;
+ let data={"فرع جدة":{qty:0,value:0},"فرع ينبع":{qty:0,value:0},"فرع المدينة":{qty:0,value:0}},rows=[];
+ const all=db.movements.filter(m=>{if(from&&m.date<from)return false;if(to&&m.date>to)return false;return true;});
+ all.forEach(m=>{
+   let branch=null,label="";
+   if(m.type==="transfer_out" && branches.includes(m.to)){branch=m.to;label="صرف للفرع";}
+   else if(m.type==="adjustment_out" && branches.includes(m.from)){branch=m.from;label="استهلاك الفرع";}
+   if(branch && (selected==="ALL"||branch===selected)){
+     data[branch].qty+=Number(m.qty||0);
+     data[branch].value+=Number(m.value||0);
+     rows.push({m,branch,label});
+   }
+ });
+ ["فرع جدة","فرع ينبع","فرع المدينة"].forEach((b,i)=>{
+   const key=i===0?"jeddah":i===1?"yanbu":"madinah";
+   document.getElementById(key+"Qty").textContent=data[b].qty.toFixed(3);
+   document.getElementById(key+"Value").textContent=money(data[b].value)+" ر.س";
+ });
+ const tq=Object.values(data).reduce((s,x)=>s+x.qty,0),tv=Object.values(data).reduce((s,x)=>s+x.value,0);
+ document.getElementById("allBranchQty").textContent=tq.toFixed(3);
+ document.getElementById("allBranchValue").textContent=money(tv)+" ر.س";
+ document.getElementById("branchReportTable").innerHTML=rows.map(r=>{
+   const i=getItem(r.m.itemId);
+   return `<tr><td>${r.m.date}</td><td>${r.m.number}</td><td>${r.branch}</td><td>${i?i.name:""}</td><td><span class="badge ${r.label==="صرف للفرع"?"transfer":"out"}">${r.label}</span></td><td>${r.m.from||"-"}</td><td>${r.m.qty}</td><td>${money(r.m.cost)}</td><td>${money(r.m.value)}</td></tr>`;
+ }).join("")||`<tr><td colspan="9">لا توجد حركات صرف خلال الفترة المحددة.</td></tr>`;
 }
 
+function applyReportFilter(){const a=document.getElementById("reportFrom").value,b=document.getElementById("reportTo").value;if(a&&b&&a>b)return alert("تاريخ البداية لا يمكن أن يكون بعد تاريخ النهاية.");renderBranchReport();}
+function clearReportFilter(){document.getElementById("reportFrom").value="";document.getElementById("reportTo").value="";document.getElementById("reportBranch").value="ALL";renderBranchReport();}
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
+function renderMovements(){const q=(document.getElementById("movementSearch").value||"").toLowerCase(),body=document.getElementById("movementTable");body.innerHTML=db.movements.filter(m=>{const i=getItem(m.itemId);return(JSON.stringify(m)+(i?i.name:" ")).toLowerCase().includes(q)}).map(m=>{const i=getItem(m.itemId);let badge=m.type==="transfer_out"||m.type==="transfer_in"?"transfer":m.type==="adjustment_out"?"out":"in";return `<tr><td>${m.date}</td><td>${m.number}</td><td><span class="badge ${badge}">${movementTypeLabel(m.type)}</span></td><td>${i?i.name:""}</td><td>${m.from||"-"}</td><td>${m.to||"-"}</td><td>${m.qty}</td><td>${money(m.cost)}</td><td>${money(m.value)}</td><td>${m.note||""}</td></tr>`}).join("");}
+function renderCard(){const item=getItem(document.getElementById("cardItem").value),summary=document.getElementById("cardSummary"),body=document.getElementById("cardTable");if(!item){summary.innerHTML="";body.innerHTML="";return;}summary.innerHTML=`<div class="total-box">الصنف: ${item.name} &nbsp; | &nbsp; متوسط التكلفة: ${money(item.cost)} ر.س &nbsp; | &nbsp; إجمالي الرصيد: ${totalQuantity(item)} ${item.unit} &nbsp; | &nbsp; قيمة المخزون: ${money(totalValue(item))} ر.س</div>`;body.innerHTML=db.movements.filter(m=>m.itemId===item.id).sort((a,b)=>a.date.localeCompare(b.date)).map(m=>`<tr><td>${m.date}</td><td>${m.number}</td><td>${movementTypeLabel(m.type)}</td><td>${m.from||"-"}</td><td>${m.to||"-"}</td><td>${m.qty}</td><td>${money(m.cost)}</td><td>${money(m.value)}</td></tr>`).join("");}
+function renderDashboard(){document.getElementById("dashItems").textContent=db.items.length;let q=0,v=0;db.items.forEach(i=>{q+=totalQuantity(i);v+=totalValue(i)});document.getElementById("dashQty").textContent=q.toFixed(3);document.getElementById("dashValue").textContent=money(v);document.getElementById("dashMoves").textContent=db.movements.length;document.getElementById("dashboardStock").innerHTML=db.items.map(i=>`<tr><td>${i.name}</td><td>${i.unit}</td><td>${i.stock["المخزن الرئيسي"]}</td><td>${i.stock["فرع جدة"]}</td><td>${i.stock["فرع ينبع"]}</td><td>${i.stock["فرع المدينة"]}</td><td>${totalQuantity(i)}</td><td>${money(totalValue(i))}</td></tr>`).join("");document.getElementById("recentMoves").innerHTML=db.movements.slice(0,10).map(m=>{const i=getItem(m.itemId);return `<tr><td>${m.date}</td><td>${m.number}</td><td>${movementTypeLabel(m.type)}</td><td>${i?i.name:""}</td><td>${m.from||"-"}</td><td>${m.to||"-"}</td><td>${m.qty}</td><td>${money(m.value)}</td></tr>`}).join("");renderBranchReport();}
+function backupData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="inventory-backup-"+today()+".json";a.click();URL.revokeObjectURL(url);}
+async function restoreData(event){const file=event.target.files[0];if(!file)return;const text=await file.text();try{const data=JSON.parse(text);if(!data.items||!data.movements)throw Error();alert("النسخة الاحتياطية المحلية لا يمكن رفعها مباشرة إلى قاعدة البيانات في هذه النسخة. استخدمها كنسخة احتياطية فقط.");}catch(e){alert("الملف غير صالح.");}}
+async function deleteAllData(){if(!confirm("تحذير!\n\nسيتم إخفاء جميع الأصناف من النظام وحذف أرصدة المخزون والحركات.\nهل أنت متأكد؟"))return;const {error}=await supabaseClient.from("products").update({active:false}).eq("active",true);if(error)return alert("تعذر تنفيذ العملية:\n"+error.message);alert("تم إخفاء الأصناف. لحذف الحركات نهائياً نحتاج صلاحية إدارية خاصة.");await loadDatabase();}
+function renderAll(){renderDashboard();renderItems();renderMovements();renderCard();updateIssueCost();updateTransferCost();}
 
-function renderDashboard(){
-
-    const from =
-        document
-        .getElementById(
-            "dashboardFrom"
-        )?.value||"";
-
-
-    const to =
-        document
-        .getElementById(
-            "dashboardTo"
-        )?.value||"";
-
-
-    const branch =
-        document
-        .getElementById(
-            "dashboardBranch"
-        )?.value||"";
-
-
-    document
-    .getElementById(
-        "statItems"
-    )
-    .textContent =
-        db.items.filter(
-            i=>i.active!==false
-        ).length;
-
-
-    let totalQty=0;
-    let totalValue=0;
-
-
-    db.items.forEach(item=>{
-
-        totalQty +=
-            Number(
-                item.stock||0
-            );
-
-        totalValue +=
-            calculateItemValue(
-                item.id
-            );
-
-    });
-
-
-    document
-    .getElementById(
-        "statQty"
-    )
-    .textContent =
-        qty(totalQty);
-
-
-    document
-    .getElementById(
-        "statValue"
-    )
-    .textContent =
-        money(totalValue);
-
-
-    let movements =
-        db.movements.slice();
-
-
-    if(from){
-
-        movements =
-            movements.filter(
-                m=>
-                dateOnly(
-                    m.movement_date
-                )>=from
-            );
-
-    }
-
-
-    if(to){
-
-        movements =
-            movements.filter(
-                m=>
-                dateOnly(
-                    m.movement_date
-                )<=to
-            );
-
-    }
-
-
-    if(branch){
-
-        movements =
-            movements.filter(
-                m=>
-                m.to===branch ||
-                m.from===branch
-            );
-
-    }
-
-
-    document
-    .getElementById(
-        "statMovements"
-    )
-    .textContent =
-        movements.length;
-
-
-    renderBranchSummary(
-        movements
-    );
-
-    renderBranchDetails(
-        movements
-    );
-
-    renderDashboardStock();
-
-    renderRecentMovements();
-
+async function startApp(){
+  document.getElementById("currentDate").textContent=today();
+  document.getElementById("openingDate").value=today();
+  document.getElementById("openingDate").addEventListener("change",updateOpeningDatePreview);
+  updateOpeningDatePreview();
+  document.getElementById("receiptDate").value=today();
+  document.getElementById("issueDate").value=today();
+  document.getElementById("transferDate").value=today();
+  try{await loadDatabase();}
+  catch(e){console.error(e);alert("تعذر الاتصال بقاعدة Supabase:\n\n"+e.message+"\n\nتأكد أن SQL تم تنفيذه وأن سياسات RLS مفعلة.");fillAllSelects();renderAll();}
 }
 
-
-function clearDashboardFilter(){
-
-    document
-    .getElementById(
-        "dashboardFrom"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "dashboardTo"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "dashboardBranch"
-    )
-    .value="";
-
-
-    renderDashboard();
-
-}
-
-
-function renderBranchSummary(
-    movements
-){
-
-    const box =
-        document.getElementById(
-            "branchSummary"
-        );
-
-
-    const stats={};
-
-
-    branches.forEach(b=>{
-
-        stats[b]={
-
-            qty:0,
-            value:0
-
-        };
-
-    });
-
-
-    movements.forEach(m=>{
-
-        if(!stats[m.to])
-            return;
-
-
-        if(
-
-            m.movement_type===
-                "transfer_in"
-
-            ||
-
-            m.movement_type===
-                "adjustment_out"
-
-        ){
-
-            stats[m.to].qty +=
-                Number(
-                    m.quantity||0
-                );
-
-            stats[m.to].value +=
-                Number(
-                    m.value||0
-                );
-
-        }
-
-    });
-
-
-    let totalQty=0;
-    let totalValue=0;
-
-
-    box.innerHTML =
-        branches.map(b=>{
-
-            totalQty +=
-                stats[b].qty;
-
-            totalValue +=
-                stats[b].value;
-
-
-            return `
-
-            <div class="stat">
-
-                <div class="title">
-                    ${esc(b)}
-                </div>
-
-                <div class="value">
-                    ${qty(
-                        stats[b].qty
-                    )}
-                </div>
-
-                <div class="small">
-                    كمية ما تم صرفه/تحويله
-                </div>
-
-                <div
-                    style="margin-top:8px;font-weight:bold"
-                >
-                    ${money(
-                        stats[b].value
-                    )}
-                    ر.س
-                </div>
-
-            </div>
-
-            `;
-
-        }).join("")+
-
-        `
-
-        <div class="stat">
-
-            <div class="title">
-                الإجمالي
-            </div>
-
-            <div class="value">
-                ${qty(totalQty)}
-            </div>
-
-            <div class="small">
-                إجمالي الكمية
-            </div>
-
-            <div
-                style="margin-top:8px;font-weight:bold"
-            >
-                ${money(totalValue)}
-                ر.س
-            </div>
-
-        </div>
-
-        `;
-
-}
-
-
-function renderBranchDetails(
-    movements
-){
-
-    const body =
-        document.getElementById(
-            "branchDetailsBody"
-        );
-
-
-    const rows =
-        movements
-        .filter(
-            m=>
-            branches.includes(m.to) ||
-            branches.includes(m.from)
-        )
-        .map(m=>`
-
-        <tr>
-
-            <td>
-                ${esc(
-                    dateOnly(
-                        m.movement_date
-                    )
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.document_no||"-"
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.to!=="-"
-                    ?m.to
-                    :m.from
-                )}
-            </td>
-
-            <td>
-                ${esc(m.itemName)}
-            </td>
-
-            <td>
-                ${movementTypeName(
-                    m.movement_type
-                )}
-            </td>
-
-            <td>
-                ${esc(m.from)}
-            </td>
-
-            <td>
-                ${esc(m.to)}
-            </td>
-
-            <td>
-                ${qty(m.quantity)}
-            </td>
-
-            <td>
-                ${money(m.cost)}
-            </td>
-
-            <td>
-                ${money(m.value)}
-            </td>
-
-        </tr>
-
-        `)
-        .join("");
-
-
-    body.innerHTML =
-        rows||
-        `<tr>
-            <td colspan="10">
-                لا توجد حركات للفروع في الفترة المحددة
-            </td>
-        </tr>`;
-
-}
-
-
-function renderDashboardStock(){
-
-    const body =
-        document.getElementById(
-            "dashboardStockBody"
-        );
-
-
-    const main =
-        findWarehouseByName(
-            "المخزن الرئيسي"
-        );
-
-    const jeddah =
-        findWarehouseByName(
-            "فرع جدة"
-        );
-
-    const yanbu =
-        findWarehouseByName(
-            "فرع ينبع"
-        );
-
-    const madinah =
-        findWarehouseByName(
-            "فرع المدينة"
-        );
-
-    const kitchen =
-        findWarehouseByName(
-            "المطبخ"
-        );
-
-
-    body.innerHTML =
-        db.items.map(item=>{
-
-            const get=id=>
-                id
-                ?Number(
-                    getStock(
-                        item.id,
-                        id
-                    )?.quantity||0
-                )
-                :0;
-
-
-            const a =
-                get(main?.id);
-
-            const b =
-                get(jeddah?.id);
-
-            const c =
-                get(yanbu?.id);
-
-            const d =
-                get(madinah?.id);
-
-            const e =
-                get(kitchen?.id);
-
-
-            const total =
-                a+b+c+d+e;
-
-
-            return `
-
-            <tr>
-
-                <td>
-                    ${esc(item.name)}
-                </td>
-
-                <td>
-                    ${esc(item.unit||"-")}
-                </td>
-
-                <td>
-                    ${qty(a)}
-                </td>
-
-                <td>
-                    ${qty(b)}
-                </td>
-
-                <td>
-                    ${qty(c)}
-                </td>
-
-                <td>
-                    ${qty(d)}
-                </td>
-
-                <td>
-                    ${qty(e)}
-                </td>
-
-                <td>
-                    ${qty(total)}
-                </td>
-
-                <td>
-                    ${money(
-                        calculateItemValue(
-                            item.id
-                        )
-                    )}
-                </td>
-
-            </tr>
-
-            `;
-
-        })
-        .join("");
-
-}
-
-
-function renderRecentMovements(){
-
-    const body =
-        document.getElementById(
-            "recentMovementsBody"
-        );
-
-
-    body.innerHTML =
-        db.movements
-        .slice(0,20)
-        .map(m=>`
-
-        <tr>
-
-            <td>
-                ${esc(
-                    dateOnly(
-                        m.movement_date
-                    )
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.document_no||"-"
-                )}
-            </td>
-
-            <td>
-                ${movementTypeName(
-                    m.movement_type
-                )}
-            </td>
-
-            <td>
-                ${esc(m.itemName)}
-            </td>
-
-            <td>
-                ${esc(m.from)}
-            </td>
-
-            <td>
-                ${esc(m.to)}
-            </td>
-
-            <td>
-                ${qty(m.quantity)}
-            </td>
-
-            <td>
-                ${money(m.value)}
-            </td>
-
-        </tr>
-
-        `)
-        .join("");
-
-}
-
-
-/* =========================================================
-   ENDING STOCK REPORT
-========================================================= */
-
-function renderEndingStock(){
-
-    const body =
-        document.getElementById(
-            "endingStockBody"
-        );
-
-
-    if(!body)
-        return;
-
-
-    const warehouse =
-        findWarehouseByName(
-            "المخزن الرئيسي"
-        );
-
-
-    const reportDate =
-        document
-        .getElementById(
-            "endingStockDate"
-        )?.value||"";
-
-
-    const search =
-        document
-        .getElementById(
-            "endingStockSearch"
-        )?.value
-        .trim()
-        .toLowerCase()||"";
-
-
-    if(!warehouse){
-
-        body.innerHTML =
-            `<tr>
-                <td colspan="8">
-                    لم يتم العثور على المخزن الرئيسي
-                </td>
-            </tr>`;
-
-        return;
-
-    }
-
-
-    if(!reportDate){
-
-        body.innerHTML =
-            `<tr>
-                <td colspan="8">
-                    اختر تاريخ التقرير
-                </td>
-            </tr>`;
-
-        return;
-
-    }
-
-
-    /*
-       نأخذ فقط حركات المخزن الرئيسي
-       حتى تاريخ التقرير.
-    */
-
-    const movements =
-        db.movements
-        .filter(
-            m=>
-            String(
-                m.warehouse_id
-            )===
-            String(
-                warehouse.id
-            )
-        )
-        .filter(
-            m=>
-            dateOnly(
-                m.movement_date
-            )<=reportDate
-        )
-        .sort((a,b)=>{
-
-            const da =
-                dateOnly(
-                    a.movement_date
-                );
-
-            const dbb =
-                dateOnly(
-                    b.movement_date
-                );
-
-            if(da!==dbb){
-
-                return da.localeCompare(
-                    dbb
-                );
-
-            }
-
-            return String(
-                a.created_at||""
-            ).localeCompare(
-                String(
-                    b.created_at||""
-                )
-            );
-
-        });
-
-
-    const inboundTypes = [
-
-        "opening",
-        "purchase",
-        "transfer_in",
-        "adjustment_in",
-        "receipt"
-
-    ];
-
-
-    const outboundTypes = [
-
-        "transfer_out",
-        "adjustment_out",
-        "issue"
-
-    ];
-
-
-    let openingTotal=0;
-    let inboundTotal=0;
-    let outboundTotal=0;
-    let closingTotal=0;
-    let valueTotal=0;
-    let itemCount=0;
-
-
-    const rows =
-        db.items
-        .filter(
-            item=>
-            String(item.name||"")
-            .toLowerCase()
-            .includes(search)
-        )
-        .map(item=>{
-
-            let opening=0;
-            let inbound=0;
-            let outbound=0;
-
-            let quantity=0;
-            let avgCost=0;
-
-
-            const itemMovements =
-                movements.filter(
-                    m=>
-                    String(
-                        m.product_id
-                    )===
-                    String(
-                        item.id
-                    )
-                );
-
-
-            itemMovements.forEach(m=>{
-
-                const q =
-                    Number(
-                        m.quantity||0
-                    );
-
-                const cost =
-                    Number(
-                        m.cost||0
-                    );
-
-
-                if(q<=0)
-                    return;
-
-
-                /*
-                   رصيد أول المدة
-                */
-
-                if(
-                    m.movement_type===
-                    "opening"
-                ){
-
-                    opening += q;
-
-                }
-
-
-                /*
-                   الوارد
-                */
-
-                if(
-                    inboundTypes.includes(
-                        m.movement_type
-                    )
-                ){
-
-                    const oldQty =
-                        quantity;
-
-                    const oldCost =
-                        avgCost;
-
-                    const newQty =
-                        oldQty+q;
-
-
-                    if(newQty>0){
-
-                        if(oldQty>0){
-
-                            avgCost =
-                                (
-                                    (
-                                        oldQty*
-                                        oldCost
-                                    )+
-                                    (
-                                        q*
-                                        cost
-                                    )
-                                )/
-                                newQty;
-
-                        }
-
-                        else{
-
-                            avgCost =
-                                cost;
-
-                        }
-
-                    }
-
-
-                    quantity =
-                        newQty;
-
-
-                    if(
-                        m.movement_type!==
-                        "opening"
-                    ){
-
-                        inbound += q;
-
-                    }
-
-                }
-
-
-                /*
-                   المنصرف
-                */
-
-                if(
-                    outboundTypes.includes(
-                        m.movement_type
-                    )
-                ){
-
-                    outbound += q;
-
-                    quantity -= q;
-
-                }
-
-            });
-
-
-            const closing =
-                quantity;
-
-
-            const value =
-                closing*
-                avgCost;
-
-
-            /*
-               إظهار الأصناف التي لها
-               حركة أو رصيد.
-            */
-
-            if(
-                opening===0 &&
-                inbound===0 &&
-                outbound===0 &&
-                closing===0
-            ){
-
-                return "";
-
-            }
-
-
-            itemCount++;
-
-            openingTotal += opening;
-            inboundTotal += inbound;
-            outboundTotal += outbound;
-            closingTotal += closing;
-            valueTotal += value;
-
-
-            const closingClass =
-                closing<0
-                ?"negative-stock"
-                :"";
-
-
-            return `
-
-            <tr>
-
-                <td>
-                    ${esc(item.name)}
-                </td>
-
-                <td>
-                    ${esc(item.unit||"-")}
-                </td>
-
-                <td>
-                    ${qty(opening)}
-                </td>
-
-                <td>
-                    ${qty(inbound)}
-                </td>
-
-                <td>
-                    ${qty(outbound)}
-                </td>
-
-                <td class="${closingClass}">
-                    ${qty(closing)}
-                </td>
-
-                <td>
-                    ${money(avgCost)}
-                </td>
-
-                <td>
-                    ${money(value)}
-                </td>
-
-            </tr>
-
-            `;
-
-        })
-        .join("");
-
-
-    body.innerHTML =
-        rows||
-        `<tr>
-            <td colspan="8">
-                لا توجد أرصدة أو حركات حتى هذا التاريخ
-            </td>
-        </tr>`;
-
-
-    document
-    .getElementById(
-        "endingStockItemCount"
-    )
-    .textContent =
-        itemCount;
-
-
-    document
-    .getElementById(
-        "endingStockOpeningTotal"
-    )
-    .textContent =
-        qty(openingTotal);
-
-
-    document
-    .getElementById(
-        "endingStockInboundTotal"
-    )
-    .textContent =
-        qty(inboundTotal);
-
-
-    document
-    .getElementById(
-        "endingStockOutboundTotal"
-    )
-    .textContent =
-        qty(outboundTotal);
-
-
-    document
-    .getElementById(
-        "endingStockClosingTotal"
-    )
-    .textContent =
-        qty(closingTotal);
-
-
-    document
-    .getElementById(
-        "endingStockValueTotal"
-    )
-    .textContent =
-        money(valueTotal);
-
-
-    document
-    .getElementById(
-        "endingStockOpeningFooter"
-    )
-    .textContent =
-        qty(openingTotal);
-
-
-    document
-    .getElementById(
-        "endingStockInboundFooter"
-    )
-    .textContent =
-        qty(inboundTotal);
-
-
-    document
-    .getElementById(
-        "endingStockOutboundFooter"
-    )
-    .textContent =
-        qty(outboundTotal);
-
-
-    document
-    .getElementById(
-        "endingStockClosingFooter"
-    )
-    .textContent =
-        qty(closingTotal);
-
-
-    document
-    .getElementById(
-        "endingStockValueFooter"
-    )
-    .textContent =
-        money(valueTotal);
-
-
-    document
-    .getElementById(
-        "endingStockHeader"
-    )
-    .innerHTML = `
-
-        <div class="report-title">
-            📊 تقرير رصيد آخر المدة
-        </div>
-
-        <div>
-            <strong>المخزن:</strong>
-            ${esc(warehouse.name)}
-        </div>
-
-        <div>
-            <strong>حتى تاريخ:</strong>
-            ${esc(reportDate)}
-        </div>
-
-        <div class="small"
-             style="margin-top:8px">
-
-            الرصيد =
-            رصيد أول المدة +
-            الوارد -
-            المنصرف
-
-        </div>
-
-    `;
-
-}
-
-
-function printEndingStock(){
-
-    renderEndingStock();
-
-
-    document
-    .body
-    .classList
-    .add(
-        "print-ending-stock"
-    );
-
-
-    setTimeout(()=>{
-
-        window.print();
-
-
-        setTimeout(()=>{
-
-            document
-            .body
-            .classList
-            .remove(
-                "print-ending-stock"
-            );
-
-        },500);
-
-    },100);
-
-}
-
-
-/* =========================================================
-   ITEM CARD
-========================================================= */
-
-function renderItemCard(){
-
-    const itemId =
-        document
-        .getElementById(
-            "cardItem"
-        )?.value;
-
-
-    const from =
-        document
-        .getElementById(
-            "cardFrom"
-        )?.value||"";
-
-
-    const to =
-        document
-        .getElementById(
-            "cardTo"
-        )?.value||"";
-
-
-    const body =
-        document
-        .getElementById(
-            "itemCardBody"
-        );
-
-
-    if(!body)
-        return;
-
-
-    if(!itemId){
-
-        body.innerHTML =
-            `<tr>
-                <td colspan="8">
-                    اختر الصنف
-                </td>
-            </tr>`;
-
-        return;
-
-    }
-
-
-    const rows =
-        db.movements
-        .filter(
-            m=>
-            String(
-                m.product_id
-            )===
-            String(itemId)
-        )
-        .filter(m=>{
-
-            const d =
-                dateOnly(
-                    m.movement_date
-                );
-
-
-            if(
-                from &&
-                d<from
-            )
-                return false;
-
-
-            if(
-                to &&
-                d>to
-            )
-                return false;
-
-
-            return true;
-
-        })
-        .map(m=>`
-
-        <tr>
-
-            <td>
-                ${esc(
-                    dateOnly(
-                        m.movement_date
-                    )
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.document_no||"-"
-                )}
-            </td>
-
-            <td>
-                ${movementTypeName(
-                    m.movement_type
-                )}
-            </td>
-
-            <td>
-                ${esc(m.from)}
-            </td>
-
-            <td>
-                ${esc(m.to)}
-            </td>
-
-            <td>
-                ${qty(m.quantity)}
-            </td>
-
-            <td>
-                ${money(m.cost)}
-            </td>
-
-            <td>
-                ${money(m.value)}
-            </td>
-
-        </tr>
-
-        `)
-        .join("");
-
-
-    body.innerHTML =
-        rows||
-        `<tr>
-            <td colspan="8">
-                لا توجد حركات
-            </td>
-        </tr>`;
-
-}
-
-
-/* =========================================================
-   BACKUP
-========================================================= */
-
-function downloadBackup(){
-
-    const backup={
-
-        exported_at:
-            new Date().toISOString(),
-
-        products:
-            db.items,
-
-        warehouses:
-            db.warehouses,
-
-        stock_balances:
-            db.stocks,
-
-        stock_movements:
-            db.movements,
-
-        transfers:
-            db.transfers,
-
-        suppliers:
-            db.suppliers
-
-    };
-
-
-    const blob =
-        new Blob(
-
-            [
-                JSON.stringify(
-                    backup,
-                    null,
-                    2
-                )
-            ],
-
-            {
-                type:
-                "application/json;charset=utf-8"
-            }
-
-        );
-
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-
-    const a =
-        document.createElement(
-            "a"
-        );
-
-
-    a.href=url;
-
-
-    a.download =
-        "prodiet-inventory-backup-"+
-        new Date()
-        .toISOString()
-        .slice(0,10)+
-        ".json";
-
-
-    document
-    .body
-    .appendChild(a);
-
-
-    a.click();
-
-    a.remove();
-
-
-    URL.revokeObjectURL(
-        url
-    );
-
-}
-
-
-/* =========================================================
-   AUTO EVENTS
-========================================================= */
-
-document
-.getElementById(
-    "receiptItem"
-)
-?.addEventListener(
-    "change",
-    function(){
-
-        const item =
-            getItemById(
-                this.value
-            );
-
-
-        if(item){
-
-            document
-            .getElementById(
-                "receiptCost"
-            )
-            .value =
-                Number(
-                    item.cost||0
-                )
-                .toFixed(2);
-
-        }
-
-    }
-);
-
-
-document
-.getElementById(
-    "openingItem"
-)
-?.addEventListener(
-    "change",
-    function(){
-
-        const item =
-            getItemById(
-                this.value
-            );
-
-
-        if(item){
-
-            document
-            .getElementById(
-                "openingCost"
-            )
-            .value =
-                Number(
-                    item.cost||0
-                )
-                .toFixed(2);
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   DEFAULT RECEIVING WAREHOUSE
-========================================================= */
-
-function setDefaultReceiptWarehouse(){
-
-    const main =
-        findWarehouseByName(
-            "المخزن الرئيسي"
-        );
-
-
-    const select =
-        document
-        .getElementById(
-            "receiptWarehouse"
-        );
-
-
-    if(
-        main &&
-        select
-    ){
-
-        select.value =
-            main.id;
-
-    }
-
-}
-
-
-/*
-   بعد تحميل الصفحة والبيانات
-   نضع المخزن الرئيسي تلقائيًا
-*/
-
-setTimeout(
-    setDefaultReceiptWarehouse,
-    1000
-);
-
+(async function init(){
+  document.querySelector("header").style.display="none";
+  document.querySelector(".container").style.display="none";
+  if(localStorage.getItem("inventoryLoggedIn")==="1"){
+    showApp();
+    await startApp();
+  }
+})();
 </script>
 
 </body>
