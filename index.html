@@ -2208,46 +2208,61 @@ async function loadDatabase(){
 ========================================================= */
 
 async function loadSuppliers(){
-
     const{
         data,
         error
     }=
     await supabaseClient
         .from("suppliers")
-        .select("*")
-        .order("name");
+        .select("id,name,phone,notes,active,opening_balance,balance")
+        .order("name",{ascending:true});
 
-    if(error)
-        throw error;
+    if(error){
+        console.error("SUPPLIERS LOAD ERROR:",error);
+        db.suppliers=[];
+        showAlert(
+            "تعذر تحميل الموردين: "+error.message,
+            "error"
+        );
+        return false;
+    }
 
     db.suppliers=
-        data||[];
+        (data||[])
+        .map(s=>({
+            ...s,
+            name:String(s.name||"").trim()
+        }))
+        .filter(s=>s.id && s.name);
 
+    console.log("SUPPLIERS LOADED:",db.suppliers);
+    return true;
 }
 
 
 function fillSupplierSelect(id){
-
     const select=
         document.getElementById(id);
 
     if(!select) return;
 
+    const suppliers=
+        (db.suppliers||[])
+        .filter(
+            s=>s.active!==false &&
+            String(s.name||"").trim()
+        );
+
     select.innerHTML=
         `<option value="">اختر المورد</option>`+
-        db.suppliers
-        .filter(
-            s=>s.active!==false
-        )
+        suppliers
         .map(
             s=>
             `<option value="${esc(s.id)}">
-                ${esc(s.name)}
+                ${esc(String(s.name).trim())}
             </option>`
         )
         .join("");
-
 }
 
 
@@ -6412,138 +6427,193 @@ function renderRecentMovements(){
 
 function renderItemCard(){
 
-    const itemId = document.getElementById("cardItem")?.value || "";
-    const warehouseId = document.getElementById("cardWarehouse")?.value || "";
-    const from = document.getElementById("cardFrom")?.value || "";
-    const to = document.getElementById("cardTo")?.value || "";
+    const itemId =
+        document
+        .getElementById("cardItem")
+        ?.value||"";
 
-    const body = document.getElementById("itemCardBody");
-    const totalQtyEl = document.getElementById("itemCardTotalQty");
-    const totalValueEl = document.getElementById("itemCardTotalValue");
+    const warehouseId =
+        document
+        .getElementById("cardWarehouse")
+        ?.value||"";
+
+    const from =
+        document
+        .getElementById("cardFrom")
+        ?.value||"";
+
+    const to =
+        document
+        .getElementById("cardTo")
+        ?.value||"";
+
+    const body =
+        document.getElementById(
+            "itemCardBody"
+        );
+
+    const totalQtyEl =
+        document.getElementById(
+            "itemCardTotalQty"
+        );
+
+    const totalValueEl =
+        document.getElementById(
+            "itemCardTotalValue"
+        );
 
     if(!body) return;
 
     if(!itemId){
-        body.innerHTML = `<tr><td colspan="8">اختر الصنف</td></tr>`;
-        if(totalQtyEl) totalQtyEl.textContent = qty(0);
-        if(totalValueEl) totalValueEl.textContent = money(0);
+
+        body.innerHTML=
+            `<tr>
+                <td colspan="8">
+                    اختر الصنف
+                </td>
+            </tr>`;
+
+        if(totalQtyEl)
+            totalQtyEl.textContent=qty(0);
+
+        if(totalValueEl)
+            totalValueEl.textContent=money(0);
+
         return;
     }
 
-    const allWarehouses = warehouseId === "";
+    const movements=
+        db.movements
+        .filter(
+            m=>
+            String(m.product_id)===
+            String(itemId)
+        )
+        .filter(m=>{
 
-    const movements = db.movements
-        .filter(m => String(m.product_id) === String(itemId))
-        .filter(m => {
-            if(!allWarehouses && String(m.warehouse_id) !== String(warehouseId)) return false;
-            const d = dateOnly(m.movement_date);
-            if(from && d < from) return false;
-            if(to && d > to) return false;
+            if(
+                warehouseId &&
+                String(m.warehouse_id)!==
+                String(warehouseId)
+            ){
+                return false;
+            }
+
+            const d=
+                dateOnly(
+                    m.movement_date
+                );
+
+            if(
+                from &&
+                d<from
+            )
+                return false;
+
+            if(
+                to &&
+                d>to
+            )
+                return false;
+
             return true;
-        })
-        .slice()
-        .sort((a,b) => {
-            const da = String(a.movement_date || "");
-            const dbb = String(b.movement_date || "");
-            if(da < dbb) return -1;
-            if(da > dbb) return 1;
-            return String(a.created_at || "").localeCompare(String(b.created_at || ""));
+
         });
 
-    function movementQty(m){
-        return Number(m.quantity ?? m.qty ?? 0) || 0;
-    }
+    const totalQty=
+        movements.reduce(
+            (sum,m)=>
+                sum+
+                Number(m.quantity||0),
+            0
+        );
 
-    function movementCost(m){
-        return Number(m.cost ?? m.unit_cost ?? 0) || 0;
-    }
+    const totalValue=
+        movements.reduce(
+            (sum,m)=>
+                sum+
+                Number(m.value||0),
+            0
+        );
 
-    function movementValue(m){
-        const v = Number(m.value ?? m.total_cost ?? 0) || 0;
-        return v !== 0 ? Math.abs(v) : movementQty(m) * movementCost(m);
-    }
+    if(totalQtyEl)
+        totalQtyEl.textContent=
+            qty(totalQty);
 
-    function movementSign(m){
-        const type = String(m.movement_type || "").trim();
+    if(totalValueEl)
+        totalValueEl.textContent=
+            money(totalValue);
 
-        switch(type){
-            case "opening":
-            case "purchase":
-            case "transfer_in":
-            case "adjustment_in":
-            case "receipt":
-            case "receiving":
-            case "in":
-                return 1;
+    const rows=
+        movements
+        .map(m=>`
 
-            case "transfer_out":
-            case "adjustment_out":
-            case "issue":
-            case "sale":
-            case "consumption":
-            case "out":
-                return -1;
-
-            default:
-                return 0;
-        }
-    }
-
-    let totalQty = 0;
-    let totalValue = 0;
-
-    movements.forEach(m => {
-        const q = movementQty(m);
-        if(q <= 0) return;
-
-        const type = String(m.movement_type || "").trim();
-        const sign = movementSign(m);
-        if(sign === 0) return;
-
-        /*
-         * عند اختيار كل المخازن والفروع:
-         * التحويل الداخلي لا يغير إجمالي مخزون الشركة.
-         * لذلك لا نحسب transfer_in / transfer_out في الإجمالي.
-         */
-        if(allWarehouses && (type === "transfer_in" || type === "transfer_out")){
-            return;
-        }
-
-        totalQty += q * sign;
-        totalValue += movementValue(m) * sign;
-    });
-
-    if(Math.abs(totalQty) < 0.000001) totalQty = 0;
-    if(Math.abs(totalValue) < 0.000001) totalValue = 0;
-
-    if(totalQtyEl) totalQtyEl.textContent = qty(totalQty);
-    if(totalValueEl) totalValueEl.textContent = money(totalValue);
-
-    const rows = movements.map(m => {
-        const q = movementQty(m);
-        const cost = movementCost(m);
-        const value = movementValue(m);
-        const sign = movementSign(m);
-
-        let displayedQty = qty(q);
-        if(sign > 0) displayedQty = "+" + displayedQty;
-        if(sign < 0) displayedQty = "-" + displayedQty;
-
-        return `
         <tr>
-            <td>${esc(dateOnly(m.movement_date))}</td>
-            <td>${esc(m.document_no || "-")}</td>
-            <td>${movementTypeName(m.movement_type)}</td>
-            <td>${esc(m.from || "-")}</td>
-            <td>${esc(m.to || "-")}</td>
-            <td>${displayedQty}</td>
-            <td>${money(cost)}</td>
-            <td>${money(value)}</td>
-        </tr>`;
-    }).join("");
 
-    body.innerHTML = rows || `<tr><td colspan="8">لا توجد حركات</td></tr>`;
+            <td>
+                ${esc(
+                    dateOnly(
+                        m.movement_date
+                    )
+                )}
+            </td>
+
+            <td>
+                ${esc(
+                    m.document_no||"-"
+                )}
+            </td>
+
+            <td>
+                ${movementTypeName(
+                    m.movement_type
+                )}
+            </td>
+
+            <td>
+                ${esc(
+                    m.from||"-"
+                )}
+            </td>
+
+            <td>
+                ${esc(
+                    m.to||"-"
+                )}
+            </td>
+
+            <td>
+                ${qty(
+                    m.quantity
+                )}
+            </td>
+
+            <td>
+                ${money(
+                    m.cost
+                )}
+            </td>
+
+            <td>
+                ${money(
+                    m.value
+                )}
+            </td>
+
+        </tr>
+
+        `)
+        .join("");
+
+    body.innerHTML=
+        rows||
+        `<tr>
+            <td colspan="8">
+                لا توجد حركات
+            </td>
+        </tr>`;
 }
+
 
 /* =========================================================
    BACKUP
