@@ -2810,7 +2810,13 @@ function calculateItemValue(itemId){
         .reduce(
             (sum,s)=>{
                 const qty=Number(s.qty||0);
-                const cost=Number(s.avg_cost ?? s.unit_cost ?? defaultCost);
+                let cost = Number(s.avg_cost);
+                if (!Number.isFinite(cost) || cost <= 0) {
+                    cost = Number(s.unit_cost);
+                }
+                if (!Number.isFinite(cost) || cost <= 0) {
+                    cost = defaultCost;
+                }
                 return sum+(qty*cost);
             },
             0
