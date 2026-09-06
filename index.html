@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>نظام المخزون ERP - V2</title>
+<title>نظام المخزون ERP</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1750,11 +1750,11 @@ function setTodayDefaults(){
         "dashboardFrom",
         "dashboardTo",
         "openingDate",
+        "supplierOpeningDate",
         "receiptDate",
         "issueDate",
         "transferDate",
         "paymentDate",
-        "supplierOpeningDate",
         "adjustmentDate",
         "statementFrom",
         "statementTo",
@@ -2805,66 +2805,32 @@ function calculateItemValue(itemId){
 async function addSupplier(){
 
     const name=
-        document
-        .getElementById(
-            "supplierName"
-        )
-        .value
-        .trim();
+        document.getElementById("supplierName").value.trim();
 
     const phone=
-        document
-        .getElementById(
-            "supplierPhone"
-        )
-        .value
-        .trim();
+        document.getElementById("supplierPhone").value.trim();
 
     const opening=
-        Number(
-            document
-            .getElementById(
-                "supplierOpening"
-            )
-            .value||0
-        );
+        Number(document.getElementById("supplierOpening").value||0);
 
     const openingDate=
-        document
-        .getElementById(
-            "supplierOpeningDate"
-        )
-        .value;
+        document.getElementById("supplierOpeningDate")?.value||
+        new Date().toISOString().split("T")[0];
 
     const notes=
-        document
-        .getElementById(
-            "supplierNotes"
-        )
-        .value
-        .trim();
+        document.getElementById("supplierNotes").value.trim();
 
     if(!name){
-        showAlert(
-            "اكتب اسم المورد",
-            "error"
-        );
+        showAlert("اكتب اسم المورد","error");
         return;
     }
 
-    if(opening!==0 && !openingDate){
-        showAlert(
-            "حدد تاريخ الرصيد الافتتاحي",
-            "error"
-        );
+    if(!openingDate){
+        showAlert("اختر تاريخ الرصيد الافتتاحي","error");
         return;
     }
 
-    const{
-        data,
-        error
-    }=
-    await supabaseClient
+    const {data,error}=await supabaseClient
         .from("suppliers")
         .insert({
             name,
@@ -2878,97 +2844,41 @@ async function addSupplier(){
         .single();
 
     if(error){
-        showAlert(
-            error.message,
-            "error"
-        );
+        showAlert(error.message,"error");
         return;
     }
 
     if(opening!==0){
-        const{
-            error:txError
-        }=
-        await supabaseClient
-            .from(
-                "supplier_transactions"
-            )
+        const {error:txError}=await supabaseClient
+            .from("supplier_transactions")
             .insert({
                 supplier_id:data.id,
-                transaction_date:
-                    openingDate,
-                transaction_type:
-                    "opening",
+                transaction_date:openingDate,
+                transaction_type:"opening",
                 document_no:null,
-                description:
-                    "رصيد أول المدة",
-                debit:
-                    opening<0
-                    ?Math.abs(opening)
-                    :0,
-                credit:
-                    opening>0
-                    ?opening
-                    :0,
-                balance_after:
-                    opening
+                description:"رصيد أول المدة",
+                debit:opening<0?Math.abs(opening):0,
+                credit:opening>0?opening:0,
+                balance_after:opening
             });
 
         if(txError){
-            await supabaseClient
-                .from("suppliers")
-                .delete()
-                .eq("id",data.id);
-
-            showAlert(
-                "تعذر تسجيل الرصيد الافتتاحي: "+
-                txError.message,
-                "error"
-            );
+            await supabaseClient.from("suppliers").delete().eq("id",data.id);
+            showAlert("تعذر تسجيل الرصيد الافتتاحي: "+txError.message,"error");
             return;
         }
     }
 
-    showAlert(
-        "تم إضافة المورد بنجاح"
-    );
+    showAlert("تم إضافة المورد بنجاح");
 
-    document
-    .getElementById(
-        "supplierName"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "supplierPhone"
-    )
-    .value="";
-
-    document
-    .getElementById(
-        "supplierOpening"
-    )
-    .value="0";
-
-    document
-    .getElementById(
-        "supplierOpeningDate"
-    )
-    .value=
-        new Date()
-        .toISOString()
-        .split("T")[0];
-
-    document
-    .getElementById(
-        "supplierNotes"
-    )
-    .value="";
+    document.getElementById("supplierName").value="";
+    document.getElementById("supplierPhone").value="";
+    document.getElementById("supplierOpening").value="0";
+    document.getElementById("supplierOpeningDate").value=new Date().toISOString().split("T")[0];
+    document.getElementById("supplierNotes").value="";
 
     await loadDatabase();
 }
-
 
 /* =========================================================
    TOGGLE SUPPLIER
@@ -4797,6 +4707,7 @@ function clearIssue(){
 }
 
 async function saveIssue(){
+
     const number=document.getElementById("issueNumber")?.value.trim()||"";
     const date=document.getElementById("issueDate")?.value||"";
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
@@ -4805,19 +4716,50 @@ async function saveIssue(){
     const note=document.getElementById("issueNote")?.value.trim()||"";
 
     if(!date||!warehouseId){
-        showAlert("أكمل التاريخ والمخزن المصدر","error"); return;
+        showAlert("أكمل التاريخ والمخزن المصدر","error");
+        return;
     }
+
     if(!issueLines.length){
-        showAlert("أضف صنفًا واحدًا على الأقل إلى إذن الصرف","error"); return;
+        showAlert("أضف صنفًا واحدًا على الأقل إلى إذن الصرف","error");
+        return;
     }
 
-    const items=issueLines.map(x=>({
-        product_id:x.product_id,
-        quantity:Number(x.quantity||0)
-    }));
+    const ids=issueLines.map(x=>x.product_id);
 
-    if(items.some(x=>!x.product_id || !(x.quantity>0))){
-        showAlert("راجع أصناف وكميات إذن الصرف","error"); return;
+    const {data:latestStocks,error:stockError}=await supabaseClient
+        .from("stock_balances")
+        .select("id,product_id,warehouse_id,qty,avg_cost")
+        .eq("warehouse_id",warehouseId)
+        .in("product_id",ids);
+
+    if(stockError){
+        showAlert("تعذر قراءة أرصدة المخزون: "+stockError.message,"error");
+        return;
+    }
+
+    const stockMap={};
+    (latestStocks||[]).forEach(s=>stockMap[String(s.product_id)]=s);
+
+    for(const line of issueLines){
+        const stock=stockMap[String(line.product_id)];
+        const requested=Number(line.quantity||0);
+        const available=Number(stock?.qty||0);
+
+        if(!stock){
+            showAlert("لا يوجد رصيد للصنف: "+line.product_name,"error");
+            return;
+        }
+
+        if(requested<=0){
+            showAlert("الكمية غير صحيحة للصنف: "+line.product_name,"error");
+            return;
+        }
+
+        if(requested>available){
+            showAlert("الكمية المطلوبة للصنف "+line.product_name+" أكبر من الرصيد المتاح: "+qty(available),"error");
+            return;
+        }
     }
 
     const notes=[
@@ -4826,22 +4768,71 @@ async function saveIssue(){
         note
     ].filter(Boolean).join(" | ");
 
-    try{
-        const {error}=await supabaseClient.rpc("post_issue",{
-            p_warehouse_id:warehouseId,
-            p_issue_date:date,
-            p_document_no:number||null,
-            p_notes:notes||null,
-            p_items:items
-        });
-        if(error) throw error;
+    const updatedStocks=[];
+    const insertedMovements=[];
 
-        showAlert("تم حفظ إذن الصرف بنجاح — عدد الأصناف: "+items.length);
+    try{
+        for(const line of issueLines){
+            const stock=stockMap[String(line.product_id)];
+            const quantity=Number(line.quantity||0);
+            let cost=Number(stock.avg_cost||line.unit_cost||0);
+            if(cost<=0) cost=await getReliableAverageCost(line.product_id,warehouseId,stock);
+            const newQty=Number(stock.qty||0)-quantity;
+
+            const {error:updateError}=await supabaseClient
+                .from("stock_balances")
+                .update({qty:newQty})
+                .eq("id",stock.id)
+                .eq("warehouse_id",warehouseId)
+                .eq("product_id",line.product_id);
+
+            if(updateError)throw new Error(updateError.message);
+
+            updatedStocks.push({id:stock.id,qty:Number(stock.qty||0)});
+
+            const {data:movement,error:movementError}=await supabaseClient
+                .from("stock_movements")
+                .insert({
+                    movement_date:date,
+                    movement_type:"adjustment_out",
+                    warehouse_id:warehouseId,
+                    product_id:line.product_id,
+                    qty:quantity,
+                    unit_cost:cost,
+                    total_cost:quantity*cost,
+                    document_no:number||null,
+                    notes:notes||null
+                })
+                .select("id")
+                .single();
+
+            if(movementError)throw new Error(movementError.message);
+
+            if(movement?.id)insertedMovements.push(movement.id);
+        }
+
+        showAlert("تم حفظ إذن الصرف بنجاح — عدد الأصناف: "+issueLines.length);
         clearIssue();
         await loadDatabase();
+
     }catch(error){
-        console.error("POST ISSUE ERROR:",error);
-        showAlert("تعذر حفظ إذن الصرف: "+(error.message||error),"error");
+        console.error(error);
+
+        for(const row of updatedStocks){
+            await supabaseClient
+                .from("stock_balances")
+                .update({qty:row.qty})
+                .eq("id",row.id);
+        }
+
+        if(insertedMovements.length){
+            await supabaseClient
+                .from("stock_movements")
+                .delete()
+                .in("id",insertedMovements);
+        }
+
+        showAlert("تعذر حفظ إذن الصرف وتمت محاولة إرجاع الرصيد: "+error.message,"error");
     }
 }
 
@@ -4898,6 +4889,7 @@ function calculateAdjustment(){
 }
 
 async function saveAdjustment(){
+
     const date=document.getElementById("adjustmentDate")?.value||"";
     const warehouseId=document.getElementById("adjustmentWarehouse")?.value||"";
     const itemId=document.getElementById("adjustmentItem")?.value||"";
@@ -4905,24 +4897,37 @@ async function saveAdjustment(){
     const note=document.getElementById("adjustmentNote")?.value.trim()||"";
 
     if(!date || !warehouseId || !itemId){
-        showAlert("أكمل التاريخ والمخزن والصنف","error"); return;
+        showAlert("أكمل التاريخ والمخزن والصنف","error");
+        return;
     }
+
     if(actual<0){
-        showAlert("الرصيد الفعلي لا يمكن أن يكون سالبًا","error"); return;
+        showAlert("الرصيد الفعلي لا يمكن أن يكون سالبًا","error");
+        return;
     }
 
     const stock=getStock(itemId,warehouseId);
+
     if(!stock){
-        showAlert("لا يوجد رصيد دفتري للصنف في هذا المخزن. استخدم رصيد أول المدة أولاً.","error"); return;
+        showAlert("لا يوجد رصيد دفتري للصنف في هذا المخزن. استخدم رصيد أول المدة أولاً.","error");
+        return;
     }
 
     const bookQty=Number(stock.qty||0);
     const difference=actual-bookQty;
+
     if(Math.abs(difference)<0.000001){
-        showAlert("لا يوجد فرق بين الرصيد الدفتري والجرد الفعلي","error"); return;
+        showAlert("لا يوجد فرق بين الرصيد الدفتري والجرد الفعلي","error");
+        return;
     }
 
+    let cost=Number(stock.avg_cost||0);
+    if(cost<=0)
+        cost=await getReliableAverageCost(itemId,warehouseId,stock);
+
+    const movementType=difference>0?"adjustment_in":"adjustment_out";
     const documentNo="ADJ-"+Date.now();
+
     const finalNotes=[
         "تسوية جردية",
         "الرصيد الدفتري: "+bookQty,
@@ -4932,22 +4937,54 @@ async function saveAdjustment(){
     ].filter(Boolean).join(" | ");
 
     try{
-        const {error}=await supabaseClient.rpc("post_adjustment",{
-            p_warehouse_id:warehouseId,
-            p_product_id:itemId,
-            p_actual_qty:actual,
-            p_adjustment_date:date,
-            p_document_no:documentNo,
-            p_notes:finalNotes
-        });
-        if(error) throw error;
 
-        showAlert("تم حفظ التسوية الجردية: "+(difference>0?"زيادة +"+qty(difference):"عجز "+qty(difference)));
+        const {error:updateError}=
+            await supabaseClient
+            .from("stock_balances")
+            .update({qty:actual})
+            .eq("id",stock.id)
+            .eq("warehouse_id",warehouseId)
+            .eq("product_id",itemId);
+
+        if(updateError)throw updateError;
+
+        const {error:movementError}=
+            await supabaseClient
+            .from("stock_movements")
+            .insert({
+                movement_date:date,
+                movement_type:movementType,
+                warehouse_id:warehouseId,
+                product_id:itemId,
+                qty:Math.abs(difference),
+                unit_cost:cost,
+                total_cost:Math.abs(difference)*cost,
+                document_no:documentNo,
+                notes:finalNotes
+            });
+
+        if(movementError){
+            await supabaseClient
+                .from("stock_balances")
+                .update({qty:bookQty})
+                .eq("id",stock.id);
+            throw movementError;
+        }
+
+        showAlert(
+            "تم حفظ التسوية الجردية: "+
+            (difference>0
+                ?"زيادة +"+qty(difference)
+                :"عجز "+qty(difference))
+        );
+
         clearAdjustment();
         await loadDatabase();
+
     }catch(error){
-        console.error("POST ADJUSTMENT ERROR:",error);
-        showAlert("تعذر حفظ التسوية الجردية: "+(error.message||error),"error");
+
+        console.error(error);
+        showAlert("تعذر حفظ التسوية الجردية: "+error.message,"error");
     }
 }
 
