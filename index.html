@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>نظام المخزون ERP</title>
+<title>نظام المخزون ERP - V2</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -359,6 +359,10 @@ tr:nth-child(even){background:#fafafa}
 
 <button onclick="showPage('issue')" id="nav-issue">
 إذن صرف
+</button>
+
+<button onclick="showPage('adjustment')" id="nav-adjustment">
+تسوية جردية
 </button>
 
 <button onclick="showPage('transfer')" id="nav-transfer">
@@ -745,9 +749,8 @@ oninput="renderItems()"
 </section>
 
 
-<!--
-=====================================================
- SUPPLIERS
+<!-- =====================================================
+     SUPPLIERS
 ===================================================== -->
 
 <section id="suppliers" class="page">
@@ -1027,6 +1030,7 @@ onclick="window.print()"
 <th>مدين</th>
 <th>دائن</th>
 <th>الرصيد</th>
+<th>إجراء</th>
 </tr>
 
 </thead>
@@ -1040,6 +1044,7 @@ onclick="window.print()"
 </div>
 
 </section>
+
 
 <!-- =====================================================
      OPENING
@@ -1341,6 +1346,79 @@ onclick="clearReceipt()"
 
 
 <!-- =====================================================
+     STOCK ADJUSTMENT
+===================================================== -->
+
+<section id="adjustment" class="page">
+
+<div class="card">
+
+<h2>⚖️ تسوية جردية</h2>
+
+<p class="small">
+سجل الرصيد الفعلي بعد الجرد. النظام يحسب الفرق تلقائيًا ويضيف زيادة أو يطرح عجزًا من المخزون.
+</p>
+
+<div class="form-grid">
+
+<div>
+<label>التاريخ *</label>
+<input type="date" id="adjustmentDate">
+</div>
+
+<div>
+<label>المخزن / الفرع *</label>
+<select id="adjustmentWarehouse"></select>
+</div>
+
+<div>
+<label>الصنف *</label>
+<select id="adjustmentItem"></select>
+</div>
+
+<div>
+<label>الرصيد الدفتري</label>
+<input id="adjustmentBookQty" readonly>
+</div>
+
+<div>
+<label>الرصيد الفعلي بعد الجرد *</label>
+<input type="number" step="0.001" min="0" id="adjustmentActualQty" oninput="calculateAdjustment()">
+</div>
+
+<div>
+<label>الفرق</label>
+<input id="adjustmentDifference" readonly>
+</div>
+
+<div>
+<label>متوسط التكلفة</label>
+<input id="adjustmentCost" readonly>
+</div>
+
+<div>
+<label>قيمة الفرق</label>
+<input id="adjustmentValue" readonly>
+</div>
+
+</div>
+
+<div style="margin-top:12px">
+<label>ملاحظات الجرد</label>
+<textarea id="adjustmentNote" placeholder="مثال: جرد فعلي بتاريخ اليوم"></textarea>
+</div>
+
+<div class="actions">
+<button class="btn btn-success" onclick="saveAdjustment()">⚖️ حفظ التسوية الجردية</button>
+<button class="btn btn-light" onclick="clearAdjustment()">مسح</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
      TRANSFER
 ===================================================== -->
 
@@ -1532,9 +1610,10 @@ onchange="renderItemCard()"
 <th>الحركة</th>
 <th>من</th>
 <th>إلى</th>
-<th>الكمية</th>
+<th>الكمية (+/-)</th>
 <th>التكلفة</th>
 <th>القيمة</th>
+<th>المورد</th>
 </tr>
 
 </thead>
@@ -1621,7 +1700,8 @@ let db={
     stocks:[],
     movements:[],
     transfers:[],
-    suppliers:[]
+    suppliers:[],
+    supplierTransactions:[]
 };
 
 let receiptLines=[];
@@ -1674,6 +1754,8 @@ function setTodayDefaults(){
         "issueDate",
         "transferDate",
         "paymentDate",
+        "supplierOpeningDate",
+        "adjustmentDate",
         "statementFrom",
         "statementTo",
         "cardFrom",
@@ -1821,21 +1903,6 @@ function getStock(
 
 }
 
-function getEffectiveStock(itemId,warehouseId){
-    const base=getStock(itemId,warehouseId);
-    const rows=(db.movements||[]).filter(m=>String(m.product_id)===String(itemId)&&String(m.warehouse_id)===String(warehouseId));
-    let q=0,v=0;
-    rows.forEach(m=>{
-        const n=Number(m.qty||0), total=Number(m.total_cost||0);
-        let c=Number(m.unit_cost||0); if(c<=0&&n>0&&total>0)c=total/n;
-        if(["opening","purchase","transfer_in","adjustment_in"].includes(String(m.movement_type||""))){q+=n;if(c>0)v+=n*c;}
-        else if(["transfer_out","adjustment_out"].includes(String(m.movement_type||""))){const avg=q>0?v/q:c;q=Math.max(0,q-n);v=Math.max(0,v-n*avg);}
-    });
-    if(base&&Number(base.qty||0)>0)return base;
-    if(q>0)return {id:base?.id||null,product_id:itemId,warehouse_id:warehouseId,qty:q,avg_cost:v>0?v/q:Number(base?.avg_cost||0)};
-    return base;
-}
-
 
 function findWarehouseByName(name){
 
@@ -1925,7 +1992,8 @@ async function loadDatabase(){
             warehousesRes,
             stocksRes,
             movementsRes,
-            transfersRes
+            transfersRes,
+            supplierTransactionsRes
         ]=await Promise.all([
 
             supabaseClient
@@ -1960,7 +2028,13 @@ async function loadDatabase(){
                 .order(
                     "created_at",
                     {ascending:false}
-                )
+                ),
+
+            supabaseClient
+                .from("supplier_transactions")
+                .select("*")
+                .order("transaction_date",{ascending:true})
+                .order("created_at",{ascending:true})
 
         ]);
 
@@ -1975,6 +2049,12 @@ async function loadDatabase(){
 
         if(movementsRes.error)
             throw movementsRes.error;
+
+        if(supplierTransactionsRes.error)
+            throw supplierTransactionsRes.error;
+
+        db.supplierTransactions=
+            supplierTransactionsRes.data||[];
 
         db.warehouses=
             warehousesRes.data||[];
@@ -2083,6 +2163,15 @@ async function loadDatabase(){
                     if(match){
                         to=match[1];
                     }
+
+                }else if(
+                    movementType==="adjustment_in"
+                ){
+
+                    to=
+                        warehouseName(
+                            m.warehouse_id
+                        );
 
                 }else if(
                     movementType==="transfer_out" ||
@@ -2231,46 +2320,61 @@ async function loadDatabase(){
 ========================================================= */
 
 async function loadSuppliers(){
-
     const{
         data,
         error
     }=
     await supabaseClient
         .from("suppliers")
-        .select("*")
-        .order("name");
+        .select("id,name,phone,notes,active,opening_balance,balance")
+        .order("name",{ascending:true});
 
-    if(error)
-        throw error;
+    if(error){
+        console.error("SUPPLIERS LOAD ERROR:",error);
+        db.suppliers=[];
+        showAlert(
+            "تعذر تحميل الموردين: "+error.message,
+            "error"
+        );
+        return false;
+    }
 
     db.suppliers=
-        data||[];
+        (data||[])
+        .map(s=>({
+            ...s,
+            name:String(s.name||"").trim()
+        }))
+        .filter(s=>s.id && s.name);
 
+    console.log("SUPPLIERS LOADED:",db.suppliers);
+    return true;
 }
 
 
 function fillSupplierSelect(id){
-
     const select=
         document.getElementById(id);
 
     if(!select) return;
 
+    const suppliers=
+        (db.suppliers||[])
+        .filter(
+            s=>s.active!==false &&
+            String(s.name||"").trim()
+        );
+
     select.innerHTML=
         `<option value="">اختر المورد</option>`+
-        db.suppliers
-        .filter(
-            s=>s.active!==false
-        )
+        suppliers
         .map(
             s=>
             `<option value="${esc(s.id)}">
-                ${esc(s.name)}
+                ${esc(String(s.name).trim())}
             </option>`
         )
         .join("");
-
 }
 
 
@@ -2281,6 +2385,7 @@ function fillAllSelects(){
         "issueWarehouse",
         "transferFrom",
         "transferTo",
+        "adjustmentWarehouse",
         "cardWarehouse"
     ];
 
@@ -2318,6 +2423,7 @@ function fillAllSelects(){
         "receiptItem",
         "issueItem",
         "transferItem",
+        "adjustmentItem",
         "cardItem"
     ];
 
@@ -2329,7 +2435,7 @@ function fillAllSelects(){
         if(!el) return;
 
         el.innerHTML=
-            `<option value="">اختر الصنف</option>`+
+            `<option value="">${id==="cardItem"?"جميع الأصناف":"اختر الصنف"}</option>`+
             db.items
             .filter(
                 i=>i.active!==false
@@ -2738,27 +2844,21 @@ async function addSupplier(){
         .value
         .trim();
 
-
     if(!name){
-
         showAlert(
             "اكتب اسم المورد",
             "error"
         );
-
         return;
     }
 
     if(opening!==0 && !openingDate){
-
         showAlert(
             "حدد تاريخ الرصيد الافتتاحي",
             "error"
         );
-
         return;
     }
-
 
     const{
         data,
@@ -2777,20 +2877,15 @@ async function addSupplier(){
         .select()
         .single();
 
-
     if(error){
-
         showAlert(
             error.message,
             "error"
         );
-
         return;
     }
 
-
     if(opening!==0){
-
         const{
             error:txError
         }=
@@ -2799,60 +2894,44 @@ async function addSupplier(){
                 "supplier_transactions"
             )
             .insert({
-
                 supplier_id:data.id,
-
                 transaction_date:
                     openingDate,
-
                 transaction_type:
                     "opening",
-
                 document_no:null,
-
                 description:
                     "رصيد أول المدة",
-
                 debit:
                     opening<0
                     ?Math.abs(opening)
                     :0,
-
                 credit:
                     opening>0
                     ?opening
                     :0,
-
                 balance_after:
                     opening
-
             });
 
-
         if(txError){
-
             await supabaseClient
                 .from("suppliers")
                 .delete()
                 .eq("id",data.id);
-
 
             showAlert(
                 "تعذر تسجيل الرصيد الافتتاحي: "+
                 txError.message,
                 "error"
             );
-
             return;
         }
-
     }
-
 
     showAlert(
         "تم إضافة المورد بنجاح"
     );
-
 
     document
     .getElementById(
@@ -2876,7 +2955,10 @@ async function addSupplier(){
     .getElementById(
         "supplierOpeningDate"
     )
-    .value="";
+    .value=
+        new Date()
+        .toISOString()
+        .split("T")[0];
 
     document
     .getElementById(
@@ -2884,9 +2966,7 @@ async function addSupplier(){
     )
     .value="";
 
-
     await loadDatabase();
-
 }
 
 
@@ -3075,6 +3155,85 @@ function openSupplierStatement(id){
 }
 
 
+async function deleteSupplierTransaction(transactionId){
+
+    if(!transactionId){
+        showAlert("رقم حركة المورد غير موجود","error");
+        return;
+    }
+
+    const tx=(db.supplierTransactions||[]).find(
+        t=>String(t.id)===String(transactionId)
+    );
+
+    if(!tx){
+        showAlert("حركة المورد غير موجودة","error");
+        return;
+    }
+
+    const supplier=(db.suppliers||[]).find(
+        s=>String(s.id)===String(tx.supplier_id)
+    );
+
+    const supplierName=supplier?.name||"المورد";
+
+    if(!confirm(
+        "هل أنت متأكد من حذف هذه الحركة من كشف حساب "+supplierName+"؟\n\n"+
+        "النوع: "+transactionTypeName(tx.transaction_type)+"\n"+
+        "المستند: "+(tx.document_no||"-")+"\n"+
+        "مدين: "+money(tx.debit||0)+"\n"+
+        "دائن: "+money(tx.credit||0)+"\n\n"+
+        "سيتم إعادة احتساب رصيد المورد من جميع الحركات."
+    )) return;
+
+    try{
+
+        const {error:deleteError}=
+            await supabaseClient
+            .from("supplier_transactions")
+            .delete()
+            .eq("id",transactionId);
+
+        if(deleteError)throw deleteError;
+
+        const {data:remaining,error:loadError}=
+            await supabaseClient
+            .from("supplier_transactions")
+            .select("debit,credit")
+            .eq("supplier_id",tx.supplier_id);
+
+        if(loadError)throw loadError;
+
+        const newBalance=(remaining||[]).reduce(
+            (sum,row)=>
+                sum+
+                Number(row.credit||0)-
+                Number(row.debit||0),
+            0
+        );
+
+        const {error:updateError}=
+            await supabaseClient
+            .from("suppliers")
+            .update({balance:newBalance})
+            .eq("id",tx.supplier_id);
+
+        if(updateError)throw updateError;
+
+        showAlert("تم حذف حركة المورد وإعادة احتساب الرصيد بنجاح");
+
+        await loadDatabase();
+
+        document.getElementById("statementSupplier").value=tx.supplier_id;
+        await loadSupplierStatement();
+
+    }catch(error){
+
+        console.error(error);
+        showAlert("تعذر حذف حركة المورد: "+error.message,"error");
+    }
+}
+
 /* =========================================================
    SUPPLIER PAYMENT
 ========================================================= */
@@ -3161,14 +3320,6 @@ async function saveSupplierPayment(){
             "error"
         );
 
-        return;
-    }
-
-    if(from && to && from>to){
-        showAlert(
-            "تاريخ البداية يجب أن يكون قبل أو يساوي تاريخ النهاية",
-            "error"
-        );
         return;
     }
 
@@ -3462,24 +3613,7 @@ async function loadSupplierStatement(){
 
 
     const transactions=
-        (data||[]).slice().sort((a,b)=>{
-            const da=dateOnly(a.transaction_date);
-            const db=dateOnly(b.transaction_date);
-
-            if(da!==db){
-                return da.localeCompare(db);
-            }
-
-            if((a.transaction_type||"")!==
-               (b.transaction_type||"")){
-                if(a.transaction_type==="opening") return -1;
-                if(b.transaction_type==="opening") return 1;
-            }
-
-            return String(a.created_at||"").localeCompare(
-                String(b.created_at||"")
-            );
-        });
+        data||[];
 
 
     let openingBalance=0;
@@ -3645,6 +3779,15 @@ async function loadSupplierStatement(){
                 </strong>
             </td>
 
+            <td>
+                <button
+                    class="btn btn-danger"
+                    onclick="deleteSupplierTransaction('${t.id}')"
+                >
+                    🗑️ حذف
+                </button>
+            </td>
+
         </tr>
 
         `;
@@ -3655,7 +3798,7 @@ async function loadSupplierStatement(){
     body.innerHTML=
         html||
         `<tr>
-            <td colspan="8">
+            <td colspan="9">
                 لا توجد حركات في الفترة
             </td>
         </tr>`;
@@ -3691,21 +3834,6 @@ async function loadSupplierStatement(){
     )
     .textContent=
         money(running);
-
-    if(supplier){
-        const actualBalance=running;
-
-        if(Number(supplier.balance||0)!==Number(actualBalance||0)){
-            const{error:balanceError}=await supabaseClient
-                .from("suppliers")
-                .update({balance:actualBalance})
-                .eq("id",supplierId);
-
-            if(!balanceError){
-                supplier.balance=actualBalance;
-            }
-        }
-    }
 
 
     document
@@ -4461,24 +4589,11 @@ async function updateIssueCost(){
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
     const costEl=document.getElementById("issueCost");
     if(!costEl) return;
-    if(!itemId||!warehouseId){
-        costEl.value="0.00";
-        calculateIssue();
-        return;
-    }
+    if(!itemId||!warehouseId){ costEl.value="0.00"; calculateIssue(); return; }
     costEl.value="جارٍ الحساب...";
-    try{
-        const {data,error}=await supabaseClient.rpc("get_product_average_cost",{
-            p_product_id:itemId,
-            p_warehouse_id:warehouseId
-        });
-        if(error) throw error;
-        costEl.value=Number(data||0).toFixed(2);
-    }catch(error){
-        console.error("تعذر قراءة متوسط التكلفة من Supabase:",error);
-        const item=getItemById(itemId);
-        costEl.value=Number(item?.cost||getStock(itemId,warehouseId)?.avg_cost||0).toFixed(2);
-    }
+    const stock=getStock(itemId,warehouseId);
+    const averageCost=await getReliableAverageCost(itemId,warehouseId,stock);
+    costEl.value=Number(averageCost||0).toFixed(2);
     calculateIssue();
 }
 
@@ -4503,7 +4618,7 @@ function calculateIssue(){
         totalEl.textContent=money(linesTotal+currentTotal);
 }
 
-async async function addIssueLine(){
+async function addIssueLine(){
 
     const itemId=document.getElementById("issueItem")?.value||"";
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
@@ -4524,7 +4639,7 @@ async async function addIssueLine(){
         return;
     }
 
-    const stock=getEffectiveStock(itemId,warehouseId);
+    const stock=getStock(itemId,warehouseId);
 
     if(!stock){
         showAlert("لا يوجد رصيد لهذا الصنف في المخزن","error");
@@ -4572,7 +4687,7 @@ function changeIssueLineQty(index,value){
 
     const newQty=Number(value||0);
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
-    const stock=getEffectiveStock(line.product_id,warehouseId);
+    const stock=getStock(line.product_id,warehouseId);
 
     if(newQty<=0){
         showAlert("الكمية يجب أن تكون أكبر من صفر","error");
@@ -4682,7 +4797,6 @@ function clearIssue(){
 }
 
 async function saveIssue(){
-
     const number=document.getElementById("issueNumber")?.value.trim()||"";
     const date=document.getElementById("issueDate")?.value||"";
     const warehouseId=document.getElementById("issueWarehouse")?.value||"";
@@ -4691,50 +4805,19 @@ async function saveIssue(){
     const note=document.getElementById("issueNote")?.value.trim()||"";
 
     if(!date||!warehouseId){
-        showAlert("أكمل التاريخ والمخزن المصدر","error");
-        return;
+        showAlert("أكمل التاريخ والمخزن المصدر","error"); return;
     }
-
     if(!issueLines.length){
-        showAlert("أضف صنفًا واحدًا على الأقل إلى إذن الصرف","error");
-        return;
+        showAlert("أضف صنفًا واحدًا على الأقل إلى إذن الصرف","error"); return;
     }
 
-    const ids=issueLines.map(x=>x.product_id);
+    const items=issueLines.map(x=>({
+        product_id:x.product_id,
+        quantity:Number(x.quantity||0)
+    }));
 
-    const {data:latestStocks,error:stockError}=await supabaseClient
-        .from("stock_balances")
-        .select("id,product_id,warehouse_id,qty,avg_cost")
-        .eq("warehouse_id",warehouseId)
-        .in("product_id",ids);
-
-    if(stockError){
-        showAlert("تعذر قراءة أرصدة المخزون: "+stockError.message,"error");
-        return;
-    }
-
-    const stockMap={};
-    (latestStocks||[]).forEach(s=>stockMap[String(s.product_id)]=s);
-
-    for(const line of issueLines){
-        const stock=getEffectiveStock(line.product_id,warehouseId) || stockMap[String(line.product_id)];
-        const requested=Number(line.quantity||0);
-        const available=Number(stock?.qty||0);
-
-        if(!stock){
-            showAlert("لا يوجد رصيد للصنف: "+line.product_name,"error");
-            return;
-        }
-
-        if(requested<=0){
-            showAlert("الكمية غير صحيحة للصنف: "+line.product_name,"error");
-            return;
-        }
-
-        if(requested>available){
-            showAlert("الكمية المطلوبة للصنف "+line.product_name+" أكبر من الرصيد المتاح: "+qty(available),"error");
-            return;
-        }
+    if(items.some(x=>!x.product_id || !(x.quantity>0))){
+        showAlert("راجع أصناف وكميات إذن الصرف","error"); return;
     }
 
     const notes=[
@@ -4743,78 +4826,152 @@ async function saveIssue(){
         note
     ].filter(Boolean).join(" | ");
 
-    const updatedStocks=[];
-    const insertedMovements=[];
-
     try{
-        for(const line of issueLines){
-            const stock=getEffectiveStock(line.product_id,warehouseId) || stockMap[String(line.product_id)];
-            const quantity=Number(line.quantity||0);
-            let cost=Number(stock.avg_cost||line.unit_cost||0);
-            if(cost<=0) cost=await getReliableAverageCost(line.product_id,warehouseId,stock);
-            const newQty=Number(stock.qty||0)-quantity;
+        const {error}=await supabaseClient.rpc("post_issue",{
+            p_warehouse_id:warehouseId,
+            p_issue_date:date,
+            p_document_no:number||null,
+            p_notes:notes||null,
+            p_items:items
+        });
+        if(error) throw error;
 
-            let updateError=null;
-            if(stock.id){
-                const result=await supabaseClient.from("stock_balances").update({qty:newQty}).eq("id",stock.id).eq("warehouse_id",warehouseId).eq("product_id",line.product_id);
-                updateError=result.error;
-            }else{
-                const result=await supabaseClient.from("stock_balances").insert({product_id:line.product_id,warehouse_id:warehouseId,qty:newQty,avg_cost:cost});
-                updateError=result.error;
-            }
-
-            if(updateError)throw new Error(updateError.message);
-
-            updatedStocks.push({id:stock.id,qty:Number(stock.qty||0)});
-
-            const {data:movement,error:movementError}=await supabaseClient
-                .from("stock_movements")
-                .insert({
-                    movement_date:date,
-                    movement_type:"adjustment_out",
-                    warehouse_id:warehouseId,
-                    product_id:line.product_id,
-                    qty:quantity,
-                    unit_cost:cost,
-                    total_cost:quantity*cost,
-                    document_no:number||null,
-                    notes:notes||null
-                })
-                .select("id")
-                .single();
-
-            if(movementError)throw new Error(movementError.message);
-
-            if(movement?.id)insertedMovements.push(movement.id);
-        }
-
-        showAlert("تم حفظ إذن الصرف بنجاح — عدد الأصناف: "+issueLines.length);
+        showAlert("تم حفظ إذن الصرف بنجاح — عدد الأصناف: "+items.length);
         clearIssue();
         await loadDatabase();
-
     }catch(error){
-        console.error(error);
-
-        for(const row of updatedStocks){
-            await supabaseClient
-                .from("stock_balances")
-                .update({qty:row.qty})
-                .eq("id",row.id);
-        }
-
-        if(insertedMovements.length){
-            await supabaseClient
-                .from("stock_movements")
-                .delete()
-                .in("id",insertedMovements);
-        }
-
-        showAlert("تعذر حفظ إذن الصرف وتمت محاولة إرجاع الرصيد: "+error.message,"error");
+        console.error("POST ISSUE ERROR:",error);
+        showAlert("تعذر حفظ إذن الصرف: "+(error.message||error),"error");
     }
 }
 
 document.getElementById("issueItem")?.addEventListener("change",updateIssueCost);
 document.getElementById("issueWarehouse")?.addEventListener("change",updateIssueCost);
+
+/* =========================================================
+   STOCK ADJUSTMENT
+========================================================= */
+
+async function updateAdjustmentData(){
+
+    const itemId=document.getElementById("adjustmentItem")?.value||"";
+    const warehouseId=document.getElementById("adjustmentWarehouse")?.value||"";
+    const bookEl=document.getElementById("adjustmentBookQty");
+    const costEl=document.getElementById("adjustmentCost");
+
+    if(!itemId || !warehouseId){
+        if(bookEl)bookEl.value="0";
+        if(costEl)costEl.value="0.00";
+        calculateAdjustment();
+        return;
+    }
+
+    const stock=getStock(itemId,warehouseId);
+    const bookQty=Number(stock?.qty||0);
+
+    if(bookEl)bookEl.value=Number(bookQty).toFixed(3);
+
+    if(costEl){
+        costEl.value="جارٍ الحساب...";
+        const cost=await getReliableAverageCost(itemId,warehouseId,stock);
+        costEl.value=Number(cost||0).toFixed(2);
+    }
+
+    calculateAdjustment();
+}
+
+function calculateAdjustment(){
+
+    const book=Number(document.getElementById("adjustmentBookQty")?.value||0);
+    const actual=Number(document.getElementById("adjustmentActualQty")?.value||0);
+    const cost=Number(document.getElementById("adjustmentCost")?.value||0);
+    const diff=actual-book;
+
+    const diffEl=document.getElementById("adjustmentDifference");
+    const valueEl=document.getElementById("adjustmentValue");
+
+    if(diffEl)
+        diffEl.value=(diff>=0?"+":"")+Number(diff).toFixed(3);
+
+    if(valueEl)
+        valueEl.value=money(Math.abs(diff)*cost)+" ر.س";
+}
+
+async function saveAdjustment(){
+    const date=document.getElementById("adjustmentDate")?.value||"";
+    const warehouseId=document.getElementById("adjustmentWarehouse")?.value||"";
+    const itemId=document.getElementById("adjustmentItem")?.value||"";
+    const actual=Number(document.getElementById("adjustmentActualQty")?.value||0);
+    const note=document.getElementById("adjustmentNote")?.value.trim()||"";
+
+    if(!date || !warehouseId || !itemId){
+        showAlert("أكمل التاريخ والمخزن والصنف","error"); return;
+    }
+    if(actual<0){
+        showAlert("الرصيد الفعلي لا يمكن أن يكون سالبًا","error"); return;
+    }
+
+    const stock=getStock(itemId,warehouseId);
+    if(!stock){
+        showAlert("لا يوجد رصيد دفتري للصنف في هذا المخزن. استخدم رصيد أول المدة أولاً.","error"); return;
+    }
+
+    const bookQty=Number(stock.qty||0);
+    const difference=actual-bookQty;
+    if(Math.abs(difference)<0.000001){
+        showAlert("لا يوجد فرق بين الرصيد الدفتري والجرد الفعلي","error"); return;
+    }
+
+    const documentNo="ADJ-"+Date.now();
+    const finalNotes=[
+        "تسوية جردية",
+        "الرصيد الدفتري: "+bookQty,
+        "الرصيد الفعلي: "+actual,
+        "الفرق: "+difference,
+        note
+    ].filter(Boolean).join(" | ");
+
+    try{
+        const {error}=await supabaseClient.rpc("post_adjustment",{
+            p_warehouse_id:warehouseId,
+            p_product_id:itemId,
+            p_actual_qty:actual,
+            p_adjustment_date:date,
+            p_document_no:documentNo,
+            p_notes:finalNotes
+        });
+        if(error) throw error;
+
+        showAlert("تم حفظ التسوية الجردية: "+(difference>0?"زيادة +"+qty(difference):"عجز "+qty(difference)));
+        clearAdjustment();
+        await loadDatabase();
+    }catch(error){
+        console.error("POST ADJUSTMENT ERROR:",error);
+        showAlert("تعذر حفظ التسوية الجردية: "+(error.message||error),"error");
+    }
+}
+
+function clearAdjustment(){
+
+    ["adjustmentActualQty","adjustmentDifference","adjustmentValue","adjustmentNote"]
+    .forEach(id=>{
+        const el=document.getElementById(id);
+        if(el)el.value="";
+    });
+
+    const book=document.getElementById("adjustmentBookQty");
+    const cost=document.getElementById("adjustmentCost");
+
+    if(book)book.value="0";
+    if(cost)cost.value="0.00";
+}
+
+document.getElementById("adjustmentWarehouse")
+?.addEventListener("change",updateAdjustmentData);
+
+document.getElementById("adjustmentItem")
+?.addEventListener("change",updateAdjustmentData);
+
 
 /* =========================================================
    TRANSFER
@@ -5106,6 +5263,9 @@ function movementTypeName(type){
 
         case "adjustment_out":
             return "إذن صرف";
+
+        case "adjustment_in":
+            return "تسوية جردية - زيادة";
 
         default:
             return type||"-";
@@ -5660,6 +5820,9 @@ function renderDailyStockReport(){
             case "adjustment_out":
                 return -q;
 
+            case "adjustment_in":
+                return q;
+
             default:
                 return 0;
 
@@ -5782,6 +5945,13 @@ function renderDailyStockReport(){
                     issues += q;
                     net -= q;
                     value -= v;
+
+                    break;
+
+                case "adjustment_in":
+
+                    net += q;
+                    value += v;
 
                     break;
 
@@ -6500,195 +6670,140 @@ function renderRecentMovements(){
    ITEM CARD
 ========================================================= */
 
-function renderItemCard(){
+function movementSignedQty(m){
+    const q=Number(m.quantity||0);
+    switch(String(m.movement_type||"")){
+        case "opening":
+        case "purchase":
+        case "transfer_in":
+        case "adjustment_in":
+            return q;
+        case "transfer_out":
+        case "adjustment_out":
+            return -q;
+        default:
+            return 0;
+    }
+}
 
-    const itemId =
-        document
-        .getElementById("cardItem")
-        ?.value||"";
+function movementSupplierName(m){
+    if(String(m.movement_type||"")!=="purchase") return "-";
 
-    const warehouseId =
-        document
-        .getElementById("cardWarehouse")
-        ?.value||"";
+    const doc=String(m.document_no||"").trim();
 
-    const from =
-        document
-        .getElementById("cardFrom")
-        ?.value||"";
-
-    const to =
-        document
-        .getElementById("cardTo")
-        ?.value||"";
-
-    const body =
-        document.getElementById(
-            "itemCardBody"
+    if(doc){
+        const tx=(db.supplierTransactions||[]).find(t=>
+            String(t.transaction_type||"")==="purchase" &&
+            String(t.document_no||"").trim()===doc
         );
 
-    const totalQtyEl =
-        document.getElementById(
-            "itemCardTotalQty"
-        );
-
-    const totalValueEl =
-        document.getElementById(
-            "itemCardTotalValue"
-        );
-
-    if(!body) return;
-
-    if(!itemId){
-
-        body.innerHTML=
-            `<tr>
-                <td colspan="8">
-                    اختر الصنف
-                </td>
-            </tr>`;
-
-        if(totalQtyEl)
-            totalQtyEl.textContent=qty(0);
-
-        if(totalValueEl)
-            totalValueEl.textContent=money(0);
-
-        return;
+        if(tx){
+            const s=(db.suppliers||[]).find(
+                x=>String(x.id)===String(tx.supplier_id)
+            );
+            if(s)return s.name;
+        }
     }
 
-    const movements=
-        db.movements
-        .filter(
-            m=>
-            String(m.product_id)===
-            String(itemId)
-        )
-        .filter(m=>{
+    const note=String(m.notes||"");
+    const match=note.match(/المورد\s*:\s*(.+?)(?:\s*\||$)/);
+    return match?match[1]:"-";
+}
 
-            if(
-                warehouseId &&
-                String(m.warehouse_id)!==
-                String(warehouseId)
-            ){
-                return false;
-            }
+function renderItemCard(){
 
-            const d=
-                dateOnly(
-                    m.movement_date
-                );
+    const itemId=document.getElementById("cardItem")?.value||"";
+    const warehouseId=document.getElementById("cardWarehouse")?.value||"";
+    const from=document.getElementById("cardFrom")?.value||"";
+    const to=document.getElementById("cardTo")?.value||"";
 
-            if(
-                from &&
-                d<from
-            )
-                return false;
+    const body=document.getElementById("itemCardBody");
+    const totalQtyEl=document.getElementById("itemCardTotalQty");
+    const totalValueEl=document.getElementById("itemCardTotalValue");
 
-            if(
-                to &&
-                d>to
-            )
-                return false;
+    if(!body)return;
 
-            return true;
+    let movements=db.movements.slice();
 
-        });
-
-    const totalQty=
-        movements.reduce(
-            (sum,m)=>
-                sum+
-                Number(m.quantity||0),
-            0
+    if(itemId){
+        movements=movements.filter(
+            m=>String(m.product_id)===String(itemId)
         );
+    }
 
-    const totalValue=
-        movements.reduce(
-            (sum,m)=>
-                sum+
-                Number(m.value||0),
-            0
-        );
+    movements=movements.filter(m=>{
+
+        if(
+            warehouseId &&
+            String(m.warehouse_id)!==String(warehouseId)
+        )return false;
+
+        const d=dateOnly(m.movement_date);
+
+        if(from && d<from)return false;
+        if(to && d>to)return false;
+
+        return true;
+    });
+
+    movements.sort((a,b)=>{
+        const d=String(a.movement_date)
+            .localeCompare(String(b.movement_date));
+        if(d!==0)return d;
+        return String(a.created_at||"")
+            .localeCompare(String(b.created_at||""));
+    });
+
+    const totalQty=movements.reduce(
+        (sum,m)=>sum+movementSignedQty(m),
+        0
+    );
+
+    const totalValue=movements.reduce(
+        (sum,m)=>
+            sum+(movementSignedQty(m)*Number(m.cost||0)),
+        0
+    );
 
     if(totalQtyEl)
         totalQtyEl.textContent=
-            qty(totalQty);
+            (totalQty>=0?"+":"")+qty(totalQty);
 
     if(totalValueEl)
-        totalValueEl.textContent=
-            money(totalValue);
+        totalValueEl.textContent=money(totalValue);
 
-    const rows=
-        movements
-        .map(m=>`
+    const rows=movements.map(m=>{
 
+        const signed=movementSignedQty(m);
+
+        const signedHtml=
+            signed>0
+            ?`<span class="text-green">+${qty(signed)}</span>`
+            :signed<0
+            ?`<span class="text-red">${qty(signed)}</span>`
+            :qty(0);
+
+        return`
         <tr>
-
-            <td>
-                ${esc(
-                    dateOnly(
-                        m.movement_date
-                    )
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.document_no||"-"
-                )}
-            </td>
-
-            <td>
-                ${movementTypeName(
-                    m.movement_type
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.from||"-"
-                )}
-            </td>
-
-            <td>
-                ${esc(
-                    m.to||"-"
-                )}
-            </td>
-
-            <td>
-                ${qty(
-                    m.quantity
-                )}
-            </td>
-
-            <td>
-                ${money(
-                    m.cost
-                )}
-            </td>
-
-            <td>
-                ${money(
-                    m.value
-                )}
-            </td>
-
+            <td>${esc(dateOnly(m.movement_date))}</td>
+            <td>${esc(m.document_no||"-")}</td>
+            <td>${movementTypeName(m.movement_type)}</td>
+            <td>${esc(m.from||"-")}</td>
+            <td>${esc(m.to||"-")}</td>
+            <td>${signedHtml}</td>
+            <td>${money(m.cost)}</td>
+            <td>${money(Math.abs(signed)*Number(m.cost||0))}</td>
+            <td>${esc(movementSupplierName(m))}</td>
         </tr>
-
-        `)
-        .join("");
+        `;
+    }).join("");
 
     body.innerHTML=
         rows||
         `<tr>
-            <td colspan="8">
-                لا توجد حركات
-            </td>
+            <td colspan="9">لا توجد حركات</td>
         </tr>`;
 }
-
 
 /* =========================================================
    BACKUP
