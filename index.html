@@ -1147,11 +1147,6 @@ placeholder="رقم الفاتورة"
 <input type="date" id="receiptDate">
 </div>
 
-<div>
-<label>المخزن المستلم</label>
-<select id="receiptWarehouse"></select>
-</div>
-
 </div>
 
 <hr>
@@ -1911,11 +1906,21 @@ function getStock(
 
 function findWarehouseByName(name){
 
-    return db.warehouses.find(
-        w=>
-        String(w.name).trim()===
-        String(name).trim()
-    );
+    const aliases={
+        "المخزن الرئيسي":["المخزن الرئيسي","مخزن الرئيسي","الرئيسي"],
+        "فرع جدة":["فرع جدة","مخزن جده","مخزن جدة","جده","جدة"],
+        "فرع ينبع":["فرع ينبع","مخزن ينبع","ينبع"],
+        "فرع المدينة":["فرع المدينة","مخزن المدينه","مخزن المدينة","المدينه","المدينة"],
+        "المطبخ":["المطبخ","مطبخ"]
+    };
+
+    const wanted=String(name||"").trim();
+    const names=aliases[wanted]||[wanted];
+
+    return db.warehouses.find(w=>{
+        const current=String(w?.name||"").trim();
+        return names.some(n=>current===n);
+    });
 
 }
 
@@ -2387,7 +2392,6 @@ function fillAllSelects(){
 
     const warehouseSelects=[
         "openingWarehouse",
-        "receiptWarehouse",
         "issueWarehouse",
         "transferFrom",
         "transferTo",
@@ -2794,6 +2798,9 @@ function renderItems(){
 
 function calculateItemValue(itemId){
 
+    const item=getItemById(itemId);
+    const defaultCost=Number(item?.cost||0);
+
     return db.stocks
         .filter(
             s=>
@@ -2801,10 +2808,11 @@ function calculateItemValue(itemId){
             String(itemId)
         )
         .reduce(
-            (sum,s)=>
-            sum+
-            Number(s.qty||0)*
-            Number(s.avg_cost||0),
+            (sum,s)=>{
+                const qty=Number(s.qty||0);
+                const cost=Number(s.avg_cost ?? s.unit_cost ?? defaultCost);
+                return sum+(qty*cost);
+            },
             0
         );
 
@@ -4375,13 +4383,6 @@ function calculateReceiptTotals(){
 
 async function saveReceipt(){
 
-    const warehouseId=
-        document
-        .getElementById(
-            "receiptWarehouse"
-        )
-        .value||null;
-
     const supplierId=
         document
         .getElementById(
@@ -4411,17 +4412,6 @@ async function saveReceipt(){
         )
         .value
         .trim();
-
-
-    if(!warehouseId){
-
-        showAlert(
-            "اختر المخزن المستلم",
-            "error"
-        );
-
-        return;
-    }
 
 
     if(!date){
@@ -4482,9 +4472,6 @@ async function saveReceipt(){
         .rpc(
             "post_purchase",
             {
-                p_warehouse_id:
-                    warehouseId,
-
                 p_supplier_id:
                     supplierId,
 
@@ -4539,7 +4526,6 @@ function clearReceipt(){
 
     const fields=[
         "receiptInvoice",
-        "receiptWarehouse",
         "receiptNote",
         "receiptItem",
         "receiptQty",
