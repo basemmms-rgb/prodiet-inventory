@@ -1147,6 +1147,11 @@ placeholder="رقم الفاتورة"
 <input type="date" id="receiptDate">
 </div>
 
+<div>
+<label>المخزن المستلم</label>
+<select id="receiptWarehouse"></select>
+</div>
+
 </div>
 
 <hr>
@@ -2382,6 +2387,7 @@ function fillAllSelects(){
 
     const warehouseSelects=[
         "openingWarehouse",
+        "receiptWarehouse",
         "issueWarehouse",
         "transferFrom",
         "transferTo",
@@ -4369,6 +4375,13 @@ function calculateReceiptTotals(){
 
 async function saveReceipt(){
 
+    const warehouseId=
+        document
+        .getElementById(
+            "receiptWarehouse"
+        )
+        .value||null;
+
     const supplierId=
         document
         .getElementById(
@@ -4398,6 +4411,17 @@ async function saveReceipt(){
         )
         .value
         .trim();
+
+
+    if(!warehouseId){
+
+        showAlert(
+            "اختر المخزن المستلم",
+            "error"
+        );
+
+        return;
+    }
 
 
     if(!date){
@@ -4458,6 +4482,9 @@ async function saveReceipt(){
         .rpc(
             "post_purchase",
             {
+                p_warehouse_id:
+                    warehouseId,
+
                 p_supplier_id:
                     supplierId,
 
@@ -4512,6 +4539,7 @@ function clearReceipt(){
 
     const fields=[
         "receiptInvoice",
+        "receiptWarehouse",
         "receiptNote",
         "receiptItem",
         "receiptQty",
